@@ -1,0 +1,12 @@
+WPlatformApp
+
+The platform  web app for service of digital willing
+
+The platform is for working with users, creating and applying e-wills.
+Provides Web Interface for users.
+
+It's just a set of html pages with CSS/JS files.
+Communicates with the WPlatform via HTTPS API.
+
+(c) Eugene Valeyev
+
