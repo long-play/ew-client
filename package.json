@@ -8,7 +8,10 @@
     "wcrypto": "git+ssh://git@bitbucket.org/my-will/wcrypto.git#develop",
     "moment": "2.18.1"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "grunt": "^1.0.1",
+    "grunt-browserify": "^5.0.0"
+  },
   "scripts": {},
   "main": "index.html",
   "repository": {
