@@ -1,0 +1,20 @@
+{
+  "name": "w-platform-app",
+  "private": true,
+  "version": "0.0.1",
+  "description": "The Web Interface for the Platform for service of digital willing",
+  "keywords": [],
+  "dependencies": {
+    "wcrypto": "git+ssh://git@bitbucket.org/my-will/wcrypto.git#develop",
+    "moment": "2.18.1"
+  },
+  "devDependencies": {},
+  "scripts": {},
+  "main": "index.html",
+  "repository": {
+    "type": "git",
+    "url": "git@bitbucket.org:my-will/wplatformapp.git"
+  },
+  "author": "Eugene Valeyev",
+  "license": "exclusive"
+}
