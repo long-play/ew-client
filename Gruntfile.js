@@ -3,7 +3,7 @@ module.exports = function(grunt) {
   // Project configuration.
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
-    filename: 'index.html',
+    filename: 'will.html',
 
     browserify: {
       dist: {
