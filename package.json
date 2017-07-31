@@ -11,7 +11,8 @@
   "devDependencies": {
     "grunt": "^1.0.1",
     "grunt-browserify": "^5.0.0",
-    "grunt-html-build": "^0.7.1"
+    "grunt-html-build": "^0.7.1",
+    "grunt-multi": "0.0.7"
   },
   "scripts": {},
   "main": "index.html",

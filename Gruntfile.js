@@ -3,7 +3,8 @@ module.exports = function(grunt) {
   // Project configuration.
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
-    filename: 'will.html',
+    filename: '',
+    filenames: '',
 
     browserify: {
       dist: {
@@ -12,6 +13,20 @@ module.exports = function(grunt) {
           src: ['js/*.js'],
           dest: 'public'
         }]
+      }
+    },
+
+    multi: {
+      pattern: {
+        options: {
+          vars: {
+            filenames: { patterns: '*.html', options: { cwd: 'html', filter: 'isFile' } }
+          },
+          config: {
+            filename: '<%= filenames %>'
+          },
+          tasks: [ 'htmlbuild' ]
+        }
       }
     },
 
@@ -38,13 +53,14 @@ module.exports = function(grunt) {
   });
 
   // Load the plugins
+  grunt.loadNpmTasks('grunt-multi');
   grunt.loadNpmTasks('grunt-browserify');
   grunt.loadNpmTasks('grunt-html-build');
 
   // Default task(s)
   grunt.registerTask('default', [
     'browserify',
-    'htmlbuild'
+    'multi'
   ]);
 
 };
