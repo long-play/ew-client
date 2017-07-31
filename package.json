@@ -10,7 +10,8 @@
   },
   "devDependencies": {
     "grunt": "^1.0.1",
-    "grunt-browserify": "^5.0.0"
+    "grunt-browserify": "^5.0.0",
+    "grunt-html-build": "^0.7.1"
   },
   "scripts": {},
   "main": "index.html",

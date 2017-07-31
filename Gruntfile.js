@@ -3,6 +3,8 @@ module.exports = function(grunt) {
   // Project configuration.
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
+    filename: 'index.html',
+
     browserify: {
       dist: {
         files:[{
@@ -11,15 +13,38 @@ module.exports = function(grunt) {
           dest: 'public'
         }]
       }
-    }
+    },
+
+    htmlbuild: {
+      dist: {
+        expand: true,
+        src: 'layout.html',
+        dest: 'public',
+        rename: (dest, src) => {
+          return dest + '/<%= filename %>';
+        },
+        options: {
+          beautify: true,
+          sections: {
+            body: 'html/<%= filename %>'
+          },
+          data: {
+          }
+        }
+      }
+    },
+
+    copyright: '(c) Eugene Valeyev'
   });
 
-  // Load the plugin that provides the "browserify" task.
+  // Load the plugins
   grunt.loadNpmTasks('grunt-browserify');
+  grunt.loadNpmTasks('grunt-html-build');
 
-  // Default task(s).
+  // Default task(s)
   grunt.registerTask('default', [
-    'browserify'
+    'browserify',
+    'htmlbuild'
   ]);
 
 };
