@@ -49,6 +49,11 @@ module.exports = function(grunt) {
       }
     },
 
+    clean: {
+      htmls: ['public/*.html'],
+      jss: ['public/js/*.js']
+    },
+
     copyright: '(c) Eugene Valeyev'
   });
 
@@ -56,9 +61,11 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-multi');
   grunt.loadNpmTasks('grunt-browserify');
   grunt.loadNpmTasks('grunt-html-build');
+  grunt.loadNpmTasks('grunt-contrib-clean');
 
   // Default task(s)
   grunt.registerTask('default', [
+    'clean',
     'browserify',
     'multi'
   ]);
