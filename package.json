@@ -5,17 +5,20 @@
   "description": "The Web Interface for the Platform for service of digital willing",
   "keywords": [],
   "dependencies": {
-    "wcrypto": "git+ssh://git@bitbucket.org/my-will/wcrypto.git#develop",
-    "moment": "2.18.1"
+    "moment": "^2.18.1",
+    "wcrypto": "git+ssh://git@bitbucket.org/my-will/wcrypto.git#develop"
   },
   "devDependencies": {
+    "live-server": "^1.2.0",
     "grunt": "^1.0.1",
     "grunt-browserify": "^5.0.0",
     "grunt-contrib-clean": "^1.1.0",
     "grunt-html-build": "^0.7.1",
-    "grunt-multi": "0.0.7"
+    "grunt-multi": "^0.0.7"
   },
-  "scripts": {},
+  "scripts": {
+    "debug": "node node_modules/live-server/live-server.js --open=public"
+  },
   "main": "index.html",
   "repository": {
     "type": "git",

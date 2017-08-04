@@ -2,3 +2,56 @@
   <li><a href='will-create.html'>Create a new will</a></li>
   <li><a href='will-claim.html'>Claim the will</a></li>
 </ul>
+
+<table class="uk-table uk-table-hover uk-table-divider uk-table-small">
+    <thead>
+        <tr>
+            <th>Provider</th>
+            <th>Features</th>
+            <th>Tariff</th>
+            <th>Help</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>WPlatform</td>
+            <td>email</td>
+            <td>
+                <button class="uk-button uk-button-default" type="button">Choose a tariff</button>
+                <div uk-dropdown="mode: click">
+                    <ul class="uk-nav uk-dropdown-nav">
+                        <li><a href="#">Basic $10</a></li>
+                        <li><a href="will-create.html?token=123qwe">Pro $49</a></li>
+                        <li><a href="#">Advanced $99</a></li>
+                    </ul>
+                </div>
+            </td>
+            <td>
+                <button class="uk-button uk-button-default" type="button">?</button>
+                <div uk-dropdown>
+                    The WPlatform is a platform...
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>PFR</td>
+            <td>in presence</td>
+            <td>
+                <button class="uk-button uk-button-default" type="button">Choose a tariff</button>
+                <div uk-dropdown="mode: click">
+                    <ul class="uk-nav uk-dropdown-nav">
+                        <li><a href="#">Basic $10</a></li>
+                        <li><a href="#">Pro $49</a></li>
+                        <li><a href="#">Advanced $99</a></li>
+                    </ul>
+                </div>
+            </td>
+            <td>
+                <button class="uk-button uk-button-default" type="button">?</button>
+                <div uk-dropdown>
+                    The PFR is the biggest...
+                </div>
+            </td>
+        </tr>
+    </tbody>
+</table>
