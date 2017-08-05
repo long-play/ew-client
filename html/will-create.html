@@ -1,13 +1,17 @@
 <h2>Create a will</h2>
 
-<div id="benificiary-key">
+<div id="beneficiary-key">
     <form>
         <div class="uk-margin">
-            <input id="benificiary-address" class="uk-input" type="text" placeholder="Beneficiary address">
-            <button id="find-benificiary" class="uk-button uk-button-default" type="button" tabindex="-1">Find public key</button>
+            <input id="beneficiary-address" class="uk-input" type="text" placeholder="Beneficiary address">
+            <button id="find-beneficiary" class="uk-button uk-button-default" type="button" tabindex="-1">Find beneficiary's public key</button>
         </div>
-        <div id="benificiary-public-key" class="uk-text-success" />
-        <div id="benificiary-public-key-error" class="uk-text-danger" />
+        <div id="beneficiary-public-key" class="uk-text-success"></div>
+        <div id="beneficiary-public-key-error" class="uk-text-danger"></div>
+
+        <button id="request-key" class="uk-button uk-button-default" type="button" tabindex="-1">Request plaform's public key</button>
+        <div id="platform-public-key" class="uk-text-success"></div>
+        <div id="platform-public-key-error" class="uk-text-danger"></div>
     </form>
 </div>
 

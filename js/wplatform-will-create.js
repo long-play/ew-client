@@ -15,19 +15,27 @@ $( () => {
   };
 
   // Button actions handlers
-  $('#find-benificiary').click( (e) => {
-    // request a transaction from etherscan & parse pub key
+  $('#find-beneficiary').click( (e) => {
+    // request a public key if exists
     requestServer('http://localhost:1337/key/public').then( (response) => {
-      $('#benificiary-public-key').text(response.publicKey);
-      $('#benificiary-public-key-error').text('');
+      //todo: check if exists and warn a user if does not
+      $('#beneficiary-public-key').text(response.publicKey);
+      $('#beneficiary-public-key-error').text('');
     }).catch( (error) => {
-      $('#benificiary-public-key').text('');
-      $('#benificiary-public-key-error').text(error.statusText);
+      $('#beneficiary-public-key').text('');
+      $('#beneficiary-public-key-error').text(error.statusText);
     });
   });
 
   $('#request-key').click( (e) => {
     // pass the user's address to the server and get server's public key
+    requestServer('http://localhost:1337/key/encryption').then( (response) => {
+      $('#platform-public-key').text(response.publicKey);
+      $('#platform-public-key-error').text('');
+    }).catch( (error) => {
+      $('#platform-public-key').text('');
+      $('#platform-public-key-error').text(error.statusText);
+    });
   });
 
   $('#create-will').click( (e) => {
