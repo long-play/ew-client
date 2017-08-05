@@ -4,6 +4,8 @@ $( () => {
 
   // Button actions handlers
   $('#create-will').click( (e) => {
+    // request PlatformID from the backend
+    // redirect to a choosen provider's site
   });
 
   // Initialize the page
