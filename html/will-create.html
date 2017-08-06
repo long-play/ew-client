@@ -1,7 +1,15 @@
+<script id="template-will-row" type="text/x-handlebars-template">
+    <tr>
+        <td><input name="will-name" class="uk-input" type="text" placeholder="Name"></td>
+        <td><input name="will-value" class="uk-input" type="text" placeholder="Value"></td>
+    </tr>
+</script>
+
 <h2>Create a will</h2>
 
 <div id="beneficiary-key">
-    <form>
+    <form action="">
+        <!-- Select a Beneficiary -->
         <div class="uk-margin">
             <input id="beneficiary-address" class="uk-input" type="text" placeholder="Beneficiary address">
             <button id="find-beneficiary" class="uk-button uk-button-default" type="button" tabindex="-1">Find beneficiary's public key</button>
@@ -9,11 +17,35 @@
         <div id="beneficiary-public-key" class="uk-text-success"></div>
         <div id="beneficiary-public-key-error" class="uk-text-danger"></div>
 
+        <!-- Select the user's wallet -->
+        <div class="uk-margin">
+            <input id="user-private-key" class="uk-input" type="text" placeholder="User's private key">
+            <button id="unlock-wallet" class="uk-button uk-button-default" type="button" tabindex="-1">Unlock the wallet</button>
+        </div>
+        <div id="user-address" class="uk-text-success"></div>
+        <div id="user-address-error" class="uk-text-danger"></div>
+
+        <!-- Request a server's key -->
         <button id="request-key" class="uk-button uk-button-default" type="button" tabindex="-1">Request plaform's public key</button>
         <div id="platform-public-key" class="uk-text-success"></div>
         <div id="platform-public-key-error" class="uk-text-danger"></div>
-    </form>
-</div>
 
-<div id="ethereum-key">
+        <!-- The user's will -->
+        <table id="will-table" class="uk-table uk-table-hover uk-table-divider uk-table-small">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Value</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+        <button id="add-will-row" class="uk-button uk-button-default" type="button" tabindex="-1">Add one more will</button>
+
+        <!-- Create the will -->
+        <button id="create-will" class="uk-button uk-button-default" type="button" tabindex="-1">Create will</button>
+
+        <!-- The end of the form -->
+    </form>
 </div>
