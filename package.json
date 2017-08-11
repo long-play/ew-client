@@ -5,6 +5,7 @@
   "description": "The Web Interface for the Platform for service of digital willing",
   "keywords": [],
   "dependencies": {
+    "ethereumjs-util": "^5.1.2",
     "wcrypto": "git+ssh://git@bitbucket.org/my-will/wcrypto.git#develop"
   },
   "devDependencies": {

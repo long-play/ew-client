@@ -1,4 +1,5 @@
 const Crypto = require('wcrypto');
+const EthUtil = require('ethereumjs-util');
 
 $( () => {
   // State
@@ -40,7 +41,8 @@ $( () => {
   $('#unlock-wallet').click( (e) => {
     // unlock a user's wallet & extract the private key
     theState.userPrivateKey = $('#user-private-key').val();
-    theState.userAddress = '';
+    theState.userAddress = EthUtil.privateToAddress(theState.userPrivateKey);
+    $('#user-address').text(`0x${theState.userAddress.toString('hex')}`);
   });
 
   $('#request-key').click( (e) => {
