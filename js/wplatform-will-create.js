@@ -41,8 +41,8 @@ $( () => {
   $('#unlock-wallet').click( (e) => {
     // unlock a user's wallet & extract the private key
     theState.userPrivateKey = $('#user-private-key').val();
-    theState.userAddress = EthUtil.privateToAddress(theState.userPrivateKey);
-    $('#user-address').text(`0x${theState.userAddress.toString('hex')}`);
+    theState.userAddress = '0x' + EthUtil.privateToAddress(theState.userPrivateKey).toString('hex');
+    $('#user-address').text(theState.userAddress);
   });
 
   $('#request-key').click( (e) => {

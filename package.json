@@ -1,5 +1,5 @@
 {
-  "name": "w-platform-app",
+  "name": "w-platform-web",
   "private": true,
   "version": "0.0.1",
   "description": "The Web Interface for the Platform for service of digital willing",
@@ -22,7 +22,7 @@
   "main": "index.html",
   "repository": {
     "type": "git",
-    "url": "git@bitbucket.org:my-will/wplatformapp.git"
+    "url": "git@bitbucket.org:my-will/wplatform-web.git"
   },
   "author": "Eugene Valeyev",
   "license": "exclusive"
