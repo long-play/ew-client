@@ -2,6 +2,18 @@ const Crypto = require('wcrypto');
 
 $( () => {
 
+  // Helper methods
+  function requestServer(url) {
+    const promise = $.ajax(url).done( (response) => {
+      console.log(`${url}: ${ JSON.stringify(response) }`);
+      return Promise.resolve(response);
+    }).fail( (error) => {
+      console.error(`${url}: ${ JSON.stringify(error) }`);
+      return Promise.reject(error);
+    });
+    return promise;
+  };
+
   // Button actions handlers
   $('#create-will').click( (e) => {
     // request PlatformID from the backend
@@ -10,29 +22,23 @@ $( () => {
 
   // Initialize the page
   function initProvidersTable(providersData) {
-    const data = { providers: [
-        { name: 'WPlatform', tags: 'email', help: 'Here is a description', tariffs: [
-            { id: '0100', name: 'Basic    $12' },
-            { id: '0500', name: 'Pro      $49' },
-            { id: '1000', name: 'Ultimate $99' }
-        ]},
-        { name: 'PFR RF', tags: 'passport', help: 'Here is a description', tariffs: [
-            { id: '0100', name: 'Basic    $12' },
-            { id: '0100', name: 'Pro      $49' },
-            { id: '0100', name: 'Ultimate $99' }
-        ]},
-        { name: 'Zombie Inc', tags: 'phone, vk.com', help: 'Here is a description', tariffs: [
-            { id: '0100', name: 'Basic    $12' },
-            { id: '0100', name: 'Pro      $49' },
-            { id: '0100', name: 'Ultimate $99' }
-        ]}
-    ]};
-    providersData = data;
-    const providers = $('#template-providers').html();
-    const table = Handlebars.compile(providers);
+    requestServer('swarm/providers.json').then( (response) => {
+      const providersData = { providers: [] };
 
-    const container = $('#container-providers')[0];
-    container.innerHTML = table(providersData);
+      for (let address in response.providers) {
+        const provider = response.providers[address];
+        providersData.providers.push(provider);
+      }
+
+      const providers = $('#template-providers').html();
+      const table = Handlebars.compile(providers);
+  
+      const container = $('#container-providers')[0];
+      container.innerHTML = table(providersData);
+    }).catch( (error) => {
+      //todo: show UIKit error
+      alert(error);
+    });
   };
 
   initProvidersTable();

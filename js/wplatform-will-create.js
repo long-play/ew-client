@@ -4,6 +4,7 @@ const EthUtil = require('ethereumjs-util');
 $( () => {
   // State
   const apiHost = 'http://localhost:1337';
+  const providerParams = {};
   const theState = {};
 
   // Helper methods
@@ -26,6 +27,7 @@ $( () => {
   $('#find-beneficiary').click( (e) => {
     // request a public key if exists
     theState.beneficiaryAddress = $('#beneficiary-address').val();
+    //todo: replace with rpc call to geth
     const url = `${apiHost}/key/public?address=${theState.beneficiaryAddress}`;
     requestServer(url).then( (response) => {
       //todo: check if exists and warn a user if does not
@@ -93,7 +95,9 @@ $( () => {
   });
 
   // Initialize the page
-  function configurePlatformId(query) {
+  function configureProviderParams(query) {
+    //todo: lock the screen
+
     // parse the params & store the PlatformID
     const params = {};
     const queries = query.split('&');
@@ -103,6 +107,35 @@ $( () => {
       params[split[0]] = split[1];
     }
     console.log(params);
+
+    providerParams.address = params['address'];
+    providerParams.user = params['user'];
+    providerParams.signature = params['signature'];
+
+    if (!providerParams.address || !providerParams.user || !providerParams.signature) {
+      //todo: show UIKit warning
+      alert('Missing some provider\'s parameters');
+      return;
+    }
+
+    const msg = `${providerParams.address}:${providerParams.user}`;
+    //todo: request public key by address
+    //todo: check the signature virify(msg, signature, pubkey)
+    const isSigned = false;
+    if (isSigned) {
+      //todo: show UIKit warning
+      alert('The provider\'s signature is corrupted!');
+      return;
+    }
+
+    // request a provider info
+    requestServer('swarm/providers.json').then( (response) => {
+      providerParams.provider = response.providers[providerParams.address];
+      //todo: unlock the screen
+    }).catch( (error) => {
+      //todo: show UIKit error
+      alert(error);
+    });
   };
 
   function addWillRow() {
@@ -112,6 +145,6 @@ $( () => {
     $('#will-table').append(compiledWillRow({}));
   };
 
-  configurePlatformId(window.location.search.slice(1));
+  configureProviderParams(window.location.search.slice(1));
   addWillRow();
 });
