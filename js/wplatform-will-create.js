@@ -48,8 +48,8 @@ $( () => {
   });
 
   $('#request-key').click( (e) => {
-    // pass the user's address to the server and get server's public key
-    const url = `${apiHost}/key/encryption?address=${theState.userAddress}`;
+    // pass the user's address to the provider and get server's public key
+    const url = `${providerParams.provider.url}/key/encryption?address=${theState.userAddress}`;
     requestServer(url).then( (response) => {
       $('#platform-public-key').text(response.publicKey);
       $('#platform-public-key-error').text('');
