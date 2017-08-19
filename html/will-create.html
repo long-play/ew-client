@@ -76,11 +76,33 @@
 
 <div id="will-confirmation-dialog" uk-modal bg-close="false">
     <div class="uk-modal-dialog uk-modal-body">
-        <h2 class="uk-modal-title">Is the will correct?</h2>
+        <h2 class="uk-modal-title">Review the will please and confirm</h2>
         <p id="will-confirmation-content"></p>
         <p class="uk-text-right">
             <button class="uk-button uk-button-default uk-modal-close" type="button">Cancel</button>
-            <button class="uk-button uk-button-primary" type="button">Confirm</button>
+            <button id="confirm-will" class="uk-button uk-button-primary uk-modal-close" type="button">Confirm</button>
         </p>
     </div>
 </div>
+
+<div id="transaction-confirmation-dialog" uk-modal bg-close="false">
+    <div class="uk-modal-dialog uk-modal-body">
+        <h2 class="uk-modal-title">Review the transaction please and confirm</h2>
+        <p id="transaction-confirmation-content"></p>
+        <p class="uk-text-right">
+            <button class="uk-button uk-button-default uk-modal-close" type="button">Cancel</button>
+            <button id="confirm-transaction" class="uk-button uk-button-primary uk-modal-close" type="button">Confirm</button>
+        </p>
+    </div>
+</div>
+
+<div id="transaction-verification-dialog" uk-modal bg-close="false">
+    <div class="uk-modal-dialog uk-modal-body">
+        <h2 class="uk-modal-title">Successfully published</h2>
+        <p>You could check the transaction at etherscan.io<br /><a target="_blank" id="transaction-verification-content" /></p>
+        <p class="uk-text-right">
+            <button class="uk-button uk-button-default uk-modal-close" type="button">Close</button>
+        </p>
+    </div>
+</div>
+

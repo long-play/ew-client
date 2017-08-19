@@ -67,7 +67,7 @@ $( () => {
       const name = $($(record).find('input')[0]).val();
       const value = $($(record).find('input')[1]).val();
 
-      if (name.length == 0 || value.length == 0) continue;
+      if (name.length == 0 || value.length == 0) return;
 
       theState.willRecords[name] = value;
     });
@@ -83,8 +83,8 @@ $( () => {
     .then( (enc) => {
       theState.beneficiaryIV = enc.iv;
       theState.beneficiaryEncrypted = enc.encrypted;
-      //todo: concatinate encrypted & IV and then pass it to the encrypt
-      // concat beneficiary address
+      //todo: compose encrypted & IV and then pass it to the encrypt
+      // including beneficiary address
       return wcrypto.encrypt(theState.beneficiaryEncrypted,
                              theState.userPrivateKey,
                              theState.platformPublicKey);
@@ -93,16 +93,30 @@ $( () => {
       theState.platformEncrypted = enc.encrypted;
       $('#encrypted-will').text(theState.platformEncrypted);
 
+      //todo: compose willContent + platformIV;
+      theState.encryptedWill = theState.willContent;
+      $('#will-confirmation-content').text(theState.willContent);
       UIkit.modal('#will-confirmation-dialog').show();
     });
   });
 
   $('#confirm-will').click( (e) => {
     // upload the will into SWARM & generate a transaction
+    console.log('confirmed the will');
+
+    //todo: generate & sign the ethereum transaction
+    $('#transaction-confirmation-content').text(theState.willContent);
+    UIkit.modal('#transaction-confirmation-dialog').show();
   });
 
-  $('#publish-will').click( (e) => {
-    // sign & send the transaction to the network
+  $('#confirm-transaction').click( (e) => {
+    // send the transaction to the network
+    console.log('confirmed the transaction');
+
+    //todo: publish the transaction
+    $('#transaction-verification-content').text('0x00ff');
+    $('#transaction-verification-content').attr('href', 'https://etherscan.io');
+    UIkit.modal('#transaction-verification-dialog').show();
   });
 
   $('#add-will-row').click( (e) => {
