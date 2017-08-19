@@ -62,7 +62,20 @@ $( () => {
 
   $('#create-will').click( (e) => {
     // construct, encrypt the will and show confirmation modal dialog
-    theState.willContent = $('#will-content').val();
+    theState.willRecords = {};
+    $('tr[name="will-record"]').each( (idx, record) => {
+      const name = $($(record).find('input')[0]).val();
+      const value = $($(record).find('input')[1]).val();
+
+      if (name.length == 0 || value.length == 0) continue;
+
+      theState.willRecords[name] = value;
+    });
+    theState.willContent = JSON.stringify(theState.willRecords);
+
+    $('#will-confirmation-content').text(theState.willContent);
+    UIkit.modal('#will-confirmation-dialog').show();
+
     const wcrypto = new Crypto.WCrypto();
     wcrypto.encrypt(theState.willContent,
                     theState.userPrivateKey,
@@ -79,6 +92,8 @@ $( () => {
       theState.platformIV = enc.iv;
       theState.platformEncrypted = enc.encrypted;
       $('#encrypted-will').text(theState.platformEncrypted);
+
+      UIkit.modal('#will-confirmation-dialog').show();
     });
   });
 

@@ -1,7 +1,7 @@
 <script id="template-will-row" type="text/x-handlebars-template">
-    <tr>
-        <td><input name="will-name" class="uk-input" type="text" placeholder="Name"></td>
-        <td><input name="will-value" class="uk-input" type="text" placeholder="Value"></td>
+    <tr name="will-record">
+        <td><input name="will-record-name" class="uk-input" type="text" placeholder="Name"></td>
+        <td><input name="will-record-value" class="uk-input" type="text" placeholder="Value"></td>
     </tr>
 </script>
 
@@ -67,8 +67,20 @@
         <!-- Create the will -->
         <hr class="uk-divider-icon">
         <legend class="uk-legend">Create the will</legend>
+        <p>It will ecnrypt the will and generate a transaction. You need to have some amount of ethers on the wallet the private key you provided for. It will be used to buy gas to pay for the transaction, provider's and the platform fees. If your wallet is empty, <a href="http://shapeshift.io/">buy</a> please at least 1 ethers.</p>
         <button id="create-will" class="uk-button uk-button-default uk-width-1-1" type="button" tabindex="-1">Create will</button>
 
         <!-- The end of the form -->
     </form>
+</div>
+
+<div id="will-confirmation-dialog" uk-modal bg-close="false">
+    <div class="uk-modal-dialog uk-modal-body">
+        <h2 class="uk-modal-title">Is the will correct?</h2>
+        <p id="will-confirmation-content"></p>
+        <p class="uk-text-right">
+            <button class="uk-button uk-button-default uk-modal-close" type="button">Cancel</button>
+            <button class="uk-button uk-button-primary" type="button">Confirm</button>
+        </p>
+    </div>
 </div>
