@@ -49,11 +49,19 @@ $( () => {
 
   $('#request-key').click( (e) => {
     // pass the user's address to the provider and get server's public key
-    const url = `${providerParams.provider.url}/key/encryption?address=${theState.userAddress}`;
+    const url = `${providerParams.provider.url}/setup-will?address=${theState.userAddress}&will=${providerParams.will}&token=${providerParams.token}`;
     requestServer(url).then( (response) => {
-      $('#platform-public-key').text(response.publicKey);
+      //todo: verify signature & willId
+      const isSigned = (response.signature == '//todo:');
+      if (isSigned !== true) {
+        return Promse.reject( /* error */ );
+      } else if (providerParams.will != response.will) {
+        return Promse.reject( /* error */ );
+      }
+
+      $('#platform-public-key').text(response.key);
       $('#platform-public-key-error').text('');
-      theState.platformPublicKey = response.publicKey;
+      theState.platformPublicKey = response.key;
     }).catch( (error) => {
       $('#platform-public-key').text('');
       $('#platform-public-key-error').text(error.statusText);
@@ -138,20 +146,21 @@ $( () => {
     console.log(params);
 
     providerParams.address = params['address'];
-    providerParams.user = params['user'];
+    providerParams.will = params['will'];
+    providerParams.token = params['token'];
     providerParams.signature = params['signature'];
 
-    if (!providerParams.address || !providerParams.user || !providerParams.signature) {
+    if (!providerParams.address || !providerParams.will || !providerParams.signature || !providerParams.token) {
       //todo: show UIKit warning
       alert('Missing some provider\'s parameters');
       return;
     }
 
-    const msg = `${providerParams.address}:${providerParams.user}`;
+    const msg = `${providerParams.address}:${providerParams.will}:${providerParams.token}`;
     //todo: request public key by address
     //todo: check the signature virify(msg, signature, pubkey)
-    const isSigned = false;
-    if (isSigned) {
+    const isSigned = (providerParams.signature == '//todo:');
+    if (isSigned !== true) {
       //todo: show UIKit warning
       alert('The provider\'s signature is corrupted!');
       return;
