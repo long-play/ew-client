@@ -1,11 +1,14 @@
 const Crypto = require('wcrypto');
 const EthUtil = require('ethereumjs-util');
+const Web3 = require('web3');
 
 $( () => {
   // State
   const apiHost = 'http://localhost:1337';
+  const nodeHost = 'http://localhost:8545';
   const providerParams = {};
   const theState = {};
+  const web3 = new Web3(new Web3.providers.HttpProvider(nodeHost));
 
   // Helper methods
   function requestServer(url) {
@@ -167,6 +170,7 @@ $( () => {
     }
 
     // request a provider info
+    //todo: get swarm id from the contract and request its content
     requestServer('swarm/providers.json').then( (response) => {
       providerParams.provider = response.providers[providerParams.address];
       //todo: unlock the screen

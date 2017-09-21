@@ -6,7 +6,8 @@
   "keywords": [],
   "dependencies": {
     "ethereumjs-util": "^5.1.2",
-    "wcrypto": "git+ssh://git@bitbucket.org/my-will/wcrypto.git#develop"
+    "wcrypto": "git+ssh://git@bitbucket.org/my-will/wcrypto.git#develop",
+    "web3": "^1.0.0-beta.21"
   },
   "devDependencies": {
     "live-server": "^1.2.0",
@@ -17,7 +18,7 @@
     "grunt-multi": "^0.0.7"
   },
   "scripts": {
-    "debug": "node node_modules/live-server/live-server.js --open=public --watch=public --wait=5000"
+    "debug": "node node_modules/live-server/live-server.js --mount=/:public --watch=public --wait=5000"
   },
   "main": "index.html",
   "repository": {
