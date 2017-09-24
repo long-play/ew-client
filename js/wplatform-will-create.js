@@ -54,10 +54,6 @@ $( () => {
     return promise;
   };
 
-  function generateTx() {
-    // generate smart-contract function call transaction
-  };
-
   // Button actions handlers
   $('#find-beneficiary').click( (e) => {
     // request a public key if exists
@@ -133,6 +129,7 @@ $( () => {
 
     $('#will-confirmation-content').text(theState.willContent);
     UIkit.modal('#will-confirmation-dialog').show();
+    return;
 
     const wcrypto = new Crypto.WCrypto();
     wcrypto.encrypt(theState.willContent,
@@ -164,19 +161,18 @@ $( () => {
     console.log('confirmed the will');
 
     //todo: generate & sign the ethereum transaction
-    const hashedBenAddress = theState.beneficiaryAddress;
     const willId = (new BN(providerParams.address.slice(2), 16)).iushln(92).iadd(new BN(providerParams.will)).toString(16);
     const payload = abi.simpleEncode('createWill(uint256,uint256,uint256,address)',
-        willId,
-        storageId,
-        theState.beneficiaryAddressHash,
-        providerParams.address);
+      willId,
+      storageId,
+      theState.beneficiaryAddressHash,
+      providerParams.address);
     const rawTx = {
       nonce: 0,
       gasPrice: 21.0e+9,
       gasLimit: 0,
-      to: '0x5907b1b17f335a788d1a6a9ad129441fdda63b8d',
-      value: '0x4fffffff',
+      to: '0x976541a3803e7a14757b5f348a1a44366c5acbe2',
+      value: 15.0e+18,
       data: payload,
       chainId: 666
     };

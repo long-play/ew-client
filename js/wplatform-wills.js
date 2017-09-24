@@ -1,6 +1,31 @@
 const Crypto = require('wcrypto');
+const EthUtil = require('ethereumjs-util');
+const Transaction = require('ethereumjs-tx');
+const rpc = require('ethrpc');
+const abi = require('ethereumjs-abi');
+const BN = require('bn.js');
+const keccak256 = require('js-sha3').keccak256;
 
 $( () => {
+  // State
+  const nodeHost = 'http://localhost:8545';
+  const theState = {};
+
+  const connectionConfiguration = {
+    httpAddresses: [nodeHost],
+    wsAddresses: [],
+    ipcAddresses: [],
+    networkID: 666,
+    connectionTimeout: 3000,
+    errorHandler: function (err) { /* out-of-band error */ },
+  };
+  rpc.connect(connectionConfiguration, (err) => {
+    if (err) {
+      console.error("Failed to connect to Ethereum node: " + err);
+    } else {
+      console.log("Connected to Ethereum node!");
+    }
+  });
 
   // Helper methods
   function requestServer(url) {
@@ -15,10 +40,25 @@ $( () => {
   };
 
   // Button actions handlers
-  $('#create-will').click( (e) => {
-    // request PlatformID from the backend
-    // redirect to a choosen provider's site
+  $('#unlock-wallet').click( (e) => {
+    // unlock a user's wallet & extract the private key
+    theState.userPrivateKey = $('#user-private-key').val();
+    theState.userAddress = '0x' + EthUtil.privateToAddress(theState.userPrivateKey).toString('hex');
+    $('#user-address').text(theState.userAddress);
+
+    const payload = abi.simpleEncode('userWills(address,uint256)',
+      theState.userAddress,
+      0
+    );
+    const rawTx = {
+      to: '0x976541a3803e7a14757b5f348a1a44366c5acbe2',
+      data: '0x' + payload.toString('hex')
+    };
+    rpc.eth.call([rawTx, 'pending'], (res) => {
+      console.log(res);
+    });
   });
+
 
   // Initialize the page
   function initProvidersTable(providersData) {
