@@ -1,6 +1,23 @@
 const Crypto = require('wcrypto');
 const EthUtil = require('ethereumjs-util');
-const Web3 = require('web3');
+const Transaction = require('ethereumjs-tx');
+const rpc = require('ethrpc');
+const abi = require('ethereumjs-abi');
+const BN = require('bn.js');
+const keccak256 = require('js-sha3').keccak256;
+
+function promisify(fn) {
+  const asyncFn = (args) => {
+    const promise = new Promise( (resolve, reject) => {
+      const ret = fn(args, (result) => {
+        resolve(result);
+      });
+      if (ret) reject();
+    });
+    return promise;
+  };
+  return asyncFn;
+}
 
 $( () => {
   // State
@@ -8,11 +25,26 @@ $( () => {
   const nodeHost = 'http://localhost:8545';
   const providerParams = {};
   const theState = {};
-  const web3 = new Web3(new Web3.providers.HttpProvider(nodeHost));
+
+  const connectionConfiguration = {
+    httpAddresses: [nodeHost],
+    wsAddresses: [],
+    ipcAddresses: [],
+    networkID: 666,
+    connectionTimeout: 3000,
+    errorHandler: function (err) { /* out-of-band error */ },
+  };
+  rpc.connect(connectionConfiguration, (err) => {
+    if (err) {
+      console.error("Failed to connect to Ethereum node: " + err);
+    } else {
+      console.log("Connected to Ethereum node!");
+    }
+  });
 
   // Helper methods
-  function requestServer(url) {
-    const promise = $.ajax(url).done( (response) => {
+  function requestServer(url, settings) {
+    const promise = $.ajax(url, settings).done( (response) => {
       console.log(`${url}: ${ JSON.stringify(response) }`);
       return Promise.resolve(response);
     }).fail( (error) => {
@@ -30,7 +62,17 @@ $( () => {
   $('#find-beneficiary').click( (e) => {
     // request a public key if exists
     theState.beneficiaryAddress = $('#beneficiary-address').val();
+    const benAddr = new BN(theState.beneficiaryAddress.slice(2), 16);
+    const benBuff = EthUtil.toBuffer(benAddr);
+    theState.beneficiaryAddressHash = new BN(keccak256(benBuff), 16);
+
+    //todo: debug solution
+    theState.beneficiaryPublicKey = '0x431fe740f51d16296e732eec5c288057448c18f3025a15a9b54c099a6f2840ce2698753e6ed12be5aa43b43bbef5c0ea90b9b3af8f1f914d3cb4587fdd7d279f';
+    $('#beneficiary-public-key').text(theState.beneficiaryPublicKey);
+    return;
+
     //todo: replace with rpc call to geth
+    //rpc does not have such method. Make a call to etherscan.io api
     const url = `${apiHost}/key/public?address=${theState.beneficiaryAddress}`;
     requestServer(url).then( (response) => {
       //todo: check if exists and warn a user if does not
@@ -52,8 +94,13 @@ $( () => {
 
   $('#request-key').click( (e) => {
     // pass the user's address to the provider and get server's public key
-    const url = `${providerParams.provider.url}/setup-will?address=${theState.userAddress}&will=${providerParams.will}&token=${providerParams.token}`;
-    requestServer(url).then( (response) => {
+    const url = `${providerParams.provider.url}/setup-will`;
+    const data = {
+      address: theState.userAddress,
+      will: providerParams.will,
+      token: providerParams.token
+    };
+    requestServer(url, { method: 'POST', contentType: 'application/json', data: JSON.stringify(data) }).then( (response) => {
       //todo: verify signature & willId
       const isSigned = (response.signature == '//todo:');
       if (isSigned !== true) {
@@ -113,21 +160,60 @@ $( () => {
 
   $('#confirm-will').click( (e) => {
     // upload the will into SWARM & generate a transaction
+    const storageId = '0x5109a6e';
     console.log('confirmed the will');
 
     //todo: generate & sign the ethereum transaction
+    const hashedBenAddress = theState.beneficiaryAddress;
+    const willId = (new BN(providerParams.address.slice(2), 16)).iushln(92).iadd(new BN(providerParams.will)).toString(16);
+    const payload = abi.simpleEncode('createWill(uint256,uint256,uint256,address)',
+        willId,
+        storageId,
+        theState.beneficiaryAddressHash,
+        providerParams.address);
+    const rawTx = {
+      nonce: 0,
+      gasPrice: 21.0e+9,
+      gasLimit: 0,
+      to: '0x5907b1b17f335a788d1a6a9ad129441fdda63b8d',
+      value: '0x4fffffff',
+      data: payload,
+      chainId: 666
+    };
+    const tx = new Transaction(rawTx);
+    rawTx.gasLimit = tx.getBaseFee();
+    const promise = new Promise( (resolve, reject) => {
+      const privBN = new BN(theState.userPrivateKey.slice(2), 16);
+      const privBF = EthUtil.toBuffer(privBN);
+      rpc.packageAndSignRawTransaction(rawTx, theState.userAddress, privBF, (result) => {
+        if (result.error) reject(result);
+        else resolve(result);
+      });
+    }).then( (tx) => {
+      console.log(tx);
+      theState.signedTx = tx;
+    }).catch( (error) => {
+      console.error(error);
+      //todo: show the error
+    });
+
     $('#transaction-confirmation-content').text(theState.willContent);
     UIkit.modal('#transaction-confirmation-dialog').show();
   });
 
   $('#confirm-transaction').click( (e) => {
     // send the transaction to the network
-    console.log('confirmed the transaction');
+    promisify(rpc.eth.sendRawTransaction)([theState.signedTx]).then( (txId) => {
+      theState.txId = txId;
 
-    //todo: publish the transaction
-    $('#transaction-verification-content').text('0x00ff');
-    $('#transaction-verification-content').attr('href', 'https://etherscan.io');
-    UIkit.modal('#transaction-verification-dialog').show();
+      $('#transaction-verification-content').text(`${txId}`);
+      $('#transaction-verification-content').attr('href', `https://etherscan.io/tx/${txId}`);
+      UIkit.modal('#transaction-verification-dialog').show();
+    });
+
+    promisify(rpc.eth.getTransactionByHash)([theState.txId]).then( (txReceipt) => {
+      console.log(txReceipt);
+    });
   });
 
   $('#add-will-row').click( (e) => {

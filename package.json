@@ -6,10 +6,12 @@
   "keywords": [],
   "dependencies": {
     "ethereumjs-util": "^5.1.2",
-    "wcrypto": "git+ssh://git@bitbucket.org/my-will/wcrypto.git#develop",
-    "web3": "^1.0.0-beta.21"
+    "ethrpc": "^4.2.3",
+    "js-sha3": "^0.6.1",
+    "wcrypto": "git+ssh://git@bitbucket.org/my-will/wcrypto.git#develop"
   },
   "devDependencies": {
+    "babel-preset-stage-0": "^6.24.1",
     "live-server": "^1.2.0",
     "grunt": "^1.0.1",
     "grunt-browserify": "^5.0.0",
