@@ -8,6 +8,7 @@ const keccak256 = require('js-sha3').keccak256;
 
 $( () => {
   // State
+  const contract = '0xf19ecfca50dfb4bdc6700135b59cca5630ff57f8'; // 0x976541a3803e7a14757b5f348a1a44366c5acbe2
   const nodeHost = 'http://localhost:8545';
   const theState = {};
 
@@ -39,6 +40,73 @@ $( () => {
     return promise;
   };
 
+  function ethCall(payload) {
+    const promise = new Promise( (resolve, reject) => {
+      const rawTx = {
+        to: contract,
+        data: EthUtil.bufferToHex(payload)
+      };
+      rpc.eth.call([rawTx, 'pending'], (res) => {
+        if (res.error) reject(res);
+        else resolve(res);
+      });
+    });
+    return promise;
+  };
+
+  function requestWill(willNumber) {
+    const payload = abi.simpleEncode('userWills(address,uint256)',
+      theState.userAddress,
+      willNumber
+    );
+    const promise = ethCall(payload).then( (willId) => {
+      const payload = abi.simpleEncode('wills(uint256)', willId);
+      return ethCall(payload);
+    }).then( (payload) => {
+      console.log(payload);
+      //const fieldValues = abi.simpleDecode('wills(uint256):(uint256,uint256,uint256,uint256,uint256,uint256,address,uint8,uint256,uint256,address)', payload);
+      const fieldValues = abi.simpleDecode('wills(uint256):(uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256)', payload);
+      const will = {
+        willId: fieldValues[0],
+        storageId: fieldValues[1],
+        balance: fieldValues[2],
+        annualFee: fieldValues[3],
+        beneficiaryHash: fieldValues[4],
+        decryptionKey: fieldValues[5],
+        owner: fieldValues[6],
+        state: fieldValues[7],
+        updatedAt: fieldValues[8],
+        validTill: fieldValues[9],
+        provider: fieldValues[10],
+      };
+      return Promise.resolve(will);
+    });
+    return promise;
+  };
+
+  async function requestAllWills() {
+    let finished = false;
+    let idx = 0;
+    const wills = [];
+
+    do {
+      try {
+        const will = await requestWill(idx);
+        if (will) {
+          wills.push(will);
+          idx++;
+        } else {
+          finished = true;
+        }
+      } catch (err) {
+        console.error(err);
+        finished = true;
+      }
+    } while (finished == false);
+
+    return wills;
+  };
+
   // Button actions handlers
   $('#unlock-wallet').click( (e) => {
     // unlock a user's wallet & extract the private key
@@ -46,16 +114,8 @@ $( () => {
     theState.userAddress = '0x' + EthUtil.privateToAddress(theState.userPrivateKey).toString('hex');
     $('#user-address').text(theState.userAddress);
 
-    const payload = abi.simpleEncode('userWills(address,uint256)',
-      theState.userAddress,
-      0
-    );
-    const rawTx = {
-      to: '0x976541a3803e7a14757b5f348a1a44366c5acbe2',
-      data: '0x' + payload.toString('hex')
-    };
-    rpc.eth.call([rawTx, 'pending'], (res) => {
-      console.log(res);
+    requestAllWills().then( (wills) => {
+      console.log(wills);
     });
   });
 
