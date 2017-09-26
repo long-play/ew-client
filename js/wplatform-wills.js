@@ -8,7 +8,8 @@ const keccak256 = require('js-sha3').keccak256;
 
 $( () => {
   // State
-  const contract = '0xf19ecfca50dfb4bdc6700135b59cca5630ff57f8'; // 0x976541a3803e7a14757b5f348a1a44366c5acbe2
+  const willStateNames = [ 'None', 'Created', 'Activated', 'Pending', 'Claimed', 'Declined' ];
+  const contract = '0xdedb3540843af498192723f836db218569f000e4'; // 0x976541a3803e7a14757b5f348a1a44366c5acbe2
   const nodeHost = 'http://localhost:8545';
   const theState = {};
 
@@ -64,6 +65,7 @@ $( () => {
       return ethCall(payload);
     }).then( (payload) => {
       console.log(payload);
+      payload = EthUtil.toBuffer(payload);
       //const fieldValues = abi.simpleDecode('wills(uint256):(uint256,uint256,uint256,uint256,uint256,uint256,address,uint8,uint256,uint256,address)', payload);
       const fieldValues = abi.simpleDecode('wills(uint256):(uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256)', payload);
       const will = {
@@ -116,6 +118,24 @@ $( () => {
 
     requestAllWills().then( (wills) => {
       console.log(wills);
+      const willsData = { wills: [] };
+
+      for (let idx in wills) {
+        const will = {
+          willId: wills[idx].willId.toString(16),
+          annualFee: wills[idx].annualFee.toString(10),
+          state: wills[idx].state.toString(10),
+          stateName: willStateNames[wills[idx].state.toString(10)],
+          validTill: wills[idx].validTill.toString(10),
+        };
+        willsData.wills.push(will);
+      }
+
+      const willsTemplate = $('#template-wills').html();
+      const table = Handlebars.compile(willsTemplate);
+
+      const container = $('#container-wills')[0];
+      container.innerHTML = table(willsData);
     });
   });
 
