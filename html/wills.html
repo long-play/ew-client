@@ -72,15 +72,9 @@
 
 <h2>Wills</h2>
 
-<ul>
-    <li><a href='will-create.html'>Create a new will</a></li>
-    <li><a href='will-claim.html'>Claim the will</a></li>
-</ul>
-
 <div id="user-key">
     <form action="">
         <!-- Select the user's wallet -->
-        <hr class="uk-divider-icon">
         <legend class="uk-legend">View my wills</legend>
         <p>Input your ethereum wallet's private key. We need it to get and update your will. The private key is treated securely and won't be passed from your browser.</p>
         <div class="uk-form-horizontal uk-grid uk-grid-small uk-margin-small-top">
@@ -94,9 +88,11 @@
         <div id="user-address" class="uk-text-success"></div>
         <div id="user-address-error" class="uk-text-danger"></div>
 
+        <!-- The user's wills -->
         <div id="container-wills">
         </div>
 
+        <!-- Available providers -->
         <hr class="uk-divider-icon">
         <legend class="uk-legend">Create a new will</legend>
         <div id="container-providers">

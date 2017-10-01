@@ -23,6 +23,7 @@ $( () => {
   // State
   const apiHost = 'http://localhost:1337';
   const nodeHost = 'http://localhost:8545';
+  const swarmHost = 'http://localhost:8500';
   const providerParams = {};
   const theState = {};
 
@@ -127,6 +128,7 @@ $( () => {
     });
     theState.willContent = JSON.stringify(theState.willRecords);
 
+    //todo: just for debug
     $('#will-confirmation-content').text(theState.willContent);
     UIkit.modal('#will-confirmation-dialog').show();
     return;
@@ -138,18 +140,25 @@ $( () => {
     .then( (enc) => {
       theState.beneficiaryIV = enc.iv;
       theState.beneficiaryEncrypted = enc.encrypted;
-      //todo: compose encrypted & IV and then pass it to the encrypt
-      // including beneficiary address
-      return wcrypto.encrypt(theState.beneficiaryEncrypted,
+      const payload = JSON.stringify({
+        beneficiaryAddress: theState.beneficiaryAddress,
+        beneficiaryContact: theState.beneficiaryContact,
+        encryptionIV: theState.beneficiaryIV,
+        encryptedWill: theState.beneficiaryEncrypted
+      });
+      return wcrypto.encrypt(payload,
                              theState.userPrivateKey,
                              theState.platformPublicKey);
     }).then( (enc) => {
       theState.platformIV = enc.iv;
       theState.platformEncrypted = enc.encrypted;
+      const payload = {
+        encryptionIV: theState.platformIV,
+        encryptedWill: theState.platformEncrypted
+      };
       $('#encrypted-will').text(theState.platformEncrypted);
 
-      //todo: compose willContent + platformIV;
-      theState.encryptedWill = theState.willContent;
+      theState.encryptedWill = payload;
       $('#will-confirmation-content').text(theState.willContent);
       UIkit.modal('#will-confirmation-dialog').show();
     });
@@ -157,34 +166,43 @@ $( () => {
 
   $('#confirm-will').click( (e) => {
     // upload the will into SWARM & generate a transaction
-    const storageId = '0x5109a6e';
-    console.log('confirmed the will');
+    const url = `${swarmHost}/bzz:/`;
+    requestServer(url, { method: 'POST', contentType: 'application/json', data: JSON.stringify(theState.encryptedWill) }).then( (response) => {
+      if (typeof response.error !== 'undefined') {
+        return Promise.reject(response.error);
+      }
 
-    //todo: generate & sign the ethereum transaction
-    const willId = (new BN(providerParams.address.slice(2), 16)).iushln(92).iadd(new BN(providerParams.will)).toString(16);
-    const payload = abi.simpleEncode('createWill(uint256,uint256,uint256,address)',
-      willId,
-      storageId,
-      theState.beneficiaryAddressHash,
-      providerParams.address);
-    const rawTx = {
-      nonce: 0,
-      gasPrice: 21.0e+9,
-      gasLimit: 0,
-      to: '0x976541a3803e7a14757b5f348a1a44366c5acbe2',
-      value: 15.0e+18,
-      data: payload,
-      chainId: 666
-    };
-    const tx = new Transaction(rawTx);
-    rawTx.gasLimit = tx.getBaseFee();
-    const promise = new Promise( (resolve, reject) => {
-      const privBN = new BN(theState.userPrivateKey.slice(2), 16);
-      const privBF = EthUtil.toBuffer(privBN);
-      rpc.packageAndSignRawTransaction(rawTx, theState.userAddress, privBF, (result) => {
-        if (result.error) reject(result);
-        else resolve(result);
+      //todo: check if needs to add 0x at the beggining
+      const storageId = response;
+      console.log('confirmed the will: ' + storageId);
+
+      // generate & sign the ethereum transaction
+      const willId = (new BN(providerParams.address.slice(2), 16)).iushln(92).iadd(new BN(providerParams.will)).toString(16);
+      const payload = abi.simpleEncode('createWill(uint256,uint256,uint256,address)',
+        willId,
+        storageId,
+        theState.beneficiaryAddressHash,
+        providerParams.address);
+      const rawTx = {
+        nonce: 0,
+        gasPrice: 21.0e+9,
+        gasLimit: 0,
+        to: '0x976541a3803e7a14757b5f348a1a44366c5acbe2',
+        value: 15.0e+18,
+        data: payload,
+        chainId: 666
+      };
+      const tx = new Transaction(rawTx);
+      rawTx.gasLimit = tx.getBaseFee();
+      const promise = new Promise( (resolve, reject) => {
+        const privBN = new BN(theState.userPrivateKey.slice(2), 16);
+        const privBF = EthUtil.toBuffer(privBN);
+        rpc.packageAndSignRawTransaction(rawTx, theState.userAddress, privBF, (result) => {
+          if (result.error) reject(result);
+          else resolve(result);
+        });
       });
+      return promise;
     }).then( (tx) => {
       console.log(tx);
       theState.signedTx = tx;
