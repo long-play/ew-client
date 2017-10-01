@@ -59,6 +59,7 @@ $( () => {
   $('#find-beneficiary').click( (e) => {
     // request a public key if exists
     theState.beneficiaryAddress = $('#beneficiary-address').val();
+    theState.beneficiaryContact = $('#beneficiary-contact').val();
     const benAddr = new BN(theState.beneficiaryAddress.slice(2), 16);
     const benBuff = EthUtil.toBuffer(benAddr);
     theState.beneficiaryAddressHash = new BN(keccak256(benBuff), 16);
@@ -129,7 +130,11 @@ $( () => {
     theState.willContent = JSON.stringify(theState.willRecords);
 
     //todo: just for debug
-    $('#will-confirmation-content').text(theState.willContent);
+    let willContent = '';
+    for (let idx in theState.willRecords) {
+      willContent += `${idx}: ${theState.willRecords[idx]}<br />`;
+    }
+    $('#will-confirmation-content').html(willContent);
     UIkit.modal('#will-confirmation-dialog').show();
     return;
 
@@ -159,9 +164,14 @@ $( () => {
       $('#encrypted-will').text(theState.platformEncrypted);
 
       theState.encryptedWill = payload;
-      $('#will-confirmation-content').text(theState.willContent);
-      UIkit.modal('#will-confirmation-dialog').show();
+      let willContent = '';
+      for (let idx in theState.willRecords) {
+        willContent += `${idx}: ${theState.willRecords[idx]}<br />`;
+      }
+      $('#will-confirmation-content').html(willContent);
     });
+
+    UIkit.modal('#will-confirmation-dialog').show();
   });
 
   $('#confirm-will').click( (e) => {
@@ -202,16 +212,16 @@ $( () => {
           else resolve(result);
         });
       });
+
+      $('#transaction-confirmation-content').text(`You are about to send ${rawTx.value / 1.0e+18} ethers to contract ${rawTx.to}. Are you sure?`);
       return promise;
     }).then( (tx) => {
-      console.log(tx);
       theState.signedTx = tx;
     }).catch( (error) => {
       console.error(error);
       //todo: show the error
     });
 
-    $('#transaction-confirmation-content').text(theState.willContent);
     UIkit.modal('#transaction-confirmation-dialog').show();
   });
 
@@ -222,12 +232,14 @@ $( () => {
 
       $('#transaction-verification-content').text(`${txId}`);
       $('#transaction-verification-content').attr('href', `https://etherscan.io/tx/${txId}`);
-      UIkit.modal('#transaction-verification-dialog').show();
     });
 
+    //todo: just for debug
     promisify(rpc.eth.getTransactionByHash)([theState.txId]).then( (txReceipt) => {
       console.log(txReceipt);
     });
+
+    UIkit.modal('#transaction-verification-dialog').show();
   });
 
   $('#add-will-row').click( (e) => {

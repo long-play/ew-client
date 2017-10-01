@@ -20,6 +20,7 @@
     "grunt-multi": "^0.0.7"
   },
   "scripts": {
+    "build": "grunt",
     "debug": "node node_modules/live-server/live-server.js --mount=/:public --watch=public --wait=5000"
   },
   "main": "index.html",
