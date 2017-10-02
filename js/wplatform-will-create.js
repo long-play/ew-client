@@ -21,17 +21,14 @@ function promisify(fn) {
 
 $( () => {
   // State
-  const apiHost = 'http://localhost:1337';
-  const nodeHost = 'http://localhost:8545';
-  const swarmHost = 'http://localhost:8500';
   const providerParams = {};
   const theState = {};
 
   const connectionConfiguration = {
-    httpAddresses: [nodeHost],
+    httpAddresses: [WPlatformConfig.gethUrl],
     wsAddresses: [],
     ipcAddresses: [],
-    networkID: 666,
+    networkID: 99,
     connectionTimeout: 3000,
     errorHandler: function (err) { /* out-of-band error */ },
   };
@@ -66,12 +63,13 @@ $( () => {
 
     //todo: debug solution
     theState.beneficiaryPublicKey = '0x431fe740f51d16296e732eec5c288057448c18f3025a15a9b54c099a6f2840ce2698753e6ed12be5aa43b43bbef5c0ea90b9b3af8f1f914d3cb4587fdd7d279f';
+    theState.beneficiaryPublicKey = '0x04e3f1ea95a64bce6060c51d3d0c897d32ebed03dc671762f1d8f2da38e84a409b43a6d812290271ac3529dc20a96418c9a11756e6dfc94a2c7e284486cae3c9a9';
     $('#beneficiary-public-key').text(theState.beneficiaryPublicKey);
     return;
 
     //todo: replace with rpc call to geth
     //rpc does not have such method. Make a call to etherscan.io api
-    const url = `${apiHost}/key/public?address=${theState.beneficiaryAddress}`;
+    const url = `${WPlatformConfig.apiUrl}/key/public?address=${theState.beneficiaryAddress}`;
     requestServer(url).then( (response) => {
       //todo: check if exists and warn a user if does not
       $('#beneficiary-public-key').text(response.publicKey);
@@ -130,6 +128,7 @@ $( () => {
     theState.willContent = JSON.stringify(theState.willRecords);
 
     //todo: just for debug
+    /*
     let willContent = '';
     for (let idx in theState.willRecords) {
       willContent += `${idx}: ${theState.willRecords[idx]}<br />`;
@@ -137,6 +136,7 @@ $( () => {
     $('#will-confirmation-content').html(willContent);
     UIkit.modal('#will-confirmation-dialog').show();
     return;
+    */
 
     const wcrypto = new Crypto.WCrypto();
     wcrypto.encrypt(theState.willContent,
@@ -176,7 +176,7 @@ $( () => {
 
   $('#confirm-will').click( (e) => {
     // upload the will into SWARM & generate a transaction
-    const url = `${swarmHost}/bzz:/`;
+    const url = `${WPlatformConfig.swarmUrl}/bzz:/`;
     requestServer(url, { method: 'POST', contentType: 'application/json', data: JSON.stringify(theState.encryptedWill) }).then( (response) => {
       if (typeof response.error !== 'undefined') {
         return Promise.reject(response.error);
@@ -197,7 +197,7 @@ $( () => {
         nonce: 0,
         gasPrice: 21.0e+9,
         gasLimit: 0,
-        to: '0x976541a3803e7a14757b5f348a1a44366c5acbe2',
+        to: WPlatformConfig.contractAddress,
         value: 15.0e+18,
         data: payload,
         chainId: 666

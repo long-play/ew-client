@@ -9,15 +9,13 @@ const keccak256 = require('js-sha3').keccak256;
 $( () => {
   // State
   const willStateNames = [ 'None', 'Created', 'Activated', 'Pending', 'Claimed', 'Declined' ];
-  const contract = '0xdedb3540843af498192723f836db218569f000e4'; // 0x976541a3803e7a14757b5f348a1a44366c5acbe2
-  const nodeHost = 'http://localhost:8545';
   const theState = {};
 
   const connectionConfiguration = {
-    httpAddresses: [nodeHost],
+    httpAddresses: [WPlatformConfig.gethUrl],
     wsAddresses: [],
     ipcAddresses: [],
-    networkID: 666,
+    networkID: 99,
     connectionTimeout: 3000,
     errorHandler: function (err) { /* out-of-band error */ },
   };
@@ -44,7 +42,7 @@ $( () => {
   function ethCall(payload) {
     const promise = new Promise( (resolve, reject) => {
       const rawTx = {
-        to: contract,
+        to: WPlatformConfig.contractAddress,
         data: EthUtil.bufferToHex(payload)
       };
       rpc.eth.call([rawTx, 'pending'], (res) => {

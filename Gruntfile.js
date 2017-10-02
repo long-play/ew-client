@@ -51,7 +51,7 @@ module.exports = function(grunt) {
 
     clean: {
       htmls: ['public/*.html'],
-      jss: ['public/js/*.js']
+      jss: ['public/js/*.js', '!public/js/wplatform-config.js']
     },
 
     copyright: '(c) Eugene Valeyev'
