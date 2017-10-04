@@ -61,14 +61,6 @@ $( () => {
     const benBuff = EthUtil.toBuffer(benAddr);
     theState.beneficiaryAddressHash = new BN(keccak256(benBuff), 16);
 
-    //todo: debug solution
-    theState.beneficiaryPublicKey = '0x431fe740f51d16296e732eec5c288057448c18f3025a15a9b54c099a6f2840ce2698753e6ed12be5aa43b43bbef5c0ea90b9b3af8f1f914d3cb4587fdd7d279f';
-    theState.beneficiaryPublicKey = '0x04e3f1ea95a64bce6060c51d3d0c897d32ebed03dc671762f1d8f2da38e84a409b43a6d812290271ac3529dc20a96418c9a11756e6dfc94a2c7e284486cae3c9a9';
-    $('#beneficiary-public-key').text(theState.beneficiaryPublicKey);
-    return;
-
-    //todo: replace with rpc call to geth
-    //rpc does not have such method. Make a call to etherscan.io api
     const url = `${WPlatformConfig.apiUrl}/key/public?address=${theState.beneficiaryAddress}`;
     requestServer(url).then( (response) => {
       //todo: check if exists and warn a user if does not
@@ -169,9 +161,10 @@ $( () => {
         willContent += `${idx}: ${theState.willRecords[idx]}<br />`;
       }
       $('#will-confirmation-content').html(willContent);
+      UIkit.modal('#will-confirmation-dialog').show();
     });
 
-    UIkit.modal('#will-confirmation-dialog').show();
+    return;
   });
 
   $('#confirm-will').click( (e) => {
@@ -214,6 +207,7 @@ $( () => {
       });
 
       $('#transaction-confirmation-content').text(`You are about to send ${rawTx.value / 1.0e+18} ethers to contract ${rawTx.to}. Are you sure?`);
+      UIkit.modal('#transaction-confirmation-dialog').show();
       return promise;
     }).then( (tx) => {
       theState.signedTx = tx;
@@ -222,7 +216,7 @@ $( () => {
       //todo: show the error
     });
 
-    UIkit.modal('#transaction-confirmation-dialog').show();
+    return;
   });
 
   $('#confirm-transaction').click( (e) => {
@@ -232,14 +226,15 @@ $( () => {
 
       $('#transaction-verification-content').text(`${txId}`);
       $('#transaction-verification-content').attr('href', `https://etherscan.io/tx/${txId}`);
-    });
-
-    //todo: just for debug
-    promisify(rpc.eth.getTransactionByHash)([theState.txId]).then( (txReceipt) => {
+      UIkit.modal('#transaction-verification-dialog').show();
+    }).then( () => {
+      //todo: just for debug
+      return promisify(rpc.eth.getTransactionByHash)([theState.txId]);
+    }).then( (txReceipt) => {
       console.log(txReceipt);
     });
 
-    UIkit.modal('#transaction-verification-dialog').show();
+    return;
   });
 
   $('#add-will-row').click( (e) => {

@@ -140,6 +140,7 @@ $( () => {
 
   // Initialize the page
   function initProvidersTable(providersData) {
+    //todo: replace with a call of contract
     requestServer('swarm/providers.json').then( (response) => {
       const providersData = { providers: [] };
 
