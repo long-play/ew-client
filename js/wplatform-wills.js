@@ -92,7 +92,7 @@ $( () => {
     do {
       try {
         const will = await requestWill(idx);
-        if (will) {
+        if (will && will.willId.toString(10) !== '0') {
           wills.push(will);
           idx++;
         } else {
@@ -112,6 +112,11 @@ $( () => {
     // unlock a user's wallet & extract the private key
     theState.userPrivateKey = $('#user-private-key').val();
     theState.userAddress = '0x' + EthUtil.privateToAddress(theState.userPrivateKey).toString('hex');
+
+    if (typeof Storage && sessionStorage.userPrivateKey != theState.userPrivateKey) {
+      sessionStorage.userPrivateKey = theState.userPrivateKey;
+    }
+
     $('#user-address').text(theState.userAddress);
 
     requestAllWills().then( (wills) => {
@@ -139,7 +144,7 @@ $( () => {
 
 
   // Initialize the page
-  function initProvidersTable(providersData) {
+  function initProvidersTable() {
     //todo: replace with a call of contract
     requestServer('swarm/providers.json').then( (response) => {
       const providersData = { providers: [] };
@@ -160,5 +165,13 @@ $( () => {
     });
   };
 
+  function initUserWallet() {
+    if (typeof Storage && sessionStorage.userPrivateKey) {
+      $('#user-private-key').val(sessionStorage.userPrivateKey);
+      $('#unlock-wallet').click();
+    }
+  };
+
   initProvidersTable();
+  setTimeout(initUserWallet, 500);
 });

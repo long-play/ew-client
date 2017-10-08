@@ -77,6 +77,11 @@ $( () => {
     // unlock a user's wallet & extract the private key
     theState.userPrivateKey = $('#user-private-key').val();
     theState.userAddress = '0x' + EthUtil.privateToAddress(theState.userPrivateKey).toString('hex');
+
+    if (typeof Storage && sessionStorage.userPrivateKey != theState.userPrivateKey) {
+      sessionStorage.userPrivateKey = theState.userPrivateKey;
+    }
+
     $('#user-address').text(theState.userAddress);
   });
 
@@ -170,6 +175,7 @@ $( () => {
   $('#confirm-will').click( (e) => {
     // upload the will into SWARM & generate a transaction
     const url = `${WPlatformConfig.swarmUrl}/bzz:/`;
+    let rawTx = {};
     requestServer(url, { method: 'POST', contentType: 'application/json', data: JSON.stringify(theState.encryptedWill) }).then( (response) => {
       if (typeof response.error !== 'undefined') {
         return Promise.reject(response.error);
@@ -180,20 +186,21 @@ $( () => {
       console.log('confirmed the will: ' + storageId);
 
       // generate & sign the ethereum transaction
-      const willId = (new BN(providerParams.address.slice(2), 16)).iushln(92).iadd(new BN(providerParams.will)).toString(16);
+      const willId = (new BN(providerParams.address.slice(2), 16)).iushln(96).iadd(new BN(providerParams.will)).toString(16);
+      console.log('willid is ' + willId);
       const payload = abi.simpleEncode('createWill(uint256,uint256,uint256,address)',
-        willId,
-        storageId,
+        `0x${willId}`,
+        `0x${storageId}`,
         theState.beneficiaryAddressHash,
         providerParams.address);
-      const rawTx = {
+      rawTx = {
         nonce: 0,
         gasPrice: 21.0e+9,
         gasLimit: 0,
         to: WPlatformConfig.contractAddress,
         value: 15.0e+18,
         data: payload,
-        chainId: 666
+        chainId: 99
       };
       const tx = new Transaction(rawTx);
       rawTx.gasLimit = tx.getBaseFee();
@@ -206,11 +213,12 @@ $( () => {
         });
       });
 
-      $('#transaction-confirmation-content').text(`You are about to send ${rawTx.value / 1.0e+18} ethers to contract ${rawTx.to}. Are you sure?`);
-      UIkit.modal('#transaction-confirmation-dialog').show();
       return promise;
     }).then( (tx) => {
       theState.signedTx = tx;
+
+      $('#transaction-confirmation-content').text(`You are about to send ${rawTx.value / 1.0e+18} ethers to contract ${rawTx.to}. Are you sure?`);
+      UIkit.modal('#transaction-confirmation-dialog').show();
     }).catch( (error) => {
       console.error(error);
       //todo: show the error
@@ -287,6 +295,13 @@ $( () => {
     });
   };
 
+  function initUserWallet() {
+    if (typeof Storage && sessionStorage.userPrivateKey) {
+      $('#user-private-key').val(sessionStorage.userPrivateKey);
+      $('#unlock-wallet').click();
+    }
+  };
+
   function addWillRow() {
     const willRow = $('#template-will-row').html();
     const compiledWillRow = Handlebars.compile(willRow);
@@ -295,5 +310,6 @@ $( () => {
   };
 
   configureProviderParams(window.location.search.slice(1));
+  initUserWallet();
   addWillRow();
 });
