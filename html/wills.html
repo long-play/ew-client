@@ -50,10 +50,10 @@
         <tbody>
         {{#each wills}}
             <tr>
-                <td>{{willId}}</td>
-                <td>{{annualFee}}</td>
+                <td>{{maskBN willId}}</td>
+                <td>{{weiToEth annualFee}} ethers</td>
                 <td>{{stateName}}</td>
-                <td>{{validTill}}</td>
+                <td>{{formatDate validTill}}</td>
                 <td>
                     <button class="uk-button uk-button-default" type="button">Choose an action</button>
                     <div uk-dropdown="mode: click">

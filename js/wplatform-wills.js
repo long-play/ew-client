@@ -65,7 +65,7 @@ $( () => {
       console.log(payload);
       payload = EthUtil.toBuffer(payload);
       //const fieldValues = abi.simpleDecode('wills(uint256):(uint256,uint256,uint256,uint256,uint256,uint256,address,uint8,uint256,uint256,address)', payload);
-      const fieldValues = abi.simpleDecode('wills(uint256):(uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256)', payload);
+      const fieldValues = abi.simpleDecode('wills(uint256):(uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256)', payload);
       const will = {
         willId: fieldValues[0],
         storageId: fieldValues[1],
@@ -75,9 +75,10 @@ $( () => {
         decryptionKey: fieldValues[5],
         owner: fieldValues[6],
         state: fieldValues[7],
-        updatedAt: fieldValues[8],
-        validTill: fieldValues[9],
-        provider: fieldValues[10],
+        createdAt: fieldValues[8],
+        updatedAt: fieldValues[9],
+        validTill: fieldValues[10],
+        provider: fieldValues[11],
       };
       return Promise.resolve(will);
     });
@@ -133,6 +134,18 @@ $( () => {
         };
         willsData.wills.push(will);
       }
+
+      Handlebars.registerHelper('maskBN', (arg) => {
+        return arg.slice(0, 6) + '..' + arg.slice(-6);
+      });
+
+      Handlebars.registerHelper('weiToEth', (arg) => {
+        return parseFloat(arg) / 1.0e+18;
+      });
+
+      Handlebars.registerHelper('formatDate', (arg) => {
+        return moment.unix(arg).format('LLL');
+      });
 
       const willsTemplate = $('#template-wills').html();
       const table = Handlebars.compile(willsTemplate);
