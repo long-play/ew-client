@@ -64,8 +64,7 @@ $( () => {
     }).then( (payload) => {
       console.log(payload);
       payload = EthUtil.toBuffer(payload);
-      //const fieldValues = abi.simpleDecode('wills(uint256):(uint256,uint256,uint256,uint256,uint256,uint256,address,uint8,uint256,uint256,address)', payload);
-      const fieldValues = abi.simpleDecode('wills(uint256):(uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256)', payload);
+      const fieldValues = abi.simpleDecode('wills(uint256):(uint256,uint256,uint256,uint256,uint256,uint256,address,uint8,uint256,uint256,uint256,address)', payload);
       const will = {
         willId: fieldValues[0],
         storageId: fieldValues[1],

@@ -5,6 +5,12 @@ const rpc = require('ethrpc');
 const abi = require('ethereumjs-abi');
 const BN = require('bn.js');
 const keccak256 = require('js-sha3').keccak256;
+const Tar = require('tar-js');
+
+const templateMeta = {
+  poweredBy: 'E-Will Platform',
+  version: '1.0'
+};
 
 function promisify(fn) {
   const asyncFn = (args) => {
@@ -112,55 +118,54 @@ $( () => {
   });
 
   $('#create-will').click( (e) => {
-    // construct, encrypt the will and show confirmation modal dialog
+    const willTar = new Tar();
     theState.willRecords = {};
+
+    // construct, encrypt the will and show confirmation modal dialog
     $('tr[name="will-record"]').each( (idx, record) => {
       const name = $($(record).find('input')[0]).val();
       const value = $($(record).find('input')[1]).val();
-
       if (name.length == 0 || value.length == 0) return;
 
       theState.willRecords[name] = value;
+      //todo: check the validity of the name and its uniqueness
+      willTar.append(name, value);
     });
-    theState.willContent = JSON.stringify(theState.willRecords);
-
-    //todo: just for debug
-    /*
-    let willContent = '';
-    for (let idx in theState.willRecords) {
-      willContent += `${idx}: ${theState.willRecords[idx]}<br />`;
-    }
-    $('#will-confirmation-content').html(willContent);
-    UIkit.modal('#will-confirmation-dialog').show();
-    return;
-    */
+    const meta = Object.assign({}, templateMeta);
+    const willContent = willTar.append('meta.json', JSON.stringify(meta));
 
     const wcrypto = new Crypto.WCrypto();
-    wcrypto.encrypt(theState.willContent,
+    wcrypto.encrypt(willContent,
                     theState.userPrivateKey,
                     theState.beneficiaryPublicKey)
     .then( (enc) => {
-      theState.beneficiaryIV = enc.iv;
-      theState.beneficiaryEncrypted = enc.encrypted;
-      const payload = JSON.stringify({
+      const encWillTar = new Tar();
+      const meta = Object.assign({
         beneficiaryAddress: theState.beneficiaryAddress,
         beneficiaryContact: theState.beneficiaryContact,
-        encryptionIV: theState.beneficiaryIV,
-        encryptedWill: theState.beneficiaryEncrypted
-      });
+        beneficiaryPublicKey: theState.beneficiaryPublicKey,
+        encryptionIV: enc.iv,
+        owner: theState.beneficiaryAddress
+      }, templateMeta);
+
+      encWillTar.append('will.encrypted.tar', enc.encrypted);
+      const payload = encWillTar.append('meta.json', JSON.stringify(meta));
+
       return wcrypto.encrypt(payload,
                              theState.userPrivateKey,
                              theState.platformPublicKey);
     }).then( (enc) => {
-      theState.platformIV = enc.iv;
-      theState.platformEncrypted = enc.encrypted;
-      const payload = {
-        encryptionIV: theState.platformIV,
-        encryptedWill: theState.platformEncrypted
-      };
-      $('#encrypted-will').text(theState.platformEncrypted);
+      const encWillTar = new Tar();
+      const meta = Object.assign({
+        encryptionIV: enc.iv,
+        owner: providerParams.address
+      }, templateMeta);
+      $('#encrypted-will').text(enc.encrypted);
 
-      theState.encryptedWill = payload;
+      encWillTar.append('will.encrypted.x2.tar', enc.encrypted);
+      const payload = encWillTar.append('meta.json', JSON.stringify(meta));
+      theState.encryptedWill = new Uint8Array(payload);
+
       let willContent = '';
       for (let idx in theState.willRecords) {
         willContent += `${idx}: ${theState.willRecords[idx]}<br />`;
@@ -176,7 +181,7 @@ $( () => {
     // upload the will into SWARM & generate a transaction
     const url = `${WPlatformConfig.swarmUrl}/bzz:/`;
     let rawTx = {};
-    requestServer(url, { method: 'POST', contentType: 'application/json', data: JSON.stringify(theState.encryptedWill) }).then( (response) => {
+    requestServer(url, { method: 'POST', contentType: 'application/json', data: /*todo: upload binary data*/theState.encryptedWill }).then( (response) => {
       if (typeof response.error !== 'undefined') {
         return Promise.reject(response.error);
       }
@@ -261,6 +266,7 @@ $( () => {
       if (split.length != 2) continue;
       params[split[0]] = split[1];
     }
+    //todo: remove logs
     console.log(params);
 
     providerParams.address = params['address'];
