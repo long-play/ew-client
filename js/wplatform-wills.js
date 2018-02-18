@@ -1,31 +1,15 @@
-const Crypto = require('wcrypto');
-const EthUtil = require('ethereumjs-util');
-const Transaction = require('ethereumjs-tx');
-const rpc = require('ethrpc');
-const abi = require('ethereumjs-abi');
-const BN = require('bn.js');
 const keccak256 = require('js-sha3').keccak256;
+const EthUtil = require('ethereumjs-util');
+const Crypto = require('wcrypto');
+const Web3 = require('web3');
+const BN = require('bn.js');
 
 $( () => {
   // State
   const willStateNames = [ 'None', 'Created', 'Activated', 'Pending', 'Claimed', 'Declined' ];
   const theState = {};
 
-  const connectionConfiguration = {
-    httpAddresses: [WPlatformConfig.gethUrl],
-    wsAddresses: [],
-    ipcAddresses: [],
-    networkID: 99,
-    connectionTimeout: 3000,
-    errorHandler: function (err) { /* out-of-band error */ },
-  };
-  rpc.connect(connectionConfiguration, (err) => {
-    if (err) {
-      console.error("Failed to connect to Ethereum node: " + err);
-    } else {
-      console.log("Connected to Ethereum node!");
-    }
-  });
+  const web3 = new Web3(WPlatformConfig.gethUrl);
 
   // Helper methods
   function requestServer(url) {
@@ -39,72 +23,28 @@ $( () => {
     return promise;
   };
 
-  function ethCall(payload) {
-    const promise = new Promise( (resolve, reject) => {
-      const rawTx = {
-        to: WPlatformConfig.contractAddress,
-        data: EthUtil.bufferToHex(payload)
-      };
-      rpc.eth.call([rawTx, 'pending'], (res) => {
-        if (res.error) reject(res);
-        else resolve(res);
-      });
-    });
-    return promise;
-  };
-
-  function requestWill(willNumber) {
-    const payload = abi.simpleEncode('userWills(address,uint256)',
-      theState.userAddress,
-      willNumber
-    );
-    const promise = ethCall(payload).then( (willId) => {
-      const payload = abi.simpleEncode('wills(uint256)', willId);
-      return ethCall(payload);
-    }).then( (payload) => {
-      console.log(payload);
-      payload = EthUtil.toBuffer(payload);
-      const fieldValues = abi.simpleDecode('wills(uint256):(uint256,uint256,uint256,uint256,uint256,uint256,address,uint8,uint256,uint256,uint256,address)', payload);
-      const will = {
-        willId: fieldValues[0],
-        storageId: fieldValues[1],
-        balance: fieldValues[2],
-        annualFee: fieldValues[3],
-        beneficiaryHash: fieldValues[4],
-        decryptionKey: fieldValues[5],
-        owner: fieldValues[6],
-        state: fieldValues[7],
-        createdAt: fieldValues[8],
-        updatedAt: fieldValues[9],
-        validTill: fieldValues[10],
-        provider: fieldValues[11],
-      };
-      return Promise.resolve(will);
-    });
-    return promise;
-  };
-
-  async function requestAllWills() {
-    let finished = false;
-    let idx = 0;
+  function requestAllWills() {
     const wills = [];
+    const promises = [];
 
-    do {
-      try {
-        const will = await requestWill(idx);
-        if (will && will.willId.toString(10) !== '0') {
+    const promise = ewPlatform.methods.numberOfUserWills(theState.userAccount.address).call().then( (numberOfWills) => {
+      for (let idx = 0; idx < numberOfWills; idx++) {
+        const promise = ewPlatform.methods.userWills(
+          theState.userAccount.address,
+          idx
+        ).call().then( (willId) => {
+          return ewPlatform.methods.wills(willId).call();
+        }).call().then( (will) => {
           wills.push(will);
-          idx++;
-        } else {
-          finished = true;
-        }
-      } catch (err) {
-        console.error(err);
-        finished = true;
+        });
+        promises.push(promise);
       }
-    } while (finished == false);
+      return Promise.all(promises);
+    }).then( () => {
+      return Promise.resolve(wills);
+    });
 
-    return wills;
+    return promise;
   };
 
   // Button actions handlers
@@ -156,6 +96,27 @@ $( () => {
 
 
   // Initialize the page
+  function configureContract() {
+    let abi = null;
+    const promise = $.getJSON('abi-platform.json').then( (json) => {
+      ewPlatform = new web3.eth.Contract(json, WPlatformConfig.contractPlatformAddress);
+      return $.getJSON('abi-escrow.json');
+    }).then( (json) => {
+      abi = json;
+      return ewPlatform.methods.escrowWallet().call();
+    }).then( (escrowAddress) => {
+      ewEscrow = new web3.eth.Contract(abi, escrowAddress);
+      return ewPlatform.methods.name().call();
+    }).then( (name) => {
+      console.log(`Contract '${name}' is initialized`);
+      return ewEscrow.methods.name().call();
+    }).then( (name) => {
+      console.log(`Contract '${name}' is initialized`);
+      return Promise.resolve();
+    });
+    return promise;
+  };
+
   function initProvidersTable() {
     //todo: replace with a call of contract
     requestServer('swarm/providers.json').then( (response) => {
@@ -184,6 +145,13 @@ $( () => {
     }
   };
 
-  initProvidersTable();
-  setTimeout(initUserWallet, 500);
+  //todo: lock the screen
+  configureContract().then( () => {
+    initUserWallet();
+    initProvidersTable();
+    //todo: unlock the screen
+  }).catch( (error) => {
+    //todo: show UIKit error
+    alert(error);
+  });
 });

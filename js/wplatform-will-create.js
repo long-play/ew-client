@@ -1,50 +1,21 @@
-const Crypto = require('wcrypto');
-const EthUtil = require('ethereumjs-util');
-const Transaction = require('ethereumjs-tx');
-const rpc = require('ethrpc');
-const abi = require('ethereumjs-abi');
-const BN = require('bn.js');
 const keccak256 = require('js-sha3').keccak256;
+const EthUtil = require('ethereumjs-util');
+const Crypto = require('wcrypto');
+const Web3 = require('web3');
 const Tar = require('tar-js');
+const BN = require('bn.js');
 
 const templateMeta = {
   poweredBy: 'E-Will Platform',
   version: '1.0'
 };
 
-function promisify(fn) {
-  const asyncFn = (args) => {
-    const promise = new Promise( (resolve, reject) => {
-      const ret = fn(args, (result) => {
-        resolve(result);
-      });
-      if (ret) reject();
-    });
-    return promise;
-  };
-  return asyncFn;
-}
-
 $( () => {
   // State
   const providerParams = {};
   const theState = {};
 
-  const connectionConfiguration = {
-    httpAddresses: [WPlatformConfig.gethUrl],
-    wsAddresses: [],
-    ipcAddresses: [],
-    networkID: 99,
-    connectionTimeout: 3000,
-    errorHandler: function (err) { /* out-of-band error */ },
-  };
-  rpc.connect(connectionConfiguration, (err) => {
-    if (err) {
-      console.error("Failed to connect to Ethereum node: " + err);
-    } else {
-      console.log("Connected to Ethereum node!");
-    }
-  });
+  const web3 = new Web3(WPlatformConfig.gethUrl);
 
   // Helper methods
   function requestServer(url, settings) {
@@ -82,20 +53,20 @@ $( () => {
   $('#unlock-wallet').click( (e) => {
     // unlock a user's wallet & extract the private key
     theState.userPrivateKey = $('#user-private-key').val();
-    theState.userAddress = '0x' + EthUtil.privateToAddress(theState.userPrivateKey).toString('hex');
+    theState.userAccount = web3.eth.accounts.privateKeyToAccount(userPrivateKey);
 
     if (typeof Storage && sessionStorage.userPrivateKey != theState.userPrivateKey) {
       sessionStorage.userPrivateKey = theState.userPrivateKey;
     }
 
-    $('#user-address').text(theState.userAddress);
+    $('#user-address').text(theState.userAccount.address);
   });
 
   $('#request-key').click( (e) => {
     // pass the user's address to the provider and get server's public key
     const url = `${providerParams.provider.url}/setup-will`;
     const data = {
-      address: theState.userAddress,
+      address: theState.userAccount.address,
       will: providerParams.will,
       token: providerParams.token
     };
@@ -103,9 +74,9 @@ $( () => {
       //todo: verify signature & willId
       const isSigned = (response.signature == '//todo:');
       if (isSigned !== true) {
-        return Promse.reject( /* error */ );
+        return Promise.reject( /* error */ );
       } else if (providerParams.will != response.will) {
-        return Promse.reject( /* error */ );
+        return Promise.reject( /* error */ );
       }
 
       $('#platform-public-key').text(response.key);
@@ -181,7 +152,8 @@ $( () => {
     // upload the will into SWARM & generate a transaction
     const url = `${WPlatformConfig.swarmUrl}/bzz:/`;
     let rawTx = {};
-    requestServer(url, { method: 'POST', contentType: 'application/json', data: /*todo: upload binary data*/theState.encryptedWill }).then( (response) => {
+    let createWill = null;
+    requestServer(url, { method: 'POST', contentType: 'application/x-tar', data: /*todo: upload binary data*/theState.encryptedWill }).then( (response) => {
       if (typeof response.error !== 'undefined') {
         return Promise.reject(response.error);
       }
@@ -193,36 +165,29 @@ $( () => {
       // generate & sign the ethereum transaction
       const willId = (new BN(providerParams.address.slice(2), 16)).iushln(96).iadd(new BN(providerParams.will)).toString(16);
       console.log('willid is ' + willId);
-      const payload = abi.simpleEncode('createWill(uint256,uint256,uint256,address)',
+
+      createWill = ewPlatform.methods.createWill(
         `0x${willId}`,
         `0x${storageId}`,
         theState.beneficiaryAddressHash,
         providerParams.address);
+      return createWill.estimateGas({ from: theState.userAccount.address });
+    }).then( (gasLimit) => {
+      const payload = createWill.encodeABI();
+      console.log(payload);
+
       rawTx = {
-        nonce: 0,
-        gasPrice: 21.0e+9,
-        gasLimit: 0,
-        to: WPlatformConfig.contractAddress,
-        value: 15.0e+18,
+        to: ewPlatform.options.address,
         data: payload,
-        chainId: 99
+        value: 15.0e+18,
+        gasLimit: gasLimit,
+        chainId: 9
       };
-      const tx = new Transaction(rawTx);
-      rawTx.gasLimit = tx.getBaseFee();
-      const promise = new Promise( (resolve, reject) => {
-        const privBN = new BN(theState.userPrivateKey.slice(2), 16);
-        const privBF = EthUtil.toBuffer(privBN);
-        rpc.packageAndSignRawTransaction(rawTx, theState.userAddress, privBF, (result) => {
-          if (result.error) reject(result);
-          else resolve(result);
-        });
-      });
-
-      return promise;
+      return theState.userAccount.signTransaction(tx);
     }).then( (tx) => {
-      theState.signedTx = tx;
+      theState.signedTx = tx.rawTransaction;
 
-      $('#transaction-confirmation-content').text(`You are about to send ${rawTx.value / 1.0e+18} ethers to contract ${rawTx.to}. Are you sure?`);
+      $('#transaction-confirmation-content').text(`You are about to send ${rawTx.value / 1.0e+18} ethers to the contract ${rawTx.to}. Are you sure?`);
       UIkit.modal('#transaction-confirmation-dialog').show();
     }).catch( (error) => {
       console.error(error);
@@ -234,17 +199,21 @@ $( () => {
 
   $('#confirm-transaction').click( (e) => {
     // send the transaction to the network
-    promisify(rpc.eth.sendRawTransaction)([theState.signedTx]).then( (txId) => {
+    const defer = web3.eth.sendSignedTransaction(theState.signedTx);
+    defer.once('transactionHash', (txId) => {
+      console.log(txId);
       theState.txId = txId;
 
       $('#transaction-verification-content').text(`${txId}`);
       $('#transaction-verification-content').attr('href', `https://etherscan.io/tx/${txId}`);
       UIkit.modal('#transaction-verification-dialog').show();
-    }).then( () => {
-      //todo: just for debug
-      return promisify(rpc.eth.getTransactionByHash)([theState.txId]);
-    }).then( (txReceipt) => {
-      console.log(txReceipt);
+    });
+    defer.once('receipt', (receipt) => {
+      console.log(receipt);
+    });
+    defer.once('confirmation', (count, receipt) => {
+      console.log('confirmed ' + count + ' times');
+      console.log(receipt);
     });
 
     return;
@@ -255,9 +224,28 @@ $( () => {
   });
 
   // Initialize the page
-  function configureProviderParams(query) {
-    //todo: lock the screen
+  function configureContract() {
+    let abi = null;
+    const promise = $.getJSON('abi-platform.json').then( (json) => {
+      ewPlatform = new web3.eth.Contract(json, WPlatformConfig.contractPlatformAddress);
+      return $.getJSON('abi-escrow.json');
+    }).then( (json) => {
+      abi = json;
+      return ewPlatform.methods.escrowWallet().call();
+    }).then( (escrowAddress) => {
+      ewEscrow = new web3.eth.Contract(abi, escrowAddress);
+      return ewPlatform.methods.name().call();
+    }).then( (name) => {
+      console.log(`Contract '${name}' is initialized`);
+      return ewEscrow.methods.name().call();
+    }).then( (name) => {
+      console.log(`Contract '${name}' is initialized`);
+      return Promise.resolve();
+    });
+    return promise;
+  };
 
+  function configureProviderParams(query) {
     // parse the params & store the PlatformID
     const params = {};
     const queries = query.split('&');
@@ -275,9 +263,7 @@ $( () => {
     providerParams.signature = params['signature'];
 
     if (!providerParams.address || !providerParams.will || !providerParams.signature || !providerParams.token) {
-      //todo: show UIKit warning
-      alert('Missing some provider\'s parameters');
-      return;
+      return Promise.reject('Missing some provider\'s parameters');
     }
 
     const msg = `${providerParams.address}:${providerParams.will}:${providerParams.token}`;
@@ -285,20 +271,16 @@ $( () => {
     //todo: check the signature virify(msg, signature, pubkey)
     const isSigned = (providerParams.signature == '//todo:');
     if (isSigned !== true) {
-      //todo: show UIKit warning
-      alert('The provider\'s signature is corrupted!');
-      return;
+      return Promise.reject('The provider\'s signature is corrupted!');
     }
 
     // request a provider info
     //todo: get swarm id from the contract and request its content
-    requestServer('swarm/providers.json').then( (response) => {
+    const promise = requestServer('swarm/providers.json').then( (response) => {
       providerParams.provider = response.providers[providerParams.address];
-      //todo: unlock the screen
-    }).catch( (error) => {
-      //todo: show UIKit error
-      alert(error);
+      return Promise.resolve();
     });
+    return promise;
   };
 
   function initUserWallet() {
@@ -315,7 +297,15 @@ $( () => {
     $('#will-table').append(compiledWillRow({}));
   };
 
-  configureProviderParams(window.location.search.slice(1));
-  initUserWallet();
-  addWillRow();
+  //todo: lock the screen
+  configureProviderParams(window.location.search.slice(1)).then( () => {
+    return configureContract();
+  }).then( () => {
+    initUserWallet();
+    addWillRow();
+    //todo: unlock the screen
+  }).catch( (error) => {
+    //todo: show UIKit error
+    alert(error);
+  });
 });
