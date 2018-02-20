@@ -267,18 +267,26 @@ $( () => {
     }
 
     const msg = `${providerParams.address}:${providerParams.will}:${providerParams.token}`;
-    //todo: request public key by address
-    //todo: check the signature virify(msg, signature, pubkey)
+    //todo: isSigned = (ecrecover(msg, providerParams.signature) == providerParams.address);
     const isSigned = (providerParams.signature == '//todo:');
     if (isSigned !== true) {
       return Promise.reject('The provider\'s signature is corrupted!');
     }
 
     // request a provider info
-    //todo: get swarm id from the contract and request its content
-    const promise = requestServer('swarm/providers.json').then( (response) => {
-      providerParams.provider = response.providers[providerParams.address];
-      return Promise.resolve();
+    const promise = ewEscrow.methods.providerAddress(providerParams.address).call().then( (address) => {
+      providerParams.resolvedAddress = address;
+      return ewEscrow.methods.isProviderValid(providerParams.resolvedAddress).call();
+    }).then( (isValid) => {
+      if (!isValid) {
+        return Promise.reject(`The provider ${providerParams.address} is not a valid provider`);
+      }
+      return ewEscrow.methods.providers(providerParams.resolvedAddress).call();
+    }).then( (providerInfo) => {
+      console.log(providerInfo);
+      return $.getJSON(`${WPlatformConfig.swarmUrl}/bzz:/${providerInfo.info}`);
+    }).then( (providerInfo) => {
+      providerParams.provider = providerInfo;
     });
     return promise;
   };
@@ -298,8 +306,9 @@ $( () => {
   };
 
   //todo: lock the screen
-  configureProviderParams(window.location.search.slice(1)).then( () => {
-    return configureContract();
+  configureContract().then( () => {
+    const queryParams = window.location.search.slice(1);
+    configureProviderParams(queryParams);
   }).then( () => {
     initUserWallet();
     addWillRow();
