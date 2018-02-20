@@ -308,7 +308,7 @@ $( () => {
   //todo: lock the screen
   configureContract().then( () => {
     const queryParams = window.location.search.slice(1);
-    configureProviderParams(queryParams);
+    return configureProviderParams(queryParams);
   }).then( () => {
     initUserWallet();
     addWillRow();

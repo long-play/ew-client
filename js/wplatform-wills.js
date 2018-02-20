@@ -117,25 +117,34 @@ $( () => {
     return promise;
   };
 
+  function requestValidProviders(addresses) {
+    const promises = addresses.map( (addr) => {
+      return ewEscrow.methods.isProviderValid(addr).call().then( (isValid) => {
+        return isValid ? ewEscrow.methods.providers(addr).call() : Promise.resolve({ invalid: true });
+      });
+    });
+    const promise = Promise.all(promises).then( (providersInfo) => {
+      return Promise.resolve(providersInfo.filter( pi => !pi.invalid ));
+    });
+    return promise;
+  };
+
   function initProvidersTable() {
-    //todo: replace with a call of contract
-    requestServer('swarm/providers.json').then( (response) => {
-      const providersData = { providers: [] };
-
-      for (let address in response.providers) {
-        const provider = response.providers[address];
-        providersData.providers.push(provider);
-      }
-
+    const promise = ewEscrow.getPastEvents('Registered').then( (events) => {
+      return requestValidProviders(events.map( ev => ev.returnValues.provider ));
+    }).then( (providersInfo) => {
+      const promises = providersInfo.map( (pi) => {
+        return $.getJSON(`${WPlatformConfig.swarmUrl}/bzz:/${providerInfo.info}`);
+      });
+      return Promise.all(promises);
+    }).then( (providersInfo) => {
+      const providersData = { providers: providersInfo };
       const providers = $('#template-providers').html();
       const table = Handlebars.compile(providers);
-  
       const container = $('#container-providers')[0];
       container.innerHTML = table(providersData);
-    }).catch( (error) => {
-      //todo: show UIKit error
-      alert(error);
     });
+    return promise;
   };
 
   function initUserWallet() {
@@ -148,7 +157,7 @@ $( () => {
   //todo: lock the screen
   configureContract().then( () => {
     initUserWallet();
-    initProvidersTable();
+    return initProvidersTable();
     //todo: unlock the screen
   }).catch( (error) => {
     //todo: show UIKit error
