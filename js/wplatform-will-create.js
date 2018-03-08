@@ -46,8 +46,21 @@ $( () => {
       theState.beneficiaryPublicKey = response.publicKey;
     }).catch( (error) => {
       $('#beneficiary-public-key').text('');
-      $('#beneficiary-public-key-error').text(error.statusText);
+      $('#beneficiary-public-key-error').text(`Failed to find beneficiary's public key: ${error.statusText$}. Please try to use another option - create an address or use addressless mechanic.`);
     });
+  });
+
+  $('#create-beneficiary').click( (e) => {
+    theState.beneficiaryContact = $('#beneficiary-contact').val();
+
+    const benAcc = web3.eth.accounts.create();
+    theState.beneficiaryAddress = benAcc.address;
+    theState.beneficiaryPublicKey = EthUtil.bufferToHex(EthUtil.privateToPublic(benAcc.privateKey));
+    const benAddr = new BN(theState.beneficiaryAddress.slice(2), 16);
+    const benBuff = EthUtil.toBuffer(benAddr);
+    theState.beneficiaryAddressHash = new BN(keccak256(benBuff), 16);
+    $('#beneficiary-public-key').text(theState.beneficiaryPublicKey);
+    $('#beneficiary-public-key-error').text('');
   });
 
   $('#unlock-wallet').click( (e) => {
