@@ -55,12 +55,16 @@ $( () => {
 
     const benAcc = web3.eth.accounts.create();
     theState.beneficiaryAddress = benAcc.address;
+    theState.beneficiaryPrivateKey = benAcc.privateKey;
     theState.beneficiaryPublicKey = EthUtil.bufferToHex(EthUtil.privateToPublic(benAcc.privateKey));
     const benAddr = new BN(theState.beneficiaryAddress.slice(2), 16);
     const benBuff = EthUtil.toBuffer(benAddr);
     theState.beneficiaryAddressHash = new BN(keccak256(benBuff), 16);
     $('#beneficiary-public-key').text(theState.beneficiaryPublicKey);
     $('#beneficiary-public-key-error').text('');
+
+    $('#address-created-content').html(`Please print the card with beneficiary's private key and give it him/her:<br />${theState.beneficiaryPrivateKey}`);
+    UIkit.modal('#address-created-dialog').show();
   });
 
   $('#unlock-wallet').click( (e) => {
