@@ -29,6 +29,21 @@ $( () => {
     return promise;
   };
 
+  const fileChangeHandler = (e) => {
+    const input = e.target;
+    input.fileToUpload = null;
+    input.contentToUpload = null;
+    if (input.files.length !== 1) return;
+
+    const file = input.files[0];
+    const reader = new FileReader();
+    reader.onload = function() {
+      input.fileToUpload = file;
+      input.contentToUpload = new Uint8Array(reader.result, 0, reader.result.byteLength);
+    };
+    reader.readAsArrayBuffer(file);
+  };
+
   // Button actions handlers
   $('#find-beneficiary').click( (e) => {
     // request a public key if exists
@@ -110,18 +125,46 @@ $( () => {
     theState.willRecords = {};
 
     // construct, encrypt the will and show confirmation modal dialog
-    $('tr[name="will-record"]').each( (idx, record) => {
+    $('tr[name="will-text-record"]').each( (idx, record) => {
       const name = $($(record).find('input')[0]).val();
       const value = $($(record).find('input')[1]).val();
       if (name.length == 0 || value.length == 0) return;
 
-      theState.willRecords[name] = value;
       //todo: check the validity of the name and its uniqueness
+      theState.willRecords[name] = value;
       willTar.append(name, value);
     });
+
+    $('tr[name="will-file-record"]').each( (idx, record) => {
+      let name = $($(record).find('input')[0]).val();
+      const input = $(record).find('input')[1];
+      if (name.length == 0) {
+        name = input.fileToUpload.name;
+      }
+
+      //todo: check the validity of the name and its uniqueness
+      theState.willRecords[name] = input.fileToUpload;
+      willTar.append(name, input.contentToUpload);
+    });
+
+/*
+//======================================================
+function uint8ToString(buf) {
+    var i, length, out = '';
+    for (i = 0, length = buf.length; i < length; i += 1) {
+        out += String.fromCharCode(buf[i]);
+    }
+    return out;
+}
+
+const base64 = btoa(uint8ToString(willTar.out));
+window.open("data:application/tar;base64," + base64);
+return;
+//======================================================
+*/
+
     const meta = Object.assign({}, templateMeta);
     const willContent = willTar.append('meta.json', JSON.stringify(meta));
-
     const wcrypto = new Crypto.WCrypto();
     wcrypto.encrypt(willContent,
                     theState.userPrivateKey,
@@ -236,8 +279,12 @@ $( () => {
     return;
   });
 
-  $('#add-will-row').click( (e) => {
-    addWillRow();
+  $('#add-will-text-row').click( (e) => {
+    addWillTextRow();
+  });
+
+  $('#add-will-file-row').click( (e) => {
+    addWillFileRow();
   });
 
   // Initialize the page
@@ -300,8 +347,9 @@ $( () => {
       }
       return ewEscrow.methods.providers(providerParams.resolvedAddress).call();
     }).then( (providerInfo) => {
+      //todo: remove logs
       console.log(providerInfo);
-      return $.getJSON(`${WPlatformConfig.swarmUrl}/bzz:/${providerInfo.info}`);
+      return $.getJSON(`${WPlatformConfig.swarmUrl}/bzz:/${providerInfo.info}/`);
     }).then( (providerInfo) => {
       providerParams.provider = providerInfo;
     });
@@ -315,11 +363,20 @@ $( () => {
     }
   };
 
-  function addWillRow() {
-    const willRow = $('#template-will-row').html();
+  function addWillTextRow() {
+    const willRow = $('#template-will-text-row').html();
     const compiledWillRow = Handlebars.compile(willRow);
 
     $('#will-table').append(compiledWillRow({}));
+  };
+
+  function addWillFileRow() {
+    const willRow = $('#template-will-file-row').html();
+    const compiledWillRow = Handlebars.compile(willRow);
+
+    $('#will-table').append(compiledWillRow({}));
+
+    $('input[name="will-file-record-value"]').on('change', fileChangeHandler);
   };
 
   //todo: lock the screen
@@ -328,7 +385,7 @@ $( () => {
     return configureProviderParams(queryParams);
   }).then( () => {
     initUserWallet();
-    addWillRow();
+    addWillTextRow();
     //todo: unlock the screen
   }).catch( (error) => {
     //todo: show UIKit error

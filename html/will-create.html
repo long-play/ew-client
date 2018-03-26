@@ -1,11 +1,21 @@
-<script id="template-will-row" type="text/x-handlebars-template">
-    <tr name="will-record">
-        <td><input name="will-record-name" class="uk-input" type="text" placeholder="Name"></td>
-        <td><input name="will-record-value" class="uk-input" type="text" placeholder="Value"></td>
+<script id="template-will-text-row" type="text/x-handlebars-template">
+    <tr name="will-text-record">
+        <td><input name="will-text-record-name" class="uk-input" type="text" placeholder="Name"></td>
+        <td><input name="will-text-record-value" class="uk-input" type="text" placeholder="Value"></td>
     </tr>
 </script>
 
-<h2>Create a will</h2>
+<script id="template-will-file-row" type="text/x-handlebars-template">
+    <tr name="will-file-record">
+        <td><input name="will-file-record-name" class="uk-input" type="text" placeholder="Name"></td>
+        <td><div uk-form-custom="target: true">
+            <input name="will-file-record-value" type="file">
+            <input class="uk-input uk-form-width-large" type="text" placeholder="Select a file" disabled>
+        </div></td>
+    </tr>
+</script>
+
+<h2>Create a new will</h2>
 
 <div id="beneficiary-key">
     <form action="">
@@ -90,7 +100,11 @@
             <tbody>
             </tbody>
         </table>
-        <button id="add-will-row" class="uk-button uk-button-default uk-float-right" type="button" tabindex="-1">Add one more record</button>
+        <p class="uk-text-right">
+            <button id="add-will-text-row" class="uk-button uk-button-default uk-float-right" type="button" tabindex="-1">Add text record</button>
+            &nbsp;
+            <button id="add-will-file-row" class="uk-button uk-button-default uk-float-right" type="button" tabindex="-1">Add file</button>
+        </p>
         <div id="add-will-result" class="uk-text-success">&nbsp;</div>
 
         <!-- Create the will -->

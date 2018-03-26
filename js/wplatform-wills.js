@@ -130,11 +130,12 @@ $( () => {
   };
 
   function initProvidersTable() {
-    const promise = ewEscrow.getPastEvents('Registered').then( (events) => {
+    const promise = ewEscrow.getPastEvents('Registered', { fromBlock: '0x1' }).then( (events) => {
       return requestValidProviders(events.map( ev => ev.returnValues.provider ));
     }).then( (providersInfo) => {
-      const promises = providersInfo.map( (pi) => {
-        return $.getJSON(`${WPlatformConfig.swarmUrl}/bzz:/${providerInfo.info}`);
+      const promises = providersInfo.map( (providerInfo) => {
+        const info = new BN(providerInfo.info, 10);
+        return $.getJSON(`${WPlatformConfig.swarmUrl}/bzz:/${info.toString('hex')}/`);
       });
       return Promise.all(promises);
     }).then( (providersInfo) => {
