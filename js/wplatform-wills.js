@@ -130,7 +130,7 @@ $( () => {
   };
 
   function initProvidersTable() {
-    const promise = ewEscrow.getPastEvents('Registered', { fromBlock: '0x1' }).then( (events) => {
+    const promise = ewEscrow.getPastEvents('Activated', { fromBlock: '0x1' }).then( (events) => {
       return requestValidProviders(events.map( ev => ev.returnValues.provider ));
     }).then( (providersInfo) => {
       const promises = providersInfo.map( (providerInfo) => {
@@ -139,11 +139,10 @@ $( () => {
       });
       return Promise.all(promises);
     }).then( (providersInfo) => {
-      const providersData = { providers: providersInfo };
       const providers = $('#template-providers').html();
       const table = Handlebars.compile(providers);
       const container = $('#container-providers')[0];
-      container.innerHTML = table(providersData);
+      container.innerHTML = table({ providers: providersInfo });
     });
     return promise;
   };

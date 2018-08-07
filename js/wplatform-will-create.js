@@ -85,7 +85,7 @@ $( () => {
   $('#unlock-wallet').click( (e) => {
     // unlock a user's wallet & extract the private key
     theState.userPrivateKey = $('#user-private-key').val();
-    theState.userAccount = web3.eth.accounts.privateKeyToAccount(userPrivateKey);
+    theState.userAccount = web3.eth.accounts.privateKeyToAccount(theState.userPrivateKey);
 
     if (typeof Storage && sessionStorage.userPrivateKey != theState.userPrivateKey) {
       sessionStorage.userPrivateKey = theState.userPrivateKey;
@@ -343,7 +343,7 @@ return;
       return ewEscrow.methods.isProviderValid(providerParams.resolvedAddress).call();
     }).then( (isValid) => {
       if (!isValid) {
-        return Promise.reject(`The provider ${providerParams.address} is not a valid provider`);
+        return Promise.reject(`The provider ${providerParams.address}=>${providerParams.resolvedAddress} is not a valid provider`);
       }
       return ewEscrow.methods.providers(providerParams.resolvedAddress).call();
     }).then( (providerInfo) => {
