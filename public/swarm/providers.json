@@ -1,0 +1,39 @@
+{
+    "providers": {
+        "0xbb5ba3413d4f2663e65946e2598d52fe9a14b91a": {
+            "name": "WPlatform",
+            "url": "http://localhost:1337",
+            "public_key": "0xfd5ee03a61e6601f89a1456a4d9fd79b939088a8ac1b330b1629c76e49b19d1c7566839f5f2ad29c62fd6ab2b578974685eb801d18789843f3afcc85793c4f3f",
+            "tariffs": [
+                { "name": "Basic    $12", "url": "http://localhost:1337/create-will?id=1001" },
+                { "name": "Pro      $59", "url": "http://localhost:1337/create-will?id=1002" },
+                { "name": "Ultimate $99", "url": "http://localhost:1337/create-will?id=1003" }
+            ],
+            "tags": "email",
+            "description": "Here is a description..."
+        },
+        "0xdeadbeaf": {
+            "name": "PFR RF",
+            "url": "http://localhost:1337",
+            "public_key": "ABCDEF009",
+            "tariffs": [
+                { "name": "Basic    $10", "url": "http://localhost:1337/create-will?id=2001" },
+                { "name": "Ultimate $59", "url": "http://localhost:1337/create-will?id=2003" }
+            ],
+            "tags": "passport",
+            "description": "Here is a description..."
+        },
+        "0x6c5c54a152d4ad644002668b0b3b371cea86daa3": {
+            "name": "Zombie Inc",
+            "url": "http://localhost:1337",
+            "public_key": "0x3ff0b40b4db4c26e022b691d91ad92f230ca81822a51ba9254d9f246508353f98a03c3355d5c81053893dfdf81ba9e0abcf87b6a55cd5d749be07c5902c289f5",
+            "tariffs": [
+                { "name": "Basic    $19", "url": "http://localhost:1337/create-will?id=3001" },
+                { "name": "Pro      $49", "url": "http://localhost:1337/create-will?id=3002" },
+                { "name": "Zombastic $99", "url": "http://localhost:1337/create-will?id=3003" }
+            ],
+            "tags": "phone, vk.com",
+            "description": "Here is a description..."
+        }
+    }
+}

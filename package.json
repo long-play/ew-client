@@ -1,0 +1,34 @@
+{
+  "name": "w-platform-web",
+  "private": true,
+  "version": "0.0.1",
+  "description": "The Web Interface for the Platform for service of digital willing",
+  "keywords": [],
+  "dependencies": {
+    "ethereumjs-util": "^5.1.2",
+    "js-sha3": "^0.6.1",
+    "tar-js": "^0.3.0",
+    "wcrypto": "git+ssh://git@bitbucket.org/my-will/wcrypto.git#develop",
+    "web3": "^1.0.0-beta.30"
+  },
+  "devDependencies": {
+    "babel-preset-stage-0": "^6.24.1",
+    "live-server": "^1.2.0",
+    "grunt": "^1.0.1",
+    "grunt-browserify": "^5.0.0",
+    "grunt-contrib-clean": "^1.1.0",
+    "grunt-html-build": "^0.7.1",
+    "grunt-multi": "^0.0.7"
+  },
+  "scripts": {
+    "build": "grunt",
+    "debug": "node node_modules/live-server/live-server.js --mount=/:public --watch=public --wait=5000"
+  },
+  "main": "index.html",
+  "repository": {
+    "type": "git",
+    "url": "git@bitbucket.org:my-will/wplatform-web.git"
+  },
+  "author": "Eugene Valeyev",
+  "license": "exclusive"
+}

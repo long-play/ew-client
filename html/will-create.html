@@ -1,0 +1,161 @@
+<script id="template-will-text-row" type="text/x-handlebars-template">
+    <tr name="will-text-record">
+        <td><input name="will-text-record-name" class="uk-input" type="text" placeholder="Name"></td>
+        <td><input name="will-text-record-value" class="uk-input" type="text" placeholder="Value"></td>
+    </tr>
+</script>
+
+<script id="template-will-file-row" type="text/x-handlebars-template">
+    <tr name="will-file-record">
+        <td><input name="will-file-record-name" class="uk-input" type="text" placeholder="Name"></td>
+        <td><div uk-form-custom="target: true">
+            <input name="will-file-record-value" type="file">
+            <input class="uk-input uk-form-width-large" type="text" placeholder="Select a file" disabled>
+        </div></td>
+    </tr>
+</script>
+
+<h2>Create a new will</h2>
+
+<div id="beneficiary-key">
+    <form action="">
+        <!-- Select a Beneficiary -->
+        <hr class="uk-divider-icon">
+        <legend class="uk-legend">Select a Beneficiary</legend>
+        <p>Input a beneficiary email or phone number. So we'll be able to notify him (or her). Double check please if the contact is valid.</p>
+        <div class="uk-form-horizontal uk-grid uk-grid-small uk-margin-small-top">
+            <div class="uk-width-2-3">
+                <input id="beneficiary-contact" class="uk-input" type="text" placeholder="Beneficiary contact (e-mail or phone number)">
+            </div>
+        </div>
+        <ul class="uk-subnav uk-subnav-pill" uk-switcher>
+            <li><a href="#">I know the address</a></li>
+            <li><a href="#">Create a new address</a></li>
+            <li><a href="#">Use addressless mechanic</a></li>
+        </ul>
+        <ul class="uk-switcher uk-margin">
+            <li>
+                <p>Input an ethereum address of the beneficiary you want to pass the will to.</p>
+                <div class="uk-form-horizontal uk-grid uk-grid-small uk-margin-small-top">
+                    <div class="uk-width-2-3">
+                        <input id="beneficiary-address" class="uk-input" type="text" placeholder="Beneficiary address">
+                    </div>
+                    <div class="uk-width-1-3">
+                        <button id="find-beneficiary" class="uk-button uk-button-default uk-width-1-1" type="button" tabindex="-1">Find beneficiary's public key</button>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <p>Press Generate to create a new address. You are required to pass the card with QR-code to the beneficiary.</p>
+                <div class="uk-form-horizontal uk-grid uk-grid-small uk-margin-small-top">
+                    <div class="uk-width-2-3">
+                    </div>
+                    <div class="uk-width-1-3">
+                        <button id="create-beneficiary" class="uk-button uk-button-default uk-width-1-1" type="button" tabindex="-1">Generate beneficiary's address</button>
+                    </div>
+                </div>
+            </li>
+            <li>
+                <p>Please input a few questions, the beneficiary knows the answers only.</p>
+                <p>NOT IMPLEMENTED YET</p>
+            </li>
+        </ul>
+        <div id="beneficiary-public-key" class="uk-text-success"></div>
+        <div id="beneficiary-public-key-error" class="uk-text-danger"></div>
+
+        <!-- Select the user's wallet -->
+        <hr class="uk-divider-icon">
+        <legend class="uk-legend">Choose a wallet</legend>
+        <p>Input your ethereum wallet's private key. We need it to encrypt and sign your will, so nobody could access it. The private key is treated securely and won't be passed from your browser.</p>
+        <div class="uk-form-horizontal uk-grid uk-grid-small uk-margin-small-top">
+            <div class="uk-width-2-3">
+                <input id="user-private-key" class="uk-input" type="text" placeholder="User's private key">
+            </div>
+            <div class="uk-width-1-3">
+                <button id="unlock-wallet" class="uk-button uk-button-default uk-width-1-1" type="button" tabindex="-1">Unlock the wallet</button>
+            </div>
+        </div>
+        <div id="user-address" class="uk-text-success"></div>
+        <div id="user-address-error" class="uk-text-danger"></div>
+
+        <!-- Request a server's key -->
+        <hr class="uk-divider-icon">
+        <legend class="uk-legend">Request provider's encryption key</legend>
+        <p>A provider's encryption key is required to encrypt your will, so nobody could access it even the beneficiary, until the provider confirms the beneficiary should get it.</p>
+        <button id="request-key" class="uk-button uk-button-default uk-width-1-1" type="button" tabindex="-1">Request plaform's public key</button>
+        <div id="platform-public-key" class="uk-text-success"></div>
+        <div id="platform-public-key-error" class="uk-text-danger"></div>
+
+        <!-- The user's will -->
+        <hr class="uk-divider-icon">
+        <legend class="uk-legend">Fill in your will</legend>
+        <p>Fill in any information you want to pass to the beneficiary after your death.</p>
+        <table id="will-table" class="uk-table uk-table-divider uk-table-small">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Value</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+        <p class="uk-text-right">
+            <button id="add-will-text-row" class="uk-button uk-button-default uk-float-right" type="button" tabindex="-1">Add text record</button>
+            &nbsp;
+            <button id="add-will-file-row" class="uk-button uk-button-default uk-float-right" type="button" tabindex="-1">Add file</button>
+        </p>
+        <div id="add-will-result" class="uk-text-success">&nbsp;</div>
+
+        <!-- Create the will -->
+        <hr class="uk-divider-icon">
+        <legend class="uk-legend">Create the will</legend>
+        <p>It will ecnrypt the will and generate a transaction. You need to have some amount of ethers on the wallet the private key you provided for. It will be used to buy gas to pay for the transaction, provider's and the platform fees. If your wallet is empty, <a href="http://shapeshift.io/">buy</a> please at least 1 ethers.</p>
+        <button id="create-will" class="uk-button uk-button-default uk-width-1-1" type="button" tabindex="-1">Create will</button>
+
+        <!-- The end of the form -->
+    </form>
+</div>
+
+<div id="address-created-dialog" uk-modal bg-close="false">
+    <div class="uk-modal-dialog uk-modal-body">
+        <h2 class="uk-modal-title">Beneficiary's address and private key are created</h2>
+        <p id="address-created-content"></p>
+        <p class="uk-text-right">
+            <button class="uk-button uk-button-default uk-modal-close" type="button">Close</button>
+        </p>
+    </div>
+</div>
+
+<div id="will-confirmation-dialog" uk-modal bg-close="false">
+    <div class="uk-modal-dialog uk-modal-body">
+        <h2 class="uk-modal-title">Review the will please and confirm</h2>
+        <p id="will-confirmation-content"></p>
+        <p class="uk-text-right">
+            <button class="uk-button uk-button-default uk-modal-close" type="button">Cancel</button>
+            <button id="confirm-will" class="uk-button uk-button-primary uk-modal-close" type="button">Confirm</button>
+        </p>
+    </div>
+</div>
+
+<div id="transaction-confirmation-dialog" uk-modal bg-close="false">
+    <div class="uk-modal-dialog uk-modal-body">
+        <h2 class="uk-modal-title">Review the transaction please and confirm</h2>
+        <p id="transaction-confirmation-content"></p>
+        <p class="uk-text-right">
+            <button class="uk-button uk-button-default uk-modal-close" type="button">Cancel</button>
+            <button id="confirm-transaction" class="uk-button uk-button-primary uk-modal-close" type="button">Confirm</button>
+        </p>
+    </div>
+</div>
+
+<div id="transaction-verification-dialog" uk-modal bg-close="false">
+    <div class="uk-modal-dialog uk-modal-body">
+        <h2 class="uk-modal-title">Successfully published</h2>
+        <p>You could check the transaction at etherscan.io<br /><a target="_blank" id="transaction-verification-content" /></p>
+        <p class="uk-text-right">
+            <button class="uk-button uk-button-default uk-modal-close" type="button">Close</button>
+        </p>
+    </div>
+</div>
+
