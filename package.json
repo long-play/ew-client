@@ -9,7 +9,8 @@
     "js-sha3": "^0.6.1",
     "tar-js": "^0.3.0",
     "wcrypto": "git+ssh://git@bitbucket.org/my-will/wcrypto.git#develop",
-    "web3": "^1.0.0-beta.30"
+    "web3": "^1.0.0-beta.30",
+    "package.json": "^2.0.1"
   },
   "devDependencies": {
     "babel-preset-stage-0": "^6.24.1",
@@ -21,10 +22,11 @@
     "grunt-multi": "^0.0.7"
   },
   "scripts": {
-    "build": "grunt",
-    "debug": "node node_modules/live-server/live-server.js --mount=/:public --watch=public --wait=5000"
+    "build": "gulp build",
+    "debug": "gulp debug",
+    "start": "npm run debug && gulp serve"
   },
-  "main": "index.html",
+  "main": "gulpfile.js",
   "repository": {
     "type": "git",
     "url": "git@bitbucket.org:my-will/wplatform-web.git"
