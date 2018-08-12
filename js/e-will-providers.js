@@ -19,8 +19,23 @@ class EWillProviders extends EWillBase {
   }
 
   getActiveProviders() {
-    this._providers = ['1', '4', '8'];
-    return Promise.resolve(this._providers);
+    const promise = this.ewEscrow.getPastEvents('Activated', { fromBlock: '0x1' }).then( (events) => {
+      return this._requestValidProviders(events.map( ev => ev.returnValues.provider ));
+    }).then( (providersInfo) => {
+      const promises = providersInfo.map( (providerInfo) => {
+        const info = new BN(providerInfo.info, 10);
+        return $.getJSON(`${EWillConfig.swarmUrl}/bzz:/${info.toString('hex')}/`);
+      });
+      return Promise.all(promises);
+    }).then( (providersInfo) => {
+      this._providers = providersInfo;
+      return Promise.resolve(providersInfo);
+    }).catch( (err) => {
+      console.error(`Failed to obtain an active providers list: ${ JSON.stringify(err) }`);
+      return Promise.reject(err);
+    });
+
+    return promise;
   }
 
   // Accessors
@@ -31,6 +46,18 @@ class EWillProviders extends EWillBase {
   // Protected functions
   _configureContracts() {
     return Promise.resolve('');
+  }
+
+  _requestValidProviders(addresses) {
+    const promises = addresses.map( (addr) => {
+      return this.ewEscrow.methods.isProviderValid(addr).call().then( (isValid) => {
+        return isValid ? this.ewEscrow.methods.providers(addr).call() : Promise.resolve({ invalid: true });
+      });
+    });
+    const promise = Promise.all(promises).then( (providersInfo) => {
+      return Promise.resolve(providersInfo.filter( pi => !pi.invalid ));
+    });
+    return promise;
   }
 }
 
