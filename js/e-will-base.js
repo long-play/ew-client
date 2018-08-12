@@ -6,12 +6,13 @@ class EWillBase {
     }
   }
 
-  isLoggedIn() {
+  loginIfPossible() {
     //todo: for debug purposes only
     return true;
 
     let result = false;
     if (this.userPrivateKey) {
+      this._userAccount = this._web3.eth.accounts.privateKeyToAccount(this.userPrivateKey);
       result = true;
     }
     return result;
