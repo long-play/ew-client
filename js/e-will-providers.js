@@ -1,7 +1,10 @@
+const EWillBase = require('./e-will-base.js').EWillBase;
+const BN = require('bn.js');
+
 class EWillProviders extends EWillBase {
   // Public functions
-  constructor(gethUrl) {
-    super(gethUrl);
+  constructor() {
+    super(EWillConfig.gethUrl);
   }
 
   configure() {
@@ -61,4 +64,4 @@ class EWillProviders extends EWillBase {
   }
 }
 
-window.EWill = EWillProviders;
+window.EWillProviders = EWillProviders;

@@ -1,7 +1,14 @@
+const EWillBase = require('./e-will-base.js').EWillBase;
+const keccak256 = require('js-sha3').keccak256;
+const EthUtil = require('ethereumjs-util');
+const Crypto = require('wcrypto');
+const Tar = require('tar-js');
+const BN = require('bn.js');
+
 class EWillCreate extends EWillBase {
   // Public functions
-  constructor(gethUrl, query) {
-    super(gethUrl);
+  constructor(query) {
+    super(EWillConfig.gethUrl);
     this._qParams = query.slice(1);
     this._templateMeta = {
       poweredBy: 'E-Will Platform',
@@ -221,4 +228,4 @@ class EWillCreate extends EWillBase {
   }
 }
 
-window.EWill = EWillCreate;
+window.EWillCreate = EWillCreate;

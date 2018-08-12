@@ -1,3 +1,5 @@
+const Web3 = require('web3');
+
 class EWillBase {
   // Public functions
   constructor(gethUrl) {
@@ -64,3 +66,5 @@ class EWillBase {
     return Promise.all(promises);
   }
 }
+
+exports.EWillBase = EWillBase;

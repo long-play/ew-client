@@ -1,3 +1,5 @@
+const EWillBase = require('./e-will-base.js').EWillBase;
+
 class EWillLogin extends EWillBase {
   // Public functions
   constructor() {
@@ -21,4 +23,4 @@ class EWillLogin extends EWillBase {
   }
 }
 
-window.EWill = EWillLogin;
+window.EWillLogin = EWillLogin;
