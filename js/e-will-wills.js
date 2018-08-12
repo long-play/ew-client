@@ -18,13 +18,34 @@ class EWillWills extends EWillBase {
     return super._configureContracts(contracts);
   }
 
-  findServiceProviders() {
-    return Promise.resolve('');
-  }
-
   getUserWills() {
-    this._wills = ['1', '4', '8'];
-    return Promise.resolve(this._wills);
+    const wills = [];
+
+    const promise = this.ewPlatform.methods.numberOfUserWills(this._userAccount.address).call().then( (numberOfWills) => {
+      const promises = [];
+
+      for (let idx = 0; idx < numberOfWills; idx++) {
+        const promise = this.ewPlatform.methods.userWills(
+          this._userAccount.address,
+          idx
+        ).call().then( (willId) => {
+          return this.ewPlatform.methods.wills(willId).call();
+        }).call().then( (will) => {
+          wills.push(will);
+        });
+        promises.push(promise);
+      }
+
+      return Promise.all(promises);
+    }).then( () => {
+      this._wills = wills;
+      return Promise.resolve(wills);
+    }).catch( (err) => {
+      console.error(`Failed to obtain user's wills: ${ JSON.stringify(err) }`);
+      return Promise.reject(err);
+    });
+
+    return promise;
   }
 
   prolongWill(idx) {
