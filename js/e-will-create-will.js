@@ -1,18 +1,25 @@
-class EWillCreate extends EWillCreateIf {
+class EWillCreate {
   // Public functions
   constructor(gethUrl, query) {
     this._qParams = query.slice(1);
   }
 
   configure() {
-    const res = _configureContracts().then( () => {
-      return _configureProviderParams(this._qParams);
-    };
+    const res = this._configureContracts().then( () => {
+      return this._configureProviderParams(this._qParams);
+    });
     return res;
   }
 
-  login(privKey) {
-    this.userPrivateKey = privKey;
+  login() {
+    //todo: for debug purposes only
+    return true;
+
+    let result = false;
+    if (this.userPrivateKey) {
+      result = true;
+    }
+    return result;
   }
 
   findBeneficiary(address) {
@@ -41,18 +48,11 @@ class EWillCreate extends EWillCreateIf {
 
   // Accessors
   set userPrivateKey(privKey) {
-    if (typeof Storage && sessionStorage.userPrivateKey != privKey) {
-      sessionStorage.userPrivateKey = privKey;
-    }
     this._privateKey = privKey;
   }
 
   get userPrivateKey() {
-    let privKey = '';
-    if (!this._privateKey && typeof Storage && sessionStorage.userPrivateKey) {
-      this._privateKey = sessionStorage.userPrivateKey;
-    }
-    return privKey;
+    return this._privateKey;
   }
 
   // Protected functions
@@ -64,3 +64,5 @@ class EWillCreate extends EWillCreateIf {
     return Promise.resolve('');
   }
 }
+
+window.EWill = EWillCreate;

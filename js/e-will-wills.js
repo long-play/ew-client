@@ -4,43 +4,49 @@ class EWillWills {
   }
 
   configure() {
-    return _configureContracts();
+    return this._configureContracts();
   }
 
-  login(privKey) {
-    this.userPrivateKey = privKey;
+  login() {
+    //todo: for debug purposes only
+    return true;
+
+    let result = false;
+    if (this.userPrivateKey) {
+      result = true;
+    }
+    return result;
   }
 
-  findServiceProviders(address) {
+  findServiceProviders() {
     return Promise.resolve('');
   }
 
   getUserWills() {
-    return Promise.resolve('');
+    this._wills = ['1', '4', '8'];
+    return Promise.resolve(this._wills);
   }
 
-  prolonWill() {
-    return Promise.resolve('');
+  prolongWill(idx) {
+    return Promise.resolve(`Prolonged the will at ${idx}`);
   }
 
-  deleteWill(records) {
-    return Promise.resolve('');
+  deleteWill(idx) {
+    this._wills.splice(0, 1);
+    return Promise.resolve(`Removed the will at ${idx}`);
   }
 
   // Accessors
   set userPrivateKey(privKey) {
-    if (typeof Storage && sessionStorage.userPrivateKey != privKey) {
-      sessionStorage.userPrivateKey = privKey;
-    }
     this._privateKey = privKey;
   }
 
   get userPrivateKey() {
-    let privKey = '';
-    if (!this._privateKey && typeof Storage && sessionStorage.userPrivateKey) {
-      this._privateKey = sessionStorage.userPrivateKey;
-    }
-    return privKey;
+    return this._privateKey;
+  }
+
+  get wills() {
+    return this._wills.slice();
   }
 
   // Protected functions
@@ -48,3 +54,5 @@ class EWillWills {
     return Promise.resolve('');
   }
 }
+
+window.EWill = EWillWills;
