@@ -1,10 +1,21 @@
-class EWillProviders {
+class EWillProviders extends EWillBase {
   // Public functions
   constructor(gethUrl) {
+    super(gethUrl);
   }
 
   configure() {
-    return this._configureContracts();
+    const contracts = {
+      ewPlatform : {
+        abi: 'abi-platform.json',
+        address: EWillConfig.contractPlatformAddress
+      },
+      ewEscrow : {
+        abi: 'abi-escrow.json',
+        address: EWillConfig.contractEscrowAddress
+      }
+    };
+    return super._configureContracts(contracts);
   }
 
   getActiveProviders() {

@@ -1,21 +1,21 @@
-class EWillWills {
+class EWillWills extends EWillBase {
   // Public functions
   constructor(gethUrl) {
+    super(gethUrl);
   }
 
   configure() {
-    return this._configureContracts();
-  }
-
-  login() {
-    //todo: for debug purposes only
-    return true;
-
-    let result = false;
-    if (this.userPrivateKey) {
-      result = true;
-    }
-    return result;
+    const contracts = {
+      ewPlatform : {
+        abi: 'abi-platform.json',
+        address: EWillConfig.contractPlatformAddress
+      },
+      ewEscrow : {
+        abi: 'abi-escrow.json',
+        address: EWillConfig.contractEscrowAddress
+      }
+    };
+    return super._configureContracts(contracts);
   }
 
   findServiceProviders() {
@@ -37,21 +37,8 @@ class EWillWills {
   }
 
   // Accessors
-  set userPrivateKey(privKey) {
-    this._privateKey = privKey;
-  }
-
-  get userPrivateKey() {
-    return this._privateKey;
-  }
-
   get wills() {
     return this._wills.slice();
-  }
-
-  // Protected functions
-  _configureContracts() {
-    return Promise.resolve('');
   }
 }
 

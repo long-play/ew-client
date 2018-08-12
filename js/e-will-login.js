@@ -1,6 +1,7 @@
-class EWillLogin {
+class EWillLogin extends EWillBase {
   // Public functions
   constructor() {
+    super();
   }
 
   loginWithPrivateKey(privKey) {
@@ -17,15 +18,6 @@ class EWillLogin {
   loginWithQestionary(questions, answers) {
     //todo: recover the key
     return true;
-  }
-
-  // Accessors
-  set userPrivateKey(privKey) {
-    this._privateKey = privKey;
-  }
-
-  get userPrivateKey() {
-    return this._privateKey;
   }
 }
 
