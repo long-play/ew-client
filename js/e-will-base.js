@@ -21,9 +21,9 @@ class EWillBase {
     const promise = $.ajax(url, options).done( (response) => {
       console.log(`${url}: ${ JSON.stringify(response) }`);
       return Promise.resolve(response);
-    }).fail( (error) => {
-      console.error(`${url}: ${ JSON.stringify(error) }`);
-      return Promise.reject(error);
+    }).fail( (err) => {
+      console.error(`${url}: ${ JSON.stringify(err) }`);
+      return Promise.reject(err);
     });
     return promise;
   }
@@ -52,7 +52,7 @@ class EWillBase {
     const promises = [];
     for (let contractName in contracts) {
       const promise = this.jsonRequest(contracts[contractName].abi).then( (abi) => {
-        this[contractName] = new this.web3.eth.Contract(abi, contracts[contractName].address);
+        this[contractName] = new this._web3.eth.Contract(abi, contracts[contractName].address);
         return this[contractName].methods.name().call();
       }).then( (name) => {
         console.log(`Initialized the contract '${name}'.`);
