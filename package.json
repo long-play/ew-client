@@ -6,6 +6,7 @@
   "keywords": [],
   "dependencies": {
     "ethereumjs-util": "^5.2.0",
+    "ethereumjs-wallet": "^0.6.2",
     "js-sha3": "^0.6.1",
     "tar-js": "^0.3.0",
     "wcrypto": "git+ssh://git@bitbucket.org/my-will/wcrypto.git#develop",

@@ -1,3 +1,4 @@
+const Wallet = require('ethereumjs-wallet');
 const EWillBase = require('./e-will-base.js').EWillBase;
 
 class EWillLogin extends EWillBase {
@@ -7,19 +8,19 @@ class EWillLogin extends EWillBase {
   }
 
   loginWithPrivateKey(privKey) {
-    //todo: validate the key
     this.userPrivateKey = privKey;
-    return true;
+    return this.loginIfPossible();
   }
 
   loginWithKeystore(keystore, password) {
-    //todo: extract the key
-    return true;
+    const wallet = Wallet.fromV3(keystore, password, true);
+    this.userPrivateKey = wallet.getPrivateKey();
+    return this.loginIfPossible();
   }
 
   loginWithQestionary(questions, answers) {
     //todo: recover the key
-    return true;
+    return this.loginIfPossible();
   }
 }
 

@@ -74,11 +74,11 @@ class EWillCreate extends EWillBase {
   requestProviderKey() {
     const data = {
       address: this._userAccount.address,
-      will: this._provider.params.will,
+      willId: this._provider.params.willId,
       token: this._provider.params.token
     };
 
-    const promise = this.ajaxRequest(`${this._provider.apiUrl}/setup-will`, {
+    const promise = this.ajaxRequest(`${this._provider.extraInfo.apiUrl}`, {
       method: 'POST',
       contentType: 'application/json',
       data: JSON.stringify(data)
@@ -87,7 +87,7 @@ class EWillCreate extends EWillBase {
       const isSigned = (response.signature == '//todo:');
       if (isSigned !== true) {
         return Promise.reject( /* error */ );
-      } else if (this._provider.params.will != response.will) {
+      } else if (this._provider.params.willId != response.willId) {
         return Promise.reject( /* error */ );
       }
 
@@ -167,7 +167,7 @@ class EWillCreate extends EWillBase {
       console.log('confirmed the will: ' + storageId);
 
       // generate & sign the ethereum transaction
-      const willId = (new BN(providerParams.address.slice(2), 16)).iushln(96).iadd(new BN(providerParams.will)).toString(16);
+      const willId = (new BN(this._provider.params.address.slice(2), 16)).iushln(96).iadd(new BN(this._provider.params.willId)).toString(16);
       console.log('willId is ' + willId);
 
       createWillMethod = this.ewPlatform.methods.createWill(
@@ -222,9 +222,53 @@ class EWillCreate extends EWillBase {
     return promise;
   }
 
+  // Accessors
+  get provider() {
+    return this._provider;
+  }
+
   // Protected functions
   _configureProviderParams(params) {
-    return Promise.resolve('');
+    const params = {};
+    const queries = query.split('&');
+    for (let i = 0; i < queries.length; i++) {
+      const split = queries[i].split('=');
+      if (split.length != 2) continue;
+      params[split[0]] = split[1];
+    }
+    this._provider = {
+      params
+    };
+
+    if (!this._provider.params.address || !this._provider.params.willId || !this._provider.params.signature || !this._provider.params.token) {
+      return Promise.reject('Missing some provider\'s parameters');
+    }
+
+    const msg = `${this._provider.params.address}:${this._provider.params.willId}:${this._provider.params.token}`;
+    //todo: isSigned = (ecrecover(msg, this._provider.params.signature) == this._provider.params.address);
+    const isSigned = (this._provider.params.signature == '//todo:');
+    if (isSigned !== true) {
+      return Promise.reject('The provider\'s signature is corrupted!');
+    }
+
+    // request a provider info
+    const promise = this.ewEscrow.methods.providerAddress(this._provider.params.address).call().then( (address) => {
+      this._provider.address = address;
+      return this.ewEscrow.methods.isProviderValid(this._provider.address).call();
+    }).then( (isValid) => {
+      if (!isValid) {
+        return Promise.reject(`The provider ${this._provider.params.address}=>${this._provider.address} is not a valid provider`);
+      }
+      return this.ewEscrow.methods.providers(this._provider.address).call();
+    }).then( (providerInfo) => {
+      this._provider.info = providerInfo;
+      //todo: remove logs
+      console.log(providerInfo);
+      return $.getJSON(`${WPlatformConfig.swarmUrl}/bzz:/${providerInfo.info}/`);
+    }).then( (providerInfo) => {
+      this._provider.extraInfo = providerInfo;
+    });
+    return promise;
   }
 }
 

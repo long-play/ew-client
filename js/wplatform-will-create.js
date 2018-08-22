@@ -318,8 +318,6 @@ return;
       if (split.length != 2) continue;
       params[split[0]] = split[1];
     }
-    //todo: remove logs
-    console.log(params);
 
     providerParams.address = params['address'];
     providerParams.will = params['will'];
