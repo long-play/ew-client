@@ -9,11 +9,11 @@ class EWillWills extends EWillBase {
   configure() {
     const contracts = {
       ewPlatform : {
-        abi: 'abi-platform.json',
+        abi: 'static/abi-platform.json',
         address: EWillConfig.contractPlatformAddress
       },
       ewEscrow : {
-        abi: 'abi-escrow.json',
+        abi: 'static/abi-escrow.json',
         address: EWillConfig.contractEscrowAddress
       }
     };

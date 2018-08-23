@@ -9,7 +9,15 @@ class EWillCreate extends EWillBase {
   // Public functions
   constructor(query) {
     super(EWillConfig.gethUrl);
-    this._qParams = query.slice(1);
+
+    const params = {};
+    const queries = query.split('&');
+    for (let i = 0; i < queries.length; i++) {
+      const split = queries[i].split('=');
+      if (split.length != 2) continue;
+      params[split[0]] = split[1];
+    }
+    this._qParams = params;
     this._templateMeta = {
       poweredBy: 'E-Will Platform',
       version: '1.0'
@@ -19,11 +27,11 @@ class EWillCreate extends EWillBase {
   configure() {
     const contracts = {
       ewPlatform : {
-        abi: 'abi-platform.json',
+        abi: 'static/abi-platform.json',
         address: EWillConfig.contractPlatformAddress
       },
       ewEscrow : {
-        abi: 'abi-escrow.json',
+        abi: 'static/abi-escrow.json',
         address: EWillConfig.contractEscrowAddress
       }
     };
@@ -45,7 +53,7 @@ class EWillCreate extends EWillBase {
     };
 
     const url = `${EWillConfig.apiUrl}/key/public/address=${address}`;
-    const promise = ajaxRequest(url).then( (response) => {
+    const promise = this.ajaxRequest(url).then( (response) => {
       this._will.beneficiaryPublicKey = response.publicKey;
       return Promise.resolve(this._will);
     }).catch( (err) => {
@@ -229,13 +237,6 @@ class EWillCreate extends EWillBase {
 
   // Protected functions
   _configureProviderParams(params) {
-    const params = {};
-    const queries = query.split('&');
-    for (let i = 0; i < queries.length; i++) {
-      const split = queries[i].split('=');
-      if (split.length != 2) continue;
-      params[split[0]] = split[1];
-    }
     this._provider = {
       params
     };

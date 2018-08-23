@@ -12,7 +12,26 @@
     "wcrypto": "git+ssh://git@bitbucket.org/my-will/wcrypto.git#develop",
     "web3": "^1.0.0-beta.35"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "autoprefixer": "^6.7.7",
+    "browser-sync": "^2.18.6",
+    "css-mqpacker": "^6.0.1",
+    "del": "^2.2.2",
+    "eslint": "^4.11.0",
+    "gulp": "^3.9.1",
+    "gulp-bro": "^1.0.3",
+    "gulp-csso": "^2.0.0",
+    "gulp-image": "^2.8.0",
+    "gulp-inject": "^4.2.0",
+    "gulp-jsmin": "^0.1.5",
+    "gulp-plumber": "^1.1.0",
+    "gulp-postcss": "^6.4.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-sass": "^3.1.0",
+    "gulp-svgmin": "^1.2.3",
+    "gulp-svgstore": "^6.1.0",
+    "run-sequence": "^1.2.2"
+  },
   "scripts": {
     "build": "gulp build",
     "debug": "gulp debug",
