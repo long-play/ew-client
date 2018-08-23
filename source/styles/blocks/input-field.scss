@@ -1,0 +1,103 @@
+.input-field {
+  position: relative;
+  @include text(14px, 1.2em, 700);
+  color: transparentize($gray-blue-dark, 0.7);
+
+  @include tablet {
+    font-size: 18px;
+  }
+
+  &--error {
+
+    &::after {
+      @include text(14px, 20px, 700);
+      position: absolute;
+      bottom: 12px;
+      right: 12px;
+      content: '!';
+      width: 20px;
+      height: 20px;
+      text-align: center;
+      vertical-align: middle;
+      border-radius: 50%;
+      border: 1px solid $will-red;
+      background-color: $white;
+      color: $will-red;
+
+      @include tablet {
+        bottom: 16px;
+        right: 16px;
+      }
+    }
+  }
+
+  &__input,
+  &__textarea {
+    width: 100%;
+    height: 44px;
+    padding: 0 17px;
+    font: inherit;
+    line-height: 1.2em;
+    background-color: $input-back;
+    border: 1px solid $input-border;
+    border-radius: 6px;
+    color: $gray-blue-dark;
+    -webkit-appearance: none;
+
+    @include tablet {
+      height: 52px;
+      padding: 0 19px;
+    }
+
+    &::placeholder {
+      color: transparentize($gray-blue-dark, 0.7);
+    }
+
+    &:hover:not(:focus) {
+      background-color: $input-hover;
+    }
+
+    &:focus {
+      font-size: 16px;
+      background-color: $white;
+      border-color: $input-focus;
+      box-shadow: 0 0 8px 0 transparentize($blue-gradient-top, 0.9);
+      outline: none;
+
+      @include tablet {
+        font-size: 20px;
+      }
+    }
+
+    &:-webkit-autofill {
+      -webkit-box-shadow: inset 0 0 0 52px $input-back;
+      -webkit-text-fill-color: $gray-blue-dark;
+    }
+
+    &--textarea {
+      height: 104px;
+      padding: 16px 17px;
+      resize: none;
+
+      @include tablet {
+        height: 104px;
+        padding: 17px 19px;
+      }
+    }
+  }
+
+  &__description {
+    display: block;
+    margin-bottom: 10px;
+    color: transparentize($gray-blue-dark, 0.6);
+
+    @include desktop-start {
+      margin-bottom: 7px;
+      font-size: 16px;
+    }
+
+    &--new-will {
+      font-size: 16px;
+    }
+  }
+}

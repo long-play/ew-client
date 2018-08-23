@@ -1,0 +1,51 @@
+.social {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 0;
+  list-style: none;
+
+  &--footer {
+    & .social__item:not(:last-child) {
+      margin-right: 41px;
+    }
+  }
+
+  &--team {
+    & .social__item:not(:last-child) {
+      margin-right: 13px;
+    }
+  }
+
+  &--header {
+
+    & .social__item {
+      margin-right: 13px;
+    }
+
+    & .social__icon {
+      fill: $white;
+    }
+
+    & .social__link:hover > .social__icon,
+    & .social__link:focus > .social__icon {
+      fill: $white;
+      opacity: 0.8;
+    }
+  }
+
+  &__link {
+    display: block;
+    font-size: 0;
+    line-height: 0;
+
+    &:hover > .social__icon,
+    &:focus > .social__icon {
+      fill: $blue-hover;
+    }
+  }
+
+  &__icon {
+    fill: $blue-main;
+  }
+}

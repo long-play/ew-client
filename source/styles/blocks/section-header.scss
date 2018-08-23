@@ -1,0 +1,54 @@
+.section-header {
+
+  &--left {
+
+    & .section-header__title,
+    & .section-header__text {
+
+      @include tablet {
+        text-align: left;
+      }
+    }
+  }
+
+  &__title {
+    @include text(18px, 1.2em, 700);
+    margin: 0 0 18px;
+    text-align: center;
+    color: $black;
+
+    @include tablet {
+      font-size: 28px;
+      margin-bottom: 22px;
+    }
+
+    @include desktop-start {
+      font-size: 30px;
+      margin-bottom: 22px;
+    }
+
+    &--gray {
+      margin-bottom: 15px;
+
+      @include desktop-start {
+        color: $gray-blue-dark;
+      }
+    }
+  }
+
+  &__text {
+    @include text(12px, 20px, 400);
+    margin: 0;
+    text-align: center;
+    color: $steel;
+
+    @include tablet {
+      font-size: 16px;
+      line-height: 26px;
+    }
+
+    @include desktop-start {
+      font-size: 18px;
+    }
+  }
+}

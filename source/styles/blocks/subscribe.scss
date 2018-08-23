@@ -1,0 +1,93 @@
+.subscribe {
+  padding: 0 20px 199px;
+  background-image: url("../img/plane.jpg");
+  background-repeat: no-repeat;
+  background-size: 824px auto;
+  background-position: right -3% bottom -8px;
+
+  @include retina-resolution {
+    background-image: url("../img/plane@2x.jpg");
+    background-size: 824px auto;
+  }
+
+  @include tablet {
+    padding: 0 30px 254px;
+    background-size: 793px auto;
+    background-position: right 73px bottom 56px;
+
+    @include retina-resolution {
+      background-size: 793px auto;
+    }
+  }
+
+  @include desktop-start {
+    padding: 0 150px 237px;
+    background-size: auto;
+    background-position: 40% 86%;
+
+    @include retina-resolution {
+      background-size: 988px, auto;
+    }
+  }
+
+  @include desktop-full {
+    padding: 0 290px 237px;
+  }
+
+  &--inner {
+    padding-bottom: 71px;
+    background-image: none;
+
+    @include retina-resolution {
+      background-image: none;
+    }
+
+    @include tablet {
+      padding-bottom: 125px;
+    }
+
+    @include desktop-start {
+      padding-bottom: 147px;
+    }
+
+    @include desktop-full {
+      padding-bottom: 147px;
+    }
+  }
+
+  &--inner-questions {
+
+    @include desktop-full {
+      padding-bottom: 132px;
+    }
+  }
+
+  &--inner-contacts {
+    @include desktop-full {
+      padding-bottom: 122px;
+    }
+  }
+
+  &__header {
+
+    @include tablet {
+      padding: 0 35px;
+    }
+
+    @include desktop-start {
+      padding: 0;
+    }
+  }
+
+  &__form {
+    margin-top: 27px;
+
+    @include tablet {
+      margin-top: 47px;
+    }
+
+    @include desktop-start {
+      margin-top: 40px;
+    }
+  }
+}

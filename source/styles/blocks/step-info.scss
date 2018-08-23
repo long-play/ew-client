@@ -1,0 +1,67 @@
+.step-info {
+  padding: 0 20px;
+  text-align: center;
+  color: $white;
+
+  @include tablet {
+    padding: 0 30px;
+  }
+
+  &__progress-mobile {
+    @include text(14px, 22px, 500);
+    margin: 0 0 2px;
+    color: transparentize($white, 0.2);
+
+    @include tablet {
+      display: none;
+    }
+  }
+
+  &__progress-desktop {
+    display: none;
+
+    @include tablet {
+      display: flex;
+      margin: 0 0 35px;
+    }
+
+    @include desktop-start {
+      margin-left: -6px;
+      margin-bottom: 41px;
+    }
+  }
+
+  &__title {
+    @include text(20px, 1.2em, 600);
+    margin: 0 0 20px;
+
+    @include tablet {
+      display: none;
+    }
+  }
+
+  &__text {
+    @include text(16px, 22px, 400);
+    margin: 0;
+    color: transparentize($white, 0.2);
+
+    @include tablet {
+      padding: 0 10%;
+    }
+
+    @include desktop-start {
+      width: 625px;
+      margin: 0 auto;
+      padding: 0;
+    }
+
+    @include desktop-full {
+      font-size: 18px;
+      line-height: 26px;
+    }
+
+    &--spacing {
+      letter-spacing: 0.005em;
+    }
+  }
+}

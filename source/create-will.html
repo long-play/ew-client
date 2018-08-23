@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
+  <meta name="theme-color" content="#000000">
+  <meta name="description" content="">
+  <meta name="keywords" content="">
+  <link href="css/style.min.css" rel="stylesheet">
+  <title>Create a new will</title>
+</head>
+<body class="page">
+<div style="height: 0; width: 0; position: absolute; visibility: hidden" class="symbols">
+  <!-- inject:svg --><!-- endinject -->
+</div>
+
+<header class="header  header--inner  header--will">
+  <div class="wrapper">
+    <nav class="header__menu  main-nav  main-nav--inner  main-nav--user-logged">
+      <div class="main-nav__user  user">
+        <p class="user__name">Demo user</p>
+        <img class="user__qrcode" src="img/qr-code.png" width="24" height="24" alt="qr-code">
+      </div>
+      <a class="main-nav__logo  logo" href="/">
+        <img class="logo__image  main-nav__logo--main" src="img/logo-white.svg" width="56" height="24" alt="Logo E-will">
+        <img class="logo__image  main-nav__logo--white" src="img/logo-white.svg" width="56" height="24" alt="Logo E-will">
+      </a>
+      <button class="main-nav__toggle  main-nav__toggle--closed" type="button">
+        <span class="visually-hidden">Открыть меню</span>
+        <svg class="main-nav__toggle-icon  main-nav__toggle-icon--burger" width="24" height="16">
+          <use xlink:href="#menu-open"></use>
+        </svg>
+        <svg class="main-nav__toggle-icon  main-nav__toggle-icon--cross" width="18" height="18">
+          <use xlink:href="#menu-close"></use>
+        </svg>
+      </button>
+      <ul class="main-nav__list">
+        <li class="main-nav__item">
+          <a class="main-nav__link  main-nav__link--active" href="wills.html">Wills</a>
+        </li>
+        <li class="main-nav__item">
+          <a class="main-nav__link" href="how-it-works.html">How it works</a>
+        </li>
+        <li class="main-nav__item">
+          <a class="main-nav__link" href="faq.html">FAQ</a>
+        </li>
+        <li class="main-nav__item">
+          <a class="main-nav__link" href="contacts.html">Contacts</a>
+        </li>
+      </ul>
+    </nav>
+    <h1 class="header__title  header__title--will">New will</h1>
+    <div class="header__step-info  step-info">
+      <div class="step-info__progress">
+        <p class="step-info__progress-mobile">Step 3 of 5</p>
+        <ul class="step-info__progress-desktop  progress">
+          <li class="progress__item  progress__item--done">
+            <svg class="progress__back" width="172" height="35">
+              <use xlink:href="#icon-progress"></use>
+            </svg>
+            <span class="progress__text">Provider</span>
+          </li>
+          <li class="progress__item  progress__item--done">
+            <svg class="progress__back" width="172" height="35">
+              <use xlink:href="#icon-progress"></use>
+            </svg>
+            <span class="progress__text">Confirmation</span>
+          </li>
+          <li class="progress__item  progress__item--active">
+            <svg class="progress__back" width="172" height="35">
+              <use xlink:href="#icon-progress"></use>
+            </svg>
+            <span class="progress__text">Benificiary</span>
+          </li>
+          <li class="progress__item">
+            <svg class="progress__back" width="172" height="35">
+              <use xlink:href="#icon-progress"></use>
+            </svg>
+            <span class="progress__text">Your will</span>
+          </li>
+          <li class="progress__item">
+            <svg class="progress__back" width="172" height="35">
+              <use xlink:href="#icon-progress"></use>
+            </svg>
+            <span class="progress__text">Payment</span>
+          </li>
+        </ul>
+      </div>
+      <p class="step-info__title">Benificiary</p>
+      <p class="step-info__text">Input a beneficiary email or phone number. So we’ll be able to notify him (or her). Double check please if the contact is valid. Then input an ethereum address you want to pass the will to</p>
+    </div>
+  </div>
+</header>
+
+<div class="wrapper">
+  <section class="steps">
+    <form class="steps__form" method="post" action="#" enctype="multipart/form-data">
+      <div class="steps__step-3">
+        <div class="steps__form-input  input-field">
+          <label class="input-field__description" for="field-1">Benificiary’s email or phone</label>
+          <input class="input-field__input" type="text" name="user" id="field-1" placeholder="evgen.povt@gmail.com">
+        </div>
+        <div class="steps__form-input  input-field">
+          <label class="input-field__description">Benificiary’s login method</label>
+          <select class="input-field__input">
+            <option>Existing ethereum address</option>
+            <option>Generate new ethereum address</option>
+            <option>Set up questionnaire</option>
+          </select>
+        </div>
+        <div class="steps__form-input  input-field">
+          <label class="input-field__description" for="field-2">Benificiary’s ethereum address</label>
+          <input class="input-field__input" name="address" type="text" id="field-2" placeholder="0xF7642-583450934503750935">
+        </div>
+        <p class="steps__tip">If your Beneficiary doesn&apos;t have an ethereum address you can generate <a class="link" href="#">a new one</a></p>
+        <button class="steps__continue  to-step-4  button  button--blue" type="button">Continue</button>
+      </div>
+
+      <div class="steps__step-4  z-hidden">
+        <div class="steps__buttons  steps__buttons--no-margin">
+          <button class="steps__add-block  steps__add-block--text  button  button--blue  button--steps" type="button">
+            <svg class="steps__add-icon" width="12" height="12">
+              <use xlink:href="#icon-plus"></use>
+            </svg>
+            Add new Text block
+          </button>
+          <button class="steps__add-block  steps__add-block--file  steps__add-block--last  button  button--blue  button--steps" type="button">
+            <svg class="steps__add-icon" width="12" height="12">
+              <use xlink:href="#icon-plus"></use>
+            </svg>
+            Add new File block
+          </button>
+          <button class="steps__continue  steps__continue--wide  to-step-5  button  button--green  z-hidden" type="button">Confirm</button>
+        </div>
+        <div class="steps__drop-zone">
+          <p class="steps__comment-title">Drop your data here</p>
+          <p class="steps__comment-text">The system allows us to put into blockchain two different types of blocks. The first ones contain only text and the second one may have a file (less 5 mb) and title</p>
+        </div>
+      </div>
+
+      <div class="steps__step-5  z-hidden">
+        <div class="steps__data  steps__data--full-width  will-resume">
+          <h2 class="will-resume__title">Your data</h2>
+          <ul class="will-resume__list">
+            <li class="will-resume__item">Facebook / login/password</li>
+            <li class="will-resume__item">My Ether Wallet JSON / UTC--2018-05-07T16-01-46.075z--f963de92b403a32e36f61db36f61db</li>
+            <li class="will-resume__item">My last letter / On behalf of MobileUp, I am writing to strongly oppose H.R. 3699, there</li>
+          </ul>
+        </div>
+        <div class="steps__data  will-resume">
+          <h2 class="will-resume__title">Resume</h2>
+          <dl class="will-resume__summary">
+            <dt class="will-resume__term">Provider</dt>
+            <dd class="will-resume__value">WP Platform</dd>
+          </dl>
+          <dl class="will-resume__summary">
+            <dt class="will-resume__term">Confirmation method</dt>
+            <dd class="will-resume__value">Email</dd>
+          </dl>
+          <dl class="will-resume__summary">
+            <dt class="will-resume__term">Annual fee</dt>
+            <dd class="will-resume__value">12 ether</dd>
+          </dl>
+          <button class="steps__submit  button  button--green" type="button">Confirm</button>
+        </div>
+      </div>
+
+      <div class="modal  modal--confirm  modal--closed">
+        <div class="modal__overlay"></div>
+        <div class="modal__content  modal__content--blue">
+          <p class="modal__title">Review the transaction<br> and confirm</p>
+          <div class="modal__image">
+            <svg class="modal__icon  modal__icon--check" width="54" height="22">
+              <use xlink:href="#icon-spectacles"></use>
+            </svg>
+          </div>
+          <p class="modal__text">You are about to send <span class="modal__amount">12 ethers</span> to contract<br><span class="modal__text  modal__text--contract">0xF7642&nbsp;58345093450375093583048394df</span></p>
+          <p class="modal__text">Are you sure?</p>
+          <div class="modal__buttons">
+            <button class="modal__button  button  button--gray" type="button">Cancel</button>
+            <button class="modal__button  button  button--green" type="submit">Confirm</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </section>
+</div>
+
+<div class="modal  modal--success  modal--closed">
+  <div class="modal__overlay"></div>
+  <div class="modal__content  modal__content--green">
+    <p class="modal__title">Your will<br> successfully published!</p>
+    <div class="modal__image">
+      <svg class="modal__icon  modal__icon--success" width="49" height="47">
+        <use xlink:href="#icon-ok"></use>
+      </svg>
+    </div>
+    <p class="modal__text">You could check transaction at <a class="modal__link  link" href="#">etherscan.io</a></p>
+    <a class="modal__button  modal__button--single  button  button--green" href="wills.html">Go to my wills</a>
+  </div>
+</div>
+
+<template>
+  <div class="steps__block  steps__block--text  will-block">
+    <h2 class="will-block__title">Block 1</h2>
+    <div class="will-block__close" tabindex="0">
+      <span class="visually-hidden">Delete block</span>
+      <svg class="will-block__close-icon" width="14" height="14">
+        <use xlink:href="#icon-plus"></use>
+      </svg>
+    </div>
+    <div class="will-block__input  input-field">
+      <label class="input-field__description  input-field__description--new-will" for="field-3">Title</label>
+      <input class="input-field__input" type="text" id="field-3" placeholder="Facebook">
+    </div>
+    <div class="will-block__input  will-block__input--wide  input-field">
+      <label class="input-field__description  input-field__description--new-will" for="field-4">Value</label>
+      <textarea class="input-field__input  input-field__input--textarea" id="field-4" autocomplete="off" rows="4" placeholder="login/password"></textarea>
+    </div>
+  </div>
+
+  <div class="steps__block  steps__block--file  will-block">
+    <h2 class="will-block__title">Block 2</h2>
+    <div class="will-block__close" tabindex="0">
+      <span class="visually-hidden">Delete block</span>
+      <svg class="will-block__close-icon" width="14" height="14">
+        <use xlink:href="#icon-plus"></use>
+      </svg>
+    </div>
+    <div class="will-block__input  input-field">
+      <label class="input-field__description  input-field__description--new-will" for="field-5">Title</label>
+      <input class="input-field__input" type="text" id="field-5" placeholder="My Ether Wallet JSON">
+    </div>
+    <div class="will-block__input  will-block__input--wide input-field">
+      <p class="input-field__description  input-field__description--new-will">Value</p>
+      <div class="will-block__file">
+        <p class="will-block__file-name"><output class="will-block__name-value"></output></p>
+        <input class="will-block__replace-input" type="file" id="replace-file">
+        <label class="will-block__file-handle">Replace</label>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script src="js/util.min.js"></script>
+<script src="js/menu.min.js"></script>
+<script src="js/create-will.min.js"></script>
+<script src="js/add-blocks.min.js"></script>
+<script src="lib/jquery.min.js"></script>
+<script src="lib/easydropdown.min.js"></script>
+<script>
+  easydropdown.all({
+    behavior: {
+      useNativeUiOnMobile: true
+    }
+  });
+</script>
+<script src="js/e-will-config.min.js"></script>
+<script src="js/e-will-create-will.min.js"></script>
+<script src="js/e-will-create-will-ui.min.js"></script>
+
+</body>
+</html>

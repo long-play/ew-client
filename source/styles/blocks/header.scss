@@ -1,0 +1,296 @@
+.header {
+
+  &--inner {
+    min-height: 345px;
+    padding-bottom: 40px;
+    background-image: url("../img/header_back_mobile.png"),
+    linear-gradient(to top, $blue-gradient-bottom, $blue-gradient-top);
+    background-repeat: no-repeat;
+    background-size: 556px, auto;
+    background-position: center 58px, 0 0;
+
+    @include retina-resolution {
+      background-image: url("../img/header_back_mobile@2x.png"),
+      linear-gradient(to top, $blue-gradient-bottom, $blue-gradient-top);
+    }
+
+    @include tablet {
+      min-height: 349px;
+    }
+
+    @include desktop-start {
+      padding-bottom: 53px;
+      background-image: url("../img/header_back_desktop-start.png"),
+      linear-gradient(to top, $blue-gradient-bottom, $blue-gradient-top);
+      background-repeat: no-repeat;
+      background-size: 1102px, auto;
+      background-position: center 95px, 0 0;
+
+      @include retina-resolution {
+        background-image: url("../img/header_back_desktop-start@2x.png"),
+        linear-gradient(to top, $blue-gradient-bottom, $blue-gradient-top);
+      }
+    }
+
+    @include desktop-full {
+      background-image: url("../img/header_back_desktop-full.png"),
+      linear-gradient(to top, $blue-gradient-bottom, $blue-gradient-top);
+      background-repeat: no-repeat;
+      background-size: 1412px, auto;
+      background-position: center 116px, 0 0;
+
+      @include retina-resolution {
+        background-image: url("../img/header_back_desktop-full@2x.png"),
+        linear-gradient(to top, $blue-gradient-bottom, $blue-gradient-top);
+      }
+    }
+  }
+
+  &--inner-questions {
+    padding-bottom: 34px;
+
+    @include desktop-start {
+      padding-bottom: 53px;
+    }
+
+    & .header__title {
+
+      @include desktop-start {
+        margin: 54px 0 32px
+      }
+    }
+
+    & .header__text {
+
+      @include desktop-start {
+        padding: 0 268px;
+      }
+
+      @include desktop-full {
+        padding: 0 370px;
+      }
+    }
+  }
+
+  &--inner-contacts {
+
+    @include desktop-start {
+      padding-bottom: 32px;
+      background-image: url("../img/header-contacts_back_desktop-start.png"),
+      linear-gradient(to top, $blue-gradient-bottom, $blue-gradient-top);
+      background-repeat: no-repeat;
+      background-size: 1210px, auto;
+      background-position: center 72px, 0 0;
+
+      @include retina-resolution {
+        background-image: url("../img/header-contacts_back_desktop-start@2x.png"),
+        linear-gradient(to top, $blue-gradient-bottom, $blue-gradient-top);
+      }
+    }
+
+    @include desktop-full {
+      background-image: url("../img/header-contacts_back_desktop-full.png"),
+      linear-gradient(to top, $blue-gradient-bottom, $blue-gradient-top);
+      background-repeat: no-repeat;
+      background-size: 1510px, auto;
+      background-position: center 72px, 0 0;
+
+      @include retina-resolution {
+        background-image: url("../img/header-contacts_back_desktop-full@2x.png"),
+        linear-gradient(to top, $blue-gradient-bottom, $blue-gradient-top);
+      }
+    }
+
+    & .header__title {
+
+      @include desktop-start {
+        margin: 54px 0 104px;
+      }
+    }
+  }
+
+  &--will {
+    padding-bottom: 36px;
+    background-image: url("../img/header_will_bottom_mobile.png"),
+    url("../img/header_will_top_mobile.png"),
+    linear-gradient(to top, $blue-gradient-bottom, $blue-gradient-top);
+    background-repeat: no-repeat;
+    background-size: 540px, 540px, auto;
+    background-position: center bottom 13px, center 81px, 0 0;
+
+    @include retina-resolution {
+      background-image: url("../img/header_will_bottom_mobile@2x.png"),
+      url("../img/header_will_top_mobile@2x.png"),
+      linear-gradient(to top, $blue-gradient-bottom, $blue-gradient-top);
+    }
+
+    @include desktop-start {
+      min-height: 388px;
+      padding-bottom: 38px;
+      background-image: url("../img/header_will_desktop-start.png"),
+      linear-gradient(to top, $blue-gradient-bottom, $blue-gradient-top);
+      background-size: 1024px, auto;
+      background-position: center 0, 0 0;
+
+      @include retina-resolution {
+        background-image: url("../img/header_will_desktop-start@2x.png"),
+        linear-gradient(to top, $blue-gradient-bottom, $blue-gradient-top);
+      }
+    }
+
+    @include desktop-full {
+      min-height: 400px;
+      padding-bottom: 38px;
+      background-image: url("../img/header_will_desktop-full.png"),
+      linear-gradient(to top, $blue-gradient-bottom, $blue-gradient-top);
+      background-size: 1440px, auto;
+      background-position: center 0, 0 0;
+
+      @include retina-resolution {
+        background-image: url("../img/header_will_desktop-full@2x.png"),
+        linear-gradient(to top, $blue-gradient-bottom, $blue-gradient-top);
+      }
+    }
+  }
+
+  &--will-big-padding {
+
+    @include desktop-start {
+      padding-bottom: 64px;
+    }
+
+    @include desktop-full {
+      padding-bottom: 64px;
+    }
+  }
+
+  &--my-wills {
+    background-position: center bottom 27px,center 81px,0 0;
+
+    & .header__title {
+      margin-bottom: 26px;
+    }
+  }
+
+  &__title {
+    @include text(22px, 1.2em, 700);
+    margin: 43px 0 80px;
+    padding: 0 20px;
+    text-align: center;
+    color: $white;
+
+    @include tablet {
+      margin-bottom: 70px;
+      padding: 0 50px;
+      font-size: 28px;
+    }
+
+    @include desktop-start {
+      margin: 54px 0 32px;
+      padding: 0 150px;
+      font-size: 36px;
+    }
+
+    &--will {
+      margin: 43px 0 17px;
+      font-size: 42px;
+
+      @include desktop-start {
+        font-size: 46px;
+        margin-bottom: 39px;
+        margin-top: 42px;
+      }
+    }
+  }
+
+  &__text {
+    @include text(12px, 20px, 400);
+    margin: 0;
+    padding: 0 20px;
+    text-align: center;
+    color: transparentize($white, 0.2);
+
+    @include tablet {
+      padding: 0 100px;
+      font-size: 16px;
+      line-height: 26px;
+    }
+
+    @include desktop-start {
+      padding: 0 120px;
+      font-size: 18px;
+    }
+
+    @include desktop-full {
+      padding: 0 240px;
+    }
+
+    &--will {
+      @include text(16px, 22px, 400);
+      margin: 0 0 28px;
+      color: transparentize($white, 0.2);
+
+      @include tablet {
+        padding: 0 10%;
+      }
+
+      @include desktop-start {
+        padding: 0;
+      }
+
+      @include desktop-full {
+        width: 600px;
+        margin: 0 auto 27px;
+        padding: 0;
+        font-size: 18px;
+        line-height: 26px;
+      }
+
+      &--spacing {
+        letter-spacing: 0.005em;
+      }
+    }
+  }
+
+  &__contacts {
+    margin: 0;
+
+    @include tablet {
+      margin-bottom: -30px;
+      margin-top: -30px;
+    }
+
+    @include desktop-start {
+      margin: 0;
+    }
+  }
+
+  &__button {
+    width: 280px;
+    margin: 0 auto 31px;
+
+    @include tablet {
+      width: 257px;
+    }
+
+    @include desktop-start {
+      margin: 0 auto 22px;
+      padding: 14px 20px 12px;
+      font-size: 22px;
+    }
+  }
+
+  &__button-icon {
+    width: 12px;
+    height: 12px;
+    margin-right: 9px;
+    fill: $white;
+
+    @include desktop-start {
+      width: 16px;
+      height: 16px;
+      margin-right: 6px;
+      margin-left: 0;
+    }
+  }
+}

@@ -1,0 +1,24 @@
+.will-form__text{
+  margin: 10px 50px;
+  max-width: 600px;
+}
+
+.will-welcome__text--select{
+  max-width: 605px;
+}
+
+.will-welcome--password{
+  margin-top: -5px;
+}
+
+.will-form__text{
+  margin-top: 30px;
+  margin-bottom: 22px;
+}
+
+@media(max-width: $width-tablet){
+
+  .will-form__login--password{
+    width: 100%;
+  }
+}

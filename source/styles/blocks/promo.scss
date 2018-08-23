@@ -1,0 +1,121 @@
+.promo {
+  display: flex;
+  flex-direction: column;
+  padding: 25px 20px 0;
+  background: url("../img/promo-back.png") no-repeat;
+  background-size: 367px auto;
+  background-position: right 68% bottom 107px;
+
+  @include retina-resolution {
+    background-image: url("../img/promo-back@2x.png");
+    background-size: 367px auto;
+  }
+
+  @include tablet {
+    padding: 50px 30px 0;
+    background-size: 539px auto;
+    background-position: left 299px top 127px;
+
+    @include retina-resolution {
+      background-size: 539px auto;
+    }
+  }
+
+  @include desktop-start {
+    padding: 90px 35px 86px 60px;
+    background-size: auto;
+    background-position: right 36px top 65px;
+
+    @include retina-resolution {
+      background-size: 559px, auto;
+    }
+  }
+
+  @include desktop-full {
+    padding: 135px 35px 102px 115px;
+    background-position: right 137px top 65px;
+  }
+
+  &__title {
+    @include text(18px, 26px, 700);
+    display: block;
+    margin: 0 0 212px;
+
+    @include tablet {
+      padding-right: 23%;
+      margin-bottom: 75px;
+      font-size: 30px;
+      line-height: 40px;
+    }
+
+    @include desktop-start {
+      padding-right: 0;
+      margin-bottom: 88px;
+      font-size: 36px;
+      line-height: 49px;
+    }
+
+    @include desktop-start {
+      width: 61%;
+    }
+  }
+
+  &__links {
+    order: 1;
+
+    @include tablet {
+      display: flex;
+      order: 0;
+      margin-bottom: 237px;
+    }
+
+    @include desktop-start {
+      margin-bottom: 155px;
+    }
+  }
+
+  &__link {
+    margin-bottom: 23px;
+
+    @include tablet {
+      margin: 0 21px 0 0;
+    }
+  }
+
+  &__channel {
+    align-self: flex-end;
+    margin: 0 -7px 19px 0;
+    text-decoration: none;
+    color: $steel;
+
+    &::after {
+      content: '';
+      display: block;
+      width: 60px;
+      height: 60px;
+      background: url("../img/telegram.svg") no-repeat center center;
+      border-radius: 50%;
+      box-shadow: 0 2px 4px 0 transparentize($black, 0.9);
+    }
+
+    @include tablet {
+      display: flex;
+      align-items: center;
+
+      &::after {
+        margin: 0 6px 0 20px;
+      }
+    }
+  }
+
+  &__channel-text {
+    display: none;
+
+    @include tablet {
+      @include text(14px, 26px, 400);
+      display: block;
+      color: $steel;
+    }
+  }
+}
+

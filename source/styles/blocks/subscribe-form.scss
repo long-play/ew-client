@@ -1,0 +1,42 @@
+.subscribe-form {
+  display: flex;
+  flex-direction: column;
+
+  @include tablet {
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  &__input {
+    margin-bottom: 15px;
+
+    @include tablet {
+      width: 300px;
+      margin-right: 19px;
+      margin-bottom: 0;
+    }
+
+    @include desktop-start {
+      width: 290px;
+      margin-right: 14px;
+    }
+
+    &--big {
+      @include desktop-start {
+        width: 300px;
+      }
+    }
+  }
+
+  &__submit {
+    flex-shrink: 0;
+
+    @include tablet {
+      width: 176px;
+    }
+
+    @include desktop-start {
+
+    }
+  }
+}

@@ -1,0 +1,209 @@
+.wrap-will--provider {
+  color:  $gray-blue-dark;
+
+  @include desktop-start {
+    margin: 25px 60px 0;
+  }
+
+  @include desktop-full {
+    margin: 25px 140px 0;
+  }
+
+  & .wrap-will__row--body {
+    padding: 22px 20px 17px;
+
+    @include tablet {
+      flex-wrap: wrap;
+    }
+
+    @include desktop-start {
+      flex-wrap: nowrap;
+      padding: 13px 18px 13px 24px;
+    }
+  }
+
+  & .wrap-will__row--head {
+
+    @include tablet {
+      display: none;
+    }
+
+    @include desktop-start {
+      display: flex;
+      margin-bottom: 19px;
+    }
+  }
+}
+
+.wrap-will--provider .wrap-will__col {
+  padding-right: 20px;
+
+  &::before {
+
+    @include desktop-start {
+      display: none;
+    }
+  }
+
+  &--provider {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    flex-basis: 100%;
+    margin-bottom: 20px;
+    padding-right: 0;
+
+    @include tablet {
+      flex-basis: 45%;
+      margin-bottom: 10px;
+      padding-right: 25px;
+    }
+
+    @include desktop-start {
+      flex-basis: 273px;
+      margin-bottom: 0;
+    }
+
+    &::before {
+      content: 'provider';
+      display: block;
+      text-transform: uppercase;
+      width: 100%;
+      margin-bottom: 15px;
+    }
+  }
+
+  &--method {
+    flex-basis: 58%;
+
+    @include tablet {
+      flex-basis: 27.5%;
+    }
+
+    @include desktop-start {
+      flex-basis: 135px;
+    }
+
+    &::before {
+      content: 'METHOD';
+      display: block;
+
+      @include tablet {
+        margin-bottom: 15px;
+      }
+    }
+  }
+
+  &--tariff {
+    flex-basis: 42%;
+
+
+    &::before {
+      content: 'tariff';
+      display: block;
+      text-transform: uppercase;
+
+      @include tablet {
+        margin-bottom: 15px;
+      }
+    }
+
+    @include tablet {
+      flex-basis: 27.5%;
+    }
+
+    @include desktop-start {
+      flex-basis: 120px;
+    }
+  }
+
+  &--description {
+    flex-basis: 100%;
+    margin-top: 29px;
+
+    @include tablet {
+      flex-basis: 75%;
+    }
+
+    @include desktop-start {
+      flex-basis: 422px;
+      margin-top: 0;
+    }
+
+    &::before {
+      content: 'description';
+      display: block;
+      text-transform: uppercase;
+
+      @include tablet {
+        margin-bottom: 15px;
+      }
+    }
+
+    & a {
+      margin-left: 3px;
+      color: #258ee2;
+      font-size: 17px;
+      font-weight: bold;
+      font-style: normal;
+      font-stretch: normal;
+      line-height: normal;
+      letter-spacing: normal;
+      text-decoration: none;
+
+      @include desktop-start {
+        margin-left: 20px;
+      }
+    }
+  }
+
+  &--provider-action {
+    flex-basis: 100%;
+    margin-top: 21px;
+    text-align: right;
+    padding-right: 0;
+
+    @include tablet {
+      flex-basis: auto;
+      margin-left: auto;
+    }
+
+    @include desktop-start {
+      flex-basis: 165px;
+      margin-top: 0;
+    }
+  }
+}
+
+.button.button--choose {
+  width: 100%;
+  padding: 14px 14px 12px 13px;
+  font-size: 14px;
+
+  @include tablet {
+    margin-top: 8px;
+  }
+
+  @include desktop-start {
+    margin-top: -2px;
+    margin-bottom: -2px;
+    padding: 11px 12px 10px 13px;
+    font-size: 16px;
+  }
+}
+
+.provider-logo-image {
+  width: 40px;
+  margin-right: 34px;
+  background-color: $white;
+
+  @include tablet {
+    width: 48px;
+  }
+
+  @include desktop-start {
+    vertical-align: middle;
+    margin-bottom: 0;
+    margin-right: 22px;
+  }
+}

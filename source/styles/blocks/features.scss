@@ -1,0 +1,142 @@
+.features {
+  padding: 46px 20px 0;
+  margin-bottom: 91px;
+
+  @include tablet {
+    margin-bottom: 102px;
+    padding: 16px 30px 0;
+  }
+
+  @include desktop-start {
+    margin-bottom: 90px;
+    padding: 0 60px;
+  }
+
+  @include desktop-full {
+    margin-bottom: 152px;
+    padding: 0 115px 0;
+  }
+
+  &__header {
+    margin-bottom: 48px;
+
+    @include tablet {
+      margin-bottom: 28px;
+      padding: 0 110px;
+    }
+
+    @include desktop-start {
+      padding: 0 20%;
+    }
+
+    @include desktop-full {
+      padding: 0 27%;
+    }
+  }
+
+  &__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    @include tablet {
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+
+  &__item {
+    padding-top: 140px;
+    background-color: transparent;
+    background-repeat: no-repeat;
+
+    @include tablet {
+      min-width: 223px;
+      padding-top: 192px;
+    }
+
+    @include desktop-start {
+      max-width: 370px;
+      padding-top: 221px;
+    }
+
+    &:nth-child(1) {
+      margin-bottom: 58px;
+      background-image: url("../img/features-1.png");
+      background-position: left 48% top 10px;
+      background-size: 103px auto;
+
+      @include retina-resolution {
+        background-image: url("../img/features-1@2x.png");
+        background-size: 103px auto;
+      }
+
+      @include tablet {
+        margin: 0 20px 0 0;
+        background-position: left 52% top 48px;
+      }
+
+      @include desktop-start {
+        margin: 0 30px 0 0;
+        background-size: 129px 131px;
+        background-position: left 47% top 54px;
+
+        @include retina-resolution {
+          background-size: 129px 131px;
+        }
+      }
+    }
+
+    &:nth-child(2) {
+      margin-bottom: 56px;
+      background-image: url("../img/features-2.png");
+      background-position: left 48% top 0;
+      background-size: 106px auto;
+
+      @include retina-resolution {
+        background-image: url("../img/features-2@2x.png");
+        background-size: 106px auto;
+      }
+
+      @include tablet {
+        margin: 0 20px 0 0;
+        background-position: left 46% top 47px;
+      }
+
+      @include desktop-start {
+        margin: 0 30px 0 0;
+        background-size: 132px 137px;
+        background-position: left 47% top 50px;
+
+        @include retina-resolution {
+          background-size: 132px 137px;
+        }
+      }
+    }
+
+    &:nth-child(3) {
+      background-image: url("../img/features-3.png");
+      background-position: left 52% top 1px;
+      background-size: 102px auto;
+
+      @include retina-resolution {
+        background-image: url("../img/features-3@2x.png");
+        background-size: 102px auto;
+      }
+
+      @include tablet {
+        margin: 0;
+        background-position: left 44% top 44px;
+      }
+
+      @include desktop-start {
+        background-size: 128px 141px;
+        background-position: left 46% top 48px;
+
+        @include retina-resolution {
+          background-size: 128px 141px;
+        }
+      }
+    }
+  }
+}

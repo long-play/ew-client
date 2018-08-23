@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link href="css/style.min.css" rel="stylesheet">
+  <title>will-empty</title>
+</head>
+<body class="my-wills">
+<div style="height: 0; width: 0; position: absolute; visibility: hidden" class="symbols">
+  <!-- inject:svg --><!-- endinject -->
+</div>
+
+<header class="header  header--inner  header--will  header--my-wills">
+  <div class="wrapper">
+    <nav class="header__menu  main-nav  main-nav--inner  main-nav--user-logged">
+      <div class="main-nav__user  user">
+        <p class="user__name">Demo user</p>
+        <img class="user__qrcode" src="img/qr-code.png" width="24" height="24" alt="qr-code">
+      </div>
+      <a class="main-nav__logo  logo" href="/">
+        <img class="logo__image  main-nav__logo--main" src="img/logo-white.svg" width="56" height="24" alt="Logo E-will">
+        <img class="logo__image  main-nav__logo--white" src="img/logo-white.svg" width="56" height="24" alt="Logo E-will">
+      </a>
+      <button class="main-nav__toggle  main-nav__toggle--closed" type="button">
+        <span class="visually-hidden">Open menu</span>
+        <svg class="main-nav__toggle-icon  main-nav__toggle-icon--burger" width="24" height="16">
+          <use xlink:href="#menu-open"></use>
+        </svg>
+        <svg class="main-nav__toggle-icon  main-nav__toggle-icon--cross" width="18" height="18">
+          <use xlink:href="#menu-close"></use>
+        </svg>
+      </button>
+      <ul class="main-nav__list">
+        <li class="main-nav__item">
+          <a class="main-nav__link  main-nav__link--active">Wills</a>
+        </li>
+        <li class="main-nav__item">
+          <a class="main-nav__link" href="how-it-works.html">How it works</a>
+        </li>
+        <li class="main-nav__item">
+          <a class="main-nav__link" href="faq.html">FAQ</a>
+        </li>
+        <li class="main-nav__item">
+          <a class="main-nav__link" href="contacts.html">Contacts</a>
+        </li>
+      </ul>
+    </nav>
+    <h1 class="header__title  header__title--will">My wills</h1>
+    <p class="header__text  header__text--will">It’s time to create your first will! It’s easy and it will take only a few minutes. Try it right now!</p>
+    <button class="header__button  button  button--green">
+      <svg class="header__button-icon" width="12" height="12">
+        <use xlink:href="#icon-plus"></use>
+      </svg>
+      Create new Will
+    </button>
+  </div>
+</header>
+
+<main class="wills-body">
+  <div class="container">
+    <div class="wrap-will wrap-will--empty wrap-will--show">
+      <h2 class="wills-body__empty-title">No wills yet</h2>
+      <p class="wills-body__empty-content">Try to create your first one!</p>
+      <img src="img/group-9.svg" alt="create-will">
+    </div>
+    <div class="wrap-will wrap-will--wills">
+      <div class="wrap-will__row wrap-will__row--head">
+        <div class="wrap-will__col wrap-will__col--head wrap-will__col--willId">Will id</div>
+        <div class="wrap-will__col wrap-will__col--head wrap-will__col--annual">Annual fee</div>
+        <div class="wrap-will__col wrap-will__col--head wrap-will__col--state">State</div>
+        <div class="wrap-will__col wrap-will__col--head wrap-will__col--validTill">Valid till</div>
+        <div class="wrap-will__col wrap-will__col--head wrap-will__col--action">Actions</div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<template>
+  <div class="wrap-will__row wrap-will__row--body">
+    <div class="wrap-will__col wrap-will__col--body wrap-will__col--willId">634556246….9902</div>
+    <div class="wrap-will__col wrap-will__col--body wrap-will__col--fee">0 ethers</div>
+    <div class="wrap-will__col wrap-will__col--body wrap-will__col--state"><span class="state-text state-text--success">Created</span></div>
+    <div class="wrap-will__col wrap-will__col--body wrap-will__col--validTill">January 1, 2017, 3:00 AM</div>
+    <div class="wrap-will__col wrap-will__col--body wrap-will__col--action">
+      <div class="wrap-will__menu  my-wills-menu  my-wills-menu--hidden">
+        <span class="my-wills-menu__arrow">▲</span>
+        <ul class="my-wills-menu__list">
+          <li class="my-wills-menu__item">
+            <a class="my-wills-menu__link my-wills-menu__link--prolong" href="#">Prolong</a>
+          </li>
+          <li class="my-wills-menu__item">
+            <a class="my-wills-menu__link  my-wills-menu__link--delete" href="#">Delete</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script src="js/util.min.js"></script>
+<script src="js/menu.min.js"></script>
+<script src="lib/moment.min.js"></script>
+<script src="lib/jquery.min.js"></script>
+<script src="js/e-will-config.min.js"></script>
+<script src="js/e-will-wills.min.js"></script>
+<script src="js/e-will-wills-ui.min.js"></script>
+
+</body>
+</html>

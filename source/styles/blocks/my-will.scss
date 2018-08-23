@@ -1,0 +1,435 @@
+.my-will {
+  background-image: url("../img/welcome_top_mobile.png"),
+  url("../img/welcome_bottom_mobile.png"),
+  linear-gradient(to top, $blue-gradient-bottom, $blue-gradient-top);
+  background-repeat: no-repeat;
+  background-size: 536px, 536px, auto;
+  background-position: center 82px, center bottom 302px, 0 0;
+
+  @include retina-resolution {
+    background-image: url("../img/welcome_top_mobile@2x.png"),
+    url("../img/welcome_bottom_mobile@2x.png"),
+    linear-gradient(to top, $blue-gradient-bottom, $blue-gradient-top);
+    background-size: 536px, 536px, auto;
+  }
+
+  @include desktop-start {
+    background-image: url("../img/welcome_desktop_start.png"),
+    linear-gradient(to top, $blue-gradient-bottom, $blue-gradient-top);
+    background-size: 1019px, auto;
+    background-position: center top 249px, 0 0;
+
+    @include retina-resolution {
+      background-image: url("../img/welcome_desktop_start@2x.png"),
+      linear-gradient(to top, $blue-gradient-bottom, $blue-gradient-top);
+      background-size: 1019px, auto;
+    }
+  }
+
+  @include desktop-full {
+    background-image: url("../img/welcome_desktop_full.png"),
+    linear-gradient(to top, $blue-gradient-bottom, $blue-gradient-top);
+    background-size: 1315px, auto;
+    background-position: center top 249px, 0 0;
+
+    @include retina-resolution {
+      background-image: url("../img/welcome_desktop_full@2x.png"),
+      linear-gradient(to top, $blue-gradient-bottom, $blue-gradient-top);
+      background-size: 1315px, auto;
+    }
+  }
+}
+
+.my-will-welcome {
+  display: flex;
+  flex-direction: column;
+  min-width: 320px;
+}
+
+.will-welcome .login-screen {
+
+  &-1 {
+    display: none;
+  }
+
+  &-2 {
+    display: none;
+  }
+
+  &-3 {
+    display: none;
+  }
+}
+
+.will-welcome .login-screen--show {
+  display: block;
+}
+
+.will-welcome {
+  text-align: center;
+  margin-bottom: 44px;
+  min-height: 400px;
+  margin-top: 162px;
+
+  @include desktop-start {
+    margin-bottom: 218px;
+  }
+
+  &--password {
+
+    & .will-demo--mobile {
+      margin-top: 170px;
+    }
+  }
+
+  &__title {
+    font-size: 48px;
+    font-weight: bold;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #ffffff;
+    margin: 0 0 31px;
+
+    @include desktop-start {
+      margin-bottom: 42px;
+    }
+
+    &--create {
+      margin-bottom: 35px;
+    }
+  }
+
+  &__text {
+    max-width: 500px;
+    padding: 0 20px;
+    margin: auto;
+    font-size: 18px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: center;
+    color: transparentize($white, 0.2);
+
+    @include desktop-start {
+      padding: 0;
+    }
+
+    &--second {
+      max-width: 100%;
+      padding: 0 5px;
+    }
+  }
+
+  &__link {
+    color: $white;
+    font-weight: bold;
+    white-space: nowrap;
+    padding-bottom: 1px;
+    border-bottom: 1px solid transparentize($white, 0.3);
+    text-decoration-line: none;
+  }
+}
+
+.will-form {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 800px;
+  margin: 32px auto 26px;
+  font-size: 14px;
+
+  @include tablet {
+    font-size: 18px;
+  }
+
+  @include desktop-start {
+    margin-top: 33px;
+    margin-bottom: 31px;
+    font-size: 20px;
+  }
+
+  &__radio {
+    display: none;
+  }
+
+  &__login {
+    width: 100%;
+    max-width: 535px;
+    height: 44px;
+    margin-top: 12px;
+    margin-bottom: 10px;
+    padding: 0 20px;
+    font: inherit;
+    font-weight: 600;
+    line-height: 1.2em;
+    border: 0;
+    border-radius: 6px;
+    -webkit-appearance: none;
+
+    @include tablet {
+      width: 535px;
+      height: 52px;
+    }
+
+    @include desktop-start {
+      margin: 0 10px 0 0;
+    }
+
+    &:focus {
+      outline: none;
+    }
+
+    &::placeholder {
+      color: transparentize($gray-blue-dark, 0.6);
+    }
+
+    &--password {
+
+      @include desktop-start {
+        width: 286px;
+      }
+    }
+  }
+
+  &__label {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 35px;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #ffffff;
+    position: relative;
+    padding-left: 45px;
+    padding-right: 33px;
+
+    &::before {
+      content: "";
+      position: absolute;
+      width: 22px;
+      left: 10px;
+      top: -3px;
+      height: 22px;
+      border-radius: 50%;
+      box-shadow: inset 0 1px 3px 0 rgba(0, 0, 0, 0.5);
+      border: solid 1px #ffffff;
+    }
+
+    @include desktop-start {
+      margin-bottom: 39px;
+    }
+  }
+
+  &__login {
+    display: block;
+  }
+}
+
+input:checked + .will-form__label::before {
+  background-image: radial-gradient(circle, rgb(255, 255, 255) 5px, transparent 6px);
+}
+
+.will-demo {
+  width: 310px;
+  height: 70px;
+  margin-top: -5px;
+  margin-left: -175px;
+  box-sizing: border-box;
+  border-radius: 6px;
+  background-color: #1351b5;
+  border: dashed 2px #ffffff;
+  text-align: left;
+
+  &--mobile {
+    display: none;
+  }
+
+  &--mywill {
+    border: 0;
+    background-color: transparent;
+    width: 292px;
+    margin-left: 23px;
+  }
+
+  &__content {
+    position: relative;
+    font-size: 16px;
+    color: #ffffff;
+    padding: 16px 16px 17px 70px;
+    margin: 0;
+
+    &::before {
+      content: '';
+      position: absolute;
+      width: 33px;
+      height: 29px;
+      background-image: url("../img/danger.svg");
+      left: 20px;
+      top: 19px;
+    }
+
+    @include desktop-full {
+      padding-top: 14px;
+    }
+  }
+}
+
+.will-menu {
+
+  @include tablet {
+    display: flex;
+    padding: 0;
+    list-style: none;
+  }
+}
+
+.will-menu__item {
+
+  &:first-child {
+    margin-right: 49px;
+  }
+
+  &:nth-child(2) {
+    margin-right: 56px;
+  }
+
+  &:nth-child(3) {
+    margin-right: 47px;
+  }
+
+  &:nth-child(4) {
+    margin-right: 0;
+  }
+}
+
+.will-menu__link {
+  font-size: 14px;
+  line-height: 18px;
+  font-weight: 700;
+  text-decoration: none;
+  color: transparentize($white, 0.5);
+
+  @include tablet {
+    font-size: 16px;
+    line-height: 26px;
+    font-weight: 400;
+  }
+
+  &:hover,
+  &:focus {
+    outline: none;
+
+    @include tablet {
+      position: relative;
+      color: $white;
+
+      &:after {
+        position: absolute;
+        left: 0;
+        bottom: -1px;
+        content: '';
+        width: 100%;
+        height: 1px;
+        background-color: $white;
+      }
+    }
+  }
+
+  &--active {
+    color: $white;
+
+    @include tablet {
+
+      &:hover::after {
+        content: none;
+      }
+    }
+  }
+}
+
+@media (min-width: $width-desktop-start) {
+
+  .will-welcome--password {
+    margin-top: 164px;
+    margin-bottom: 185px;
+  }
+}
+
+@media(max-width: $width-desktop-start - 1px) {
+
+  .my-will-welcome {
+    height: auto;
+  }
+
+  .will-welcome {
+    margin-top: 124px;
+
+    &__text {
+      font-size: 16px;
+
+      &--second {
+        padding: 0 20px;
+        line-height: 22px;
+      }
+    }
+
+    &__title {
+      font-size: 42px;
+    }
+  }
+
+  .will-menu {
+
+    &__item {
+      margin-bottom: 35px;
+    }
+  }
+
+  .will-form {
+    padding: 0 20px;
+
+    &__text {
+      font-size: 18px;
+      margin: 40px 0 10px;
+      padding: 0;
+    }
+
+    &__label {
+      margin-top: 5px;
+      padding-left: 64px;
+      margin-bottom: 17px;
+
+      &::before {
+        left: 28px;
+        top: -4px;
+      }
+    }
+  }
+}
+
+@media(max-width: 1199px) {
+  .will-demo--desktop {
+    display: none;
+  }
+
+  .will-demo--mobile {
+    display: block;
+    margin: 147px auto 23px;
+    width: 280px;
+
+    & .will-demo__content {
+      font-size: 14px;
+    }
+  }
+}
+
+@media(max-width: $width-mobile-iplus) {
+  .will-form {
+    justify-content: flex-start;
+  }
+}

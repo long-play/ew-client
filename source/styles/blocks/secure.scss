@@ -1,0 +1,155 @@
+.secure {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 83px;
+  padding: 279px 20px 0;
+  background-image: url("../img/secure.jpg");
+  background-size: 184px auto;
+  background-repeat: no-repeat;
+  background-position: 51.5% 0;
+
+  @include retina-resolution {
+    background-image: url("../img/secure@2x.jpg");
+    background-size: 184px auto;
+  }
+
+  @include tablet {
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-bottom: 54px;
+    padding: 0 30px 72px 50%;
+    background-size: 315px auto;
+    background-position: 33px 24px;
+
+    @include retina-resolution {
+      background-size: 315px auto;
+    }
+  }
+
+  @include desktop-start {
+    margin-bottom: 69px;
+    padding: 0 60px 115px 51.5%;
+    background-size: auto;
+    background-position: 100px 0;
+
+    @include retina-resolution {
+      background-size: 366px, auto;
+    }
+  }
+
+  @include desktop-full {
+    background-position: 226px 0;
+  }
+
+  &--inner {
+    margin-bottom: 49px;
+
+    @include tablet {
+      margin-bottom: 40px;
+    }
+
+    @include desktop-start {
+      margin-bottom: 96px;
+    }
+  }
+
+  &__header {
+    margin-bottom: 27px;
+
+    @include tablet {
+      margin-bottom: 37px;
+      padding-right: 5px;
+    }
+
+    @include desktop-start {
+      margin-bottom: 50px;
+      padding-right: 45px;
+    }
+  }
+
+  &__info {
+    text-align: center;
+
+    @include tablet {
+      position: relative;
+      padding-left: 40px;
+      text-align: left;
+
+      &::before {
+        position: absolute;
+        top: 0;
+        left: 0;
+        content: '';
+        width: 1px;
+        height: 100%;
+        background-image: linear-gradient(to bottom, rgba(218, 242, 255, 0), #0072ff 23%, #0072ff 82%, rgba(179, 226, 255, 0));
+      }
+    }
+
+    @include desktop-full {
+      padding-right: 15px;
+    }
+  }
+
+  &__subtitle {
+    @include text(14px, 1.2em, 600);
+    margin: 0 0 10px;
+    color: $black;
+
+    @include tablet {
+      font-size: 18px;
+      margin-bottom: 13px;
+    }
+
+    @include desktop-start {
+      font-size: 20px;
+      margin-bottom: 12px;
+    }
+  }
+
+  &__text {
+    @include text(12px, 20px, 400);
+    margin: 0 0 10px;
+    color: $steel;
+
+    @include tablet {
+      font-size: 14px;
+      line-height: 24px;
+    }
+
+    @include desktop-start {
+      font-size: 16px;
+    }
+  }
+
+  &__link-wrapper {
+    width: 100%;
+    margin-top: 31px;
+    padding: 0 10%;
+
+    @include tablet {
+      margin-top: 18px;
+      padding: 0;
+    }
+
+    @include desktop-start {
+      margin-top: 26px;
+    }
+  }
+
+  &__link {
+    @include text(12px, 24px, 600);
+    margin: 0 0 10px;
+    text-align: center;
+
+    @include tablet {
+      font-size: 14px;
+      line-height: 24px;
+    }
+
+    @include desktop-start {
+      font-size: 16px;
+    }
+  }
+}

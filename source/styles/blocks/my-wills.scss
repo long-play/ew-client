@@ -1,0 +1,340 @@
+.wills-create{
+  text-align: center;
+}
+
+.wills-body{
+  background-color: $white;
+  padding-bottom: 200px;
+
+  &__empty-content{
+    opacity: 0.6;
+    font-size: 18px;
+    font-weight: 600;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: $gray-blue-dark;
+    margin: 0 0 24px;
+  }
+
+  &__empty-title{
+    font-size: 24px;
+    line-height: 33px;
+    color: $gray-blue-dark;
+    margin: 0 0 13px;
+  }
+}
+
+.wrap-will {
+  display: none;
+  margin: 20px 140px;
+
+  @include tablet {
+    margin: 30px 30px 0;
+  }
+
+  @include desktop-start {
+    margin: 146px 60px 0;
+  }
+
+  &--show{
+    display: block;
+  }
+
+  &--wills{
+    margin: 25px 140px;
+
+    @include desktop-start {
+      margin: 26px 60px 0;
+    }
+
+    @include desktop-full {
+      margin: 26px 140px 0;
+    }
+  }
+
+  &--provider{
+    display: block;
+  }
+
+  &__row {
+    display: flex;
+    margin-bottom: 20px;
+    padding: 20px 23px 0 20px;
+    justify-content: space-between;
+    align-items: center;
+
+    @include desktop-start {
+      justify-content: flex-start;
+      padding: 20px 15px 0 25px;
+    }
+
+    &--body{
+      position: relative;
+      border: solid 1px #f1f1f1;
+      border-radius: 8px;
+      padding: 22px 23px 30px 19px;
+
+      @include desktop-start {
+        margin-bottom: 15px;
+        padding: 17px 23px 19px 26px;
+      }
+
+      &:hover {
+        box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.05);
+      }
+    }
+  }
+
+  &--empty{
+    text-align: center;
+  }
+
+  &__col {
+    flex-basis: 20%;
+    padding-right: 20px;
+    font-size: 17px;
+
+    &--willId{
+      padding-right: 25px;
+
+      @include tablet {
+        flex-basis: 23%;
+      }
+
+      @include desktop-start {
+        flex-basis: 217px;
+      }
+    }
+
+    &--annual{
+      padding-right: 25px;
+
+      @include tablet {
+        flex-basis: 18%;
+      }
+
+      @include desktop-start {
+        flex-basis: 212px;
+      }
+    }
+
+    &--state{
+
+      @include tablet {
+        flex-basis: 20%;
+        padding-right: 25px;
+      }
+
+      @include desktop-start {
+        flex-basis: 203px;
+      }
+    }
+
+    &--validTill {
+      flex-basis: 100%;
+      margin-top: 30px;
+      padding-right: 25px;
+
+      @include tablet {
+        flex-basis: 24%;
+        margin-top: 0;
+      }
+
+      @include desktop-start {
+        flex-basis: 380px;
+      }
+    }
+
+    &--fee {
+
+      @include tablet {
+        flex-basis: 18%;
+      }
+
+      @include desktop-start {
+        flex-basis: 212px;
+      }
+    }
+
+    &--head {
+      color:#9b9b9b;
+      font-size: 14px;
+      text-transform: uppercase;
+    }
+
+    &--head.wrap-will__col--action {
+
+      @include tablet {
+        position: static;
+        width: auto;
+        height: auto;
+        padding-right: 0;
+        background-image: none;
+        cursor: default;
+      }
+    }
+
+    &--action {
+      position: absolute;
+      flex-basis: auto;
+      margin-left: auto;
+      text-align: right;
+      top: 17px;
+      right: 15px;
+      width: 53px;
+      display: inline-block;
+      height: 34px;
+      background-image: url(../img/group-5.svg);
+      cursor: pointer;
+
+      @include tablet {
+        position: static;
+        top: initial;
+        right: initial;
+        flex-shrink: 0;
+      }
+    }
+  }
+
+  &__menu {
+    position: absolute;
+    z-index: 100;
+    top: 22px;
+    right: 0;
+
+    @include tablet {
+      top: 47px;
+      right: 24px;
+    }
+
+    @include desktop-start {
+      top: 40px;
+    }
+
+    @include desktop-full {
+      right: -85px;
+    }
+  }
+}
+
+.will-demo__will-text{
+  color: $white;
+  font-size: 18px;
+  margin-top: 20px;
+  display: flex;
+}
+
+.state-text{
+  padding: 2px 9px 4px;
+  display: inline-block;
+  font-size: 17px;
+  margin: -2px 0 0 -7px;
+  border-radius: 4px;
+
+  &--success{
+    background-color: transparentize($green-main, .8);
+    color: $green-main;
+  }
+  &--danger{
+    background-color: transparentize($will-red, .8);
+    color: $will-red;
+  }
+}
+
+.will-welcome__text--mywills{
+  max-width: 640px;
+}
+
+@media(max-width: ($width-tablet - 1px)) {
+
+  .wills-body .wrap-will.wrap-will--empty {
+    margin: 37px 15px;
+  }
+
+  .will-welcome__text--mywills {
+    line-height: 140%;
+  }
+
+  .wills-body {
+    padding-bottom: 50px;
+
+    &__empty-content{
+      font-size: 16px;
+      margin: 0 0 32px;
+    }
+
+    &__empty-title {
+      font-size: 22px;
+      margin: 0 0 8px;
+    }
+  }
+
+  .logo--my-wils {
+    padding-left: 20px;
+  }
+
+  .wills-body .wrap-will {
+    margin: 20px 10px;
+
+    &__row{
+      flex-wrap: wrap;
+      align-items: stretch;
+      position: relative;
+    }
+
+    &__col::before {
+      color:#9b9b9b;
+      font-size: 14px;
+      margin-bottom: 13px;
+      text-transform:uppercase;
+    }
+
+    &__col--provider::before {
+      margin-bottom: 4px;
+    }
+
+    &__row--head {
+      display: none;
+    }
+
+    &__col--willId {
+      flex-basis: 100%;
+      margin-bottom: 33px;
+
+      &::before {
+        content: 'Will id';
+        display: block;
+      }
+    }
+
+    &__col--annual {
+      flex-basis: 55.5%;
+
+      &::before {
+        content: 'Annual fee';
+        display: block;
+      }
+    }
+
+    &__col--state {
+      flex-basis: 44.5%;
+
+      &::before {
+        content: 'State';
+        display: block;
+      }
+    }
+
+    &__col--valid {
+      flex-basis: 100%;
+      margin-top: 29px;
+
+      &::before {
+        content: 'Valid till';
+        display: block;
+      }
+    }
+  }
+}

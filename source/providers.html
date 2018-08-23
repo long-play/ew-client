@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link href="css/style.min.css" rel="stylesheet">
+  <title>new-will-provider</title>
+</head>
+<body class="my-wills">
+<div style="height: 0; width: 0; position: absolute; visibility: hidden" class="symbols">
+  <!-- inject:svg --><!-- endinject -->
+</div>
+<header class="header  header--inner  header--will">
+  <div class="wrapper">
+    <nav class="header__menu  main-nav  main-nav--inner  main-nav--user-logged">
+      <div class="main-nav__user  user">
+        <p class="user__name">Demo user</p>
+        <img class="user__qrcode" src="img/qr-code.png" width="24" height="24" alt="qr-code">
+      </div>
+      <a class="main-nav__logo  logo" href="/">
+        <img class="logo__image  main-nav__logo--main" src="img/logo-white.svg" width="56" height="24" alt="Logo E-will">
+        <img class="logo__image  main-nav__logo--white" src="img/logo-white.svg" width="56" height="24" alt="Logo E-will">
+      </a>
+      <button class="main-nav__toggle  main-nav__toggle--closed" type="button">
+        <span class="visually-hidden">Open the menu</span>
+        <svg class="main-nav__toggle-icon  main-nav__toggle-icon--burger" width="24" height="16">
+          <use xlink:href="#menu-open"></use>
+        </svg>
+        <svg class="main-nav__toggle-icon  main-nav__toggle-icon--cross" width="18" height="18">
+          <use xlink:href="#menu-close"></use>
+        </svg>
+      </button>
+      <ul class="main-nav__list">
+        <li class="main-nav__item">
+          <a class="main-nav__link  main-nav__link--active" href="wills.html">Wills</a>
+        </li>
+        <li class="main-nav__item">
+          <a class="main-nav__link" href="how-it-works.html">How it works</a>
+        </li>
+        <li class="main-nav__item">
+          <a class="main-nav__link" href="faq.html">FAQ</a>
+        </li>
+        <li class="main-nav__item">
+          <a class="main-nav__link" href="contacts.html">Contacts</a>
+        </li>
+      </ul>
+    </nav>
+    <h1 class="header__title  header__title--will">New will</h1>
+    <div class="header__step-info  step-info">
+      <div class="step-info__progress">
+        <p class="step-info__progress-mobile">Step 1 of 5</p>
+        <ul class="step-info__progress-desktop  progress">
+          <li class="progress__item  progress__item--active">
+            <svg class="progress__back" width="172" height="35">
+              <use xlink:href="#icon-progress"></use>
+            </svg>
+            <span class="progress__text">Provider</span>
+          </li>
+          <li class="progress__item  ">
+            <svg class="progress__back" width="172" height="35">
+              <use xlink:href="#icon-progress"></use>
+            </svg>
+            <span class="progress__text">Confirmation</span>
+          </li>
+          <li class="progress__item  ">
+            <svg class="progress__back" width="172" height="35">
+              <use xlink:href="#icon-progress"></use>
+            </svg>
+            <span class="progress__text">Benificiary</span>
+          </li>
+          <li class="progress__item">
+            <svg class="progress__back" width="172" height="35">
+              <use xlink:href="#icon-progress"></use>
+            </svg>
+            <span class="progress__text">Your will</span>
+          </li>
+          <li class="progress__item">
+            <svg class="progress__back" width="172" height="35">
+              <use xlink:href="#icon-progress"></use>
+            </svg>
+            <span class="progress__text">Payment</span>
+          </li>
+        </ul>
+      </div>
+      <p class="step-info__title">Provider</p>
+      <p class="step-info__text  step-info__text--spacing">At first, choose one of the available providers. They differ by methods of checking activity. The most popular are e-mail, activity in social networks and messengers. Choose the most convenient for you!</p>
+    </div>
+  </div>
+</header>
+<main class="wills-body">
+  <div class="container">
+    <div class="wrap-will wrap-will--provider">
+      <div class="wrap-will__row wrap-will__row--head">
+        <div class="wrap-will__col wrap-will__col--head wrap-will__col--provider">Provider</div>
+        <div class="wrap-will__col wrap-will__col--head wrap-will__col--method">METHOD</div>
+        <div class="wrap-will__col wrap-will__col--head wrap-will__col--tariff">TARIFF</div>
+        <div class="wrap-will__col wrap-will__col--head wrap-will__col--description">Description</div>
+        <div class="wrap-will__col wrap-will__col--head wrap-will__col--provider-action">Actions</div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<template>
+  <div class="wrap-will__row wrap-will__row--body">
+    <div class="wrap-will__col wrap-will__col--body wrap-will__col--provider">
+      <picture class="provider-logo wrap-will__col--provider-logo">
+        <source class="provider-logo-source-desktop" media="(min-width: 768px)" srcset="img/provider_logo1_desktop.png 1x, img/provider_logo1_desktop@2x.png 2x">
+        <img class="provider-logo-image" src="img/provider_logo1_mobile.png" srcset="img/provider_logo1_mobile@2x.png 2x" width="40" height="40" alt="logo">
+      </picture>
+      <span class="wrap-will__col--provider-name">WP Platform</span>
+    </div>
+    <div class="wrap-will__col wrap-will__col--body wrap-will__col--method">Email</div>
+    <div class="wrap-will__col wrap-will__col--body wrap-will__col--tariff">0 ethers</div>
+    <div class="wrap-will__col wrap-will__col--body wrap-will__col--description">The details or reasons that someone…&nbsp;<a href="#">more</a></div>
+    <div class="wrap-will__col wrap-will__col--body wrap-will__col--provider-action"><button class="button button--blue button--choose">Choose provider</button></div>
+  </div>
+</template>
+
+<script src="js/util.min.js"></script>
+<script src="js/menu.min.js"></script>
+<script src="lib/jquery.min.js"></script>
+<script src="js/e-will-config.min.js"></script>
+<script src="js/e-will-providers.min.js"></script>
+<script src="js/e-will-providers-ui.min.js"></script>
+</body>
+</html>
