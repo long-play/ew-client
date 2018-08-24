@@ -52,7 +52,7 @@ class EWillCreate extends EWillBase {
       beneficiaryAddressHash: new BN(keccak256(benBuff), 16)
     };
 
-    const url = `${EWillConfig.apiUrl}/key/public/address=${address}`;
+    const url = `${EWillConfig.apiUrl}/key/public?address=${address}`;
     const promise = this.ajaxRequest(url).then( (response) => {
       this._will.beneficiaryPublicKey = response.publicKey;
       return Promise.resolve(this._will);
@@ -263,9 +263,8 @@ class EWillCreate extends EWillBase {
       return this.ewEscrow.methods.providers(this._provider.address).call();
     }).then( (providerInfo) => {
       this._provider.info = providerInfo;
-      //todo: remove logs
-      console.log(providerInfo);
-      return $.getJSON(`${WPlatformConfig.swarmUrl}/bzz:/${providerInfo.info}/`);
+      const info = new BN(providerInfo.info, 10);
+      return this.jsonRequest(`${EWillConfig.swarmUrl}/bzz:/${info.toString('hex')}/`);
     }).then( (providerInfo) => {
       this._provider.extraInfo = providerInfo;
     });

@@ -4,7 +4,7 @@ const EWillBase = require('./e-will-base.js').EWillBase;
 class EWillLogin extends EWillBase {
   // Public functions
   constructor() {
-    super();
+    super(EWillConfig.gethUrl);
   }
 
   loginWithPrivateKey(privKey) {

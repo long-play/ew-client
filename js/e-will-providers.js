@@ -27,7 +27,13 @@ class EWillProviders extends EWillBase {
     }).then( (providersInfo) => {
       const promises = providersInfo.map( (providerInfo) => {
         const info = new BN(providerInfo.info, 10);
-        return $.getJSON(`${EWillConfig.swarmUrl}/bzz:/${info.toString('hex')}/`);
+        const promise = this.jsonRequest(`${EWillConfig.swarmUrl}/bzz:/${info.toString('hex')}/`).then( (extraInfo) => {
+          return Promise.resolve({
+            info: providerInfo,
+            extraInfo
+          });
+        });
+        return promise;
       });
       return Promise.all(promises);
     }).then( (providersInfo) => {
