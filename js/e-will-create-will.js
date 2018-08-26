@@ -54,6 +54,11 @@ class EWillCreate extends EWillBase {
 
     const url = `${EWillConfig.apiUrl}/key/public?address=${address}`;
     const promise = this.ajaxRequest(url).then( (response) => {
+      // Verify the response from the server
+      const pub = '0x' + response.publicKey.slice(4);
+      const addr = EthUtil.pubToAddress(pub).toString('hex');
+      if (EthUtil.addHexPrefix(addr).toLowerCase() != address.toLowerCase()) return Promise.reject({});
+
       this._will.beneficiaryPublicKey = response.publicKey;
       return Promise.resolve(this._will);
     }).catch( (err) => {
@@ -91,8 +96,10 @@ class EWillCreate extends EWillBase {
       contentType: 'application/json',
       data: JSON.stringify(data)
     }).then( (response) => {
-      //todo: verify signature & willId
-      const isSigned = (response.signature == '//todo:');
+      const msg = Buffer.concat([EthUtil.toBuffer(response.willId), EthUtil.toBuffer(response.key)]);
+      const hash = EthUtil.keccak256(msg);
+      const pubKey = EthUtil.ecrecover(hash, response.signature.v, response.signature.r, response.signature.s);
+      const isSigned = ('0x' + EthUtil.pubToAddress(pubKey).toString('hex').toLowerCase() === this._provider.params.address.toLowerCase());
       if (isSigned !== true) {
         return Promise.reject( /* error */ );
       } else if (this._provider.params.willId != response.willId) {
@@ -170,7 +177,6 @@ class EWillCreate extends EWillBase {
         return Promise.reject(response.error);
       }
 
-      //todo: check if needs to add 0x at the beggining
       const storageId = response;
       console.log('confirmed the will: ' + storageId);
 
@@ -241,13 +247,19 @@ class EWillCreate extends EWillBase {
       params
     };
 
-    if (!this._provider.params.address || !this._provider.params.willId || !this._provider.params.signature || !this._provider.params.token) {
+    if (!this._provider.params.address ||
+        !this._provider.params.willId ||
+        !this._provider.params.signaturev ||
+        !this._provider.params.signaturer ||
+        !this._provider.params.signatures ||
+        !this._provider.params.token) {
       return Promise.reject('Missing some provider\'s parameters');
     }
 
-    const msg = `${this._provider.params.address}:${this._provider.params.willId}:${this._provider.params.token}`;
-    //todo: isSigned = (ecrecover(msg, this._provider.params.signature) == this._provider.params.address);
-    const isSigned = (this._provider.params.signature == '//todo:');
+    const msg = Buffer.concat([EthUtil.toBuffer(params.address), EthUtil.toBuffer(params.willId), EthUtil.toBuffer(params.token)]);
+    const hash = EthUtil.keccak256(msg);
+    const pubKey = EthUtil.ecrecover(hash, response.signaturev, response.signaturer, response.signatures);
+    const isSigned = ('0x' + EthUtil.pubToAddress(pubKey).toString('hex').toLowerCase() === params.address.toLowerCase());
     if (isSigned !== true) {
       return Promise.reject('The provider\'s signature is corrupted!');
     }
