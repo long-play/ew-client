@@ -58,8 +58,9 @@ gulp.task("jscript", function () {
 gulp.task("jscript-bll", function () {
   gulp.src("js/*.js")
     .pipe(plumber())
-    .pipe(jsmin())
-    .pipe(bro())
+    .pipe(bro({
+      transform: [ [ 'uglifyify', { global: false } ] ]
+    }))
     .pipe(rename({suffix: '.min'}))
     .pipe(gulp.dest("public/js/"))
     .pipe(server.reload({stream: true}));
