@@ -27,7 +27,7 @@
         <img class="logo__image  main-nav__logo--white" src="img/logo-white.svg" width="56" height="24" alt="Logo E-will">
       </a>
       <button class="main-nav__toggle  main-nav__toggle--closed" type="button">
-        <span class="visually-hidden">Открыть меню</span>
+        <span class="visually-hidden">Open menu</span>
         <svg class="main-nav__toggle-icon  main-nav__toggle-icon--burger" width="24" height="16">
           <use xlink:href="#menu-open"></use>
         </svg>
@@ -99,21 +99,22 @@
       <div class="steps__step-3">
         <div class="steps__form-input  input-field">
           <label class="input-field__description" for="field-1">Benificiary’s email or phone</label>
-          <input class="input-field__input" type="text" name="user" id="field-1" placeholder="evgen.povt@gmail.com">
+          <input class="input-field__input" type="text" name="user" id="field-1" placeholder="hello@e-will.org">
         </div>
         <div class="steps__form-input  input-field">
           <label class="input-field__description">Benificiary’s login method</label>
-          <select class="input-field__input">
-            <option>Existing ethereum address</option>
-            <option>Generate new ethereum address</option>
-            <option>Set up questionnaire</option>
+          <select class="input-field__input" name="auth-type">
+            <option value='existing_address'>Existing ethereum address</option>
+            <option value='generate_new_address'>Generate new ethereum address</option>
+            <option value='generate_from_questions'>Set up questionnaire</option>
           </select>
         </div>
-        <div class="steps__form-input  input-field">
+        <div class="steps__form-input  input-field  steps__form-beneficiary-address">
           <label class="input-field__description" for="field-2">Benificiary’s ethereum address</label>
-          <input class="input-field__input" name="address" type="text" id="field-2" placeholder="0xF7642-583450934503750935">
+          <input class="input-field__input" name="address" type="text" id="field-2" placeholder="0xFe19Ca84c79Ef813E58713174d7DF1fc0f8Fa20a">
         </div>
-        <p class="steps__tip">If your Beneficiary doesn&apos;t have an ethereum address you can generate <a class="link" href="#">a new one</a></p>
+        <p class="steps__tip" id="steps__tip-create-address">If your Beneficiary doesn&apos;t have an ethereum address you can generate <a class="link" href="#">a new one</a></p>
+        <p class="steps__tip  z-hidden" id="steps__tip-not-implemented">Sorry, the feature is not implemented yet</p>
         <button class="steps__continue  to-step-4  button  button--blue" type="button">Continue</button>
       </div>
 
@@ -131,7 +132,7 @@
             </svg>
             Add new File block
           </button>
-          <button class="steps__continue  steps__continue--wide  to-step-5  button  button--green  z-hidden" type="button">Confirm</button>
+          <button class="steps__continue  steps__continue--wide  to-step-5  button  button--green  z-hidden" type="button">Continue</button>
         </div>
         <div class="steps__drop-zone">
           <p class="steps__comment-title">Drop your data here</p>
@@ -142,27 +143,23 @@
       <div class="steps__step-5  z-hidden">
         <div class="steps__data  steps__data--full-width  will-resume">
           <h2 class="will-resume__title">Your data</h2>
-          <ul class="will-resume__list">
-            <li class="will-resume__item">Facebook / login/password</li>
-            <li class="will-resume__item">My Ether Wallet JSON / UTC--2018-05-07T16-01-46.075z--f963de92b403a32e36f61db36f61db</li>
-            <li class="will-resume__item">My last letter / On behalf of MobileUp, I am writing to strongly oppose H.R. 3699, there</li>
-          </ul>
+          <ul class="will-resume__list"></ul>
         </div>
         <div class="steps__data  will-resume">
           <h2 class="will-resume__title">Resume</h2>
           <dl class="will-resume__summary">
             <dt class="will-resume__term">Provider</dt>
-            <dd class="will-resume__value">WP Platform</dd>
+            <dd class="will-resume__value  will-resume__provider-name"></dd>
           </dl>
           <dl class="will-resume__summary">
             <dt class="will-resume__term">Confirmation method</dt>
-            <dd class="will-resume__value">Email</dd>
+            <dd class="will-resume__value  will-resume__confirm-type"></dd>
           </dl>
           <dl class="will-resume__summary">
             <dt class="will-resume__term">Annual fee</dt>
-            <dd class="will-resume__value">12 ether</dd>
+            <dd class="will-resume__value  will-resume__annual-fee"></dd>
           </dl>
-          <button class="steps__submit  button  button--green" type="button">Confirm</button>
+          <button class="steps__submit  button  button--green" type="button">Create</button>
         </div>
       </div>
 
@@ -178,8 +175,8 @@
           <p class="modal__text">You are about to send <span class="modal__amount">12 ethers</span> to contract<br><span class="modal__text  modal__text--contract">0xF7642&nbsp;58345093450375093583048394df</span></p>
           <p class="modal__text">Are you sure?</p>
           <div class="modal__buttons">
-            <button class="modal__button  button  button--gray" type="button">Cancel</button>
-            <button class="modal__button  button  button--green" type="submit">Confirm</button>
+            <button class="modal__button  button  button--gray" type="button" name="cancel">Cancel</button>
+            <button class="modal__button  button  button--green" type="button" name="submit">Confirm</button>
           </div>
         </div>
       </div>
@@ -203,7 +200,7 @@
 
 <template>
   <div class="steps__block  steps__block--text  will-block">
-    <h2 class="will-block__title">Block 1</h2>
+    <h2 class="will-block__title">Text Note</h2>
     <div class="will-block__close" tabindex="0">
       <span class="visually-hidden">Delete block</span>
       <svg class="will-block__close-icon" width="14" height="14">
@@ -215,13 +212,13 @@
       <input class="input-field__input" type="text" id="field-3" placeholder="Facebook">
     </div>
     <div class="will-block__input  will-block__input--wide  input-field">
-      <label class="input-field__description  input-field__description--new-will" for="field-4">Value</label>
+      <label class="input-field__description  input-field__description--new-will" for="field-4">Message</label>
       <textarea class="input-field__input  input-field__input--textarea" id="field-4" autocomplete="off" rows="4" placeholder="login/password"></textarea>
     </div>
   </div>
 
   <div class="steps__block  steps__block--file  will-block">
-    <h2 class="will-block__title">Block 2</h2>
+    <h2 class="will-block__title">File</h2>
     <div class="will-block__close" tabindex="0">
       <span class="visually-hidden">Delete block</span>
       <svg class="will-block__close-icon" width="14" height="14">
@@ -230,10 +227,10 @@
     </div>
     <div class="will-block__input  input-field">
       <label class="input-field__description  input-field__description--new-will" for="field-5">Title</label>
-      <input class="input-field__input" type="text" id="field-5" placeholder="My Ether Wallet JSON">
+      <input class="input-field__input" type="text" id="field-5" placeholder="MyEtherWallet Keystore">
     </div>
     <div class="will-block__input  will-block__input--wide input-field">
-      <p class="input-field__description  input-field__description--new-will">Value</p>
+      <p class="input-field__description  input-field__description--new-will">File</p>
       <div class="will-block__file">
         <p class="will-block__file-name"><output class="will-block__name-value"></output></p>
         <input class="will-block__replace-input" type="file" id="replace-file">
@@ -241,6 +238,9 @@
       </div>
     </div>
   </div>
+
+  <li class="will-resume__item"></li>
+
 </template>
 
 <script src="js/util.min.js"></script>

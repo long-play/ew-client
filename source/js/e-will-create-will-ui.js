@@ -15,8 +15,6 @@
     ;
   });
 
-  //todo: handle changes of login method
-
   // handle input of beneficiary info
   window.ui.screens.toWillContent.addEventListener('click', (e) => {
     const benInfo = window.ui.delegate.canGoToWillContent();
@@ -26,15 +24,15 @@
       return;
     }
 
-    const switcher = window.ui.screens.beneficiaryInfo.querySelector('.edd-select').selectedIndex;
+    const switcher = window.ui.screens.authTypeSelector.value;
     let promise = null;
 
-    if (switcher == 0) { // existing ethereum address
+    if (switcher == 'existing_address') {
       promise = ewill.findBeneficiary(benInfo.address, benInfo.contacts);
-    } else if (switcher == 1) { // generate a new one
+    } else if (switcher == 'generate_new_address') {
       promise = ewill.createBeneficiary(benInfo.contacts);
       //todo: show the created keys to the user
-    } else if (switcher == 2) { // questionnaire
+    } else if (switcher == 'generate_from_questions') {
       //todo: implement questionnaire
     } else { // unknown
       promise = Promise.reject('Unknown error');

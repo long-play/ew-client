@@ -12,22 +12,29 @@
   const FILE_BLOCK = 'steps__block--file';
 
   const screens = {
+    // screens
     beneficiaryInfo: document.querySelector('.steps__step-3'),
     willContent: document.querySelector('.steps__step-4'),
     validation: document.querySelector('.steps__step-5'),
+
+    // controls
     modalConfirm: document.querySelector('.modal--confirm'),
     modalResult: document.querySelector('.modal--success'),
 
     toWillContent: document.querySelector('.to-step-4'),
     toValidation: document.querySelector('.to-step-5')
   };
+  screens.authTypeSelector = screens.beneficiaryInfo.querySelector('select[name=auth-type]');
+  screens.beneficiaryAddress = screens.beneficiaryInfo.querySelector('input[name=address]');
   //todo: screens.validationBack = ...
   screens.validationValidate = screens.validation.querySelector('.steps__submit');
-  screens.modalConfirmCancel = screens.modalConfirm.querySelector('.modal__button[type=button]');
-  screens.modalConfirmSubmit = screens.modalConfirm.querySelector('button[type=submit]');
+  screens.modalConfirmCancel = screens.modalConfirm.querySelector('.modal__button[name=cancel]');
+  screens.modalConfirmSubmit = screens.modalConfirm.querySelector('.modal__button[name=submit]');
 
+  const beneficiaryAddressBlock = screens.beneficiaryInfo.querySelector('.steps__form-beneficiary-address');
+  const beneficiaryAddressTipCreate = screens.beneficiaryInfo.querySelector('#steps__tip-create-address');
+  const beneficiaryAddressTipNotImpl = screens.beneficiaryInfo.querySelector('#steps__tip-not-implemented');
   const user = screens.beneficiaryInfo.querySelector('input[name=user]');
-  const address = screens.beneficiaryInfo.querySelector('input[name=address]');
   const header = document.querySelector('.header--will');
   const progressMobile = document.querySelector('.step-info__progress-mobile');
   const progressBarScreenThree = document.querySelector('.progress__item:nth-child(3)');
@@ -35,22 +42,44 @@
   const progressBarScreenFive = document.querySelector('.progress__item:nth-child(5)');
   const stepInfoTitle = document.querySelector('.step-info__title');
   const stepInfoText = document.querySelector('.step-info__text');
-  const infoTextScreenFour = 'Fill in any information you want to pass to the beneficiary after your death. It could be passwords, logins or you';
+  const infoTextScreenFour = 'Fill in any information you want to pass to the beneficiary after your death. It could be logins, passwords or files';
+  const infoTextScreenFive = 'Check please carefully if all the being input information is correct and confirm will creation';
   const mobileWidth = window.matchMedia('(max-width: 767px)');
+  const summaryProviderName = document.querySelector('.will-resume__provider-name');
+  const summaryConfirmType = document.querySelector('.will-resume__confirm-type');
+  const summaryAnnualFee = document.querySelector('.will-resume__annual-fee');
 
   const onInputRemoveError = function () {
     const parentElement = this.parentElement;
     parentElement.classList.remove(ERROR);
   };
 
+  const onAuthTypeChanged = function (e) {
+    const selectedOption = e.target.value;
+    screens.toWillContent.removeAttribute('disabled');
+    beneficiaryAddressBlock.classList.add(window.util.HIDDEN);
+    beneficiaryAddressTipCreate.classList.add(window.util.HIDDEN);
+    beneficiaryAddressTipNotImpl.classList.add(window.util.HIDDEN);
+
+    if (selectedOption == 'existing_address') {
+      beneficiaryAddressBlock.classList.remove(window.util.HIDDEN);
+      beneficiaryAddressTipCreate.classList.remove(window.util.HIDDEN);
+    } else if (selectedOption == 'generate_new_address') {
+    } else if (selectedOption == 'generate_from_questions') {
+      beneficiaryAddressTipNotImpl.classList.remove(window.util.HIDDEN);
+      screens.toWillContent.setAttribute('disabled', true);
+    }
+  };
+  screens.authTypeSelector.addEventListener('change', onAuthTypeChanged);
+
   const canGoToWillContent = function () {
     let result = true;
 
-    if (address.value === '') {
-      const addressParent = address.parentElement;
+    if (screens.beneficiaryAddress.value === '') {
+      const addressParent = screens.beneficiaryAddress.parentElement;
       addressParent.classList.add(ERROR);
-      address.focus();
-      address.addEventListener('input', onInputRemoveError);
+      screens.beneficiaryAddress.focus();
+      screens.beneficiaryAddress.addEventListener('input', onInputRemoveError);
       result = false;
     }
 
@@ -65,33 +94,47 @@
     return {
       result,
       contacts: user.value,
-      address:  address.value
+      address:  screens.beneficiaryAddress.value
     };
   };
 
   const canGoToValidation = function () {
     let result = true;
     const recordRows = screens.willContent.querySelectorAll('.will-block');
-
-    const records = []; //todo: get the user input records from recordRows
-    //format of record:
-    /*
-      {
-        type: "file" или "text",
-        title: текст из title или имя файла, если тайтл пустой
-        value: file object или текст из value
-      }
-    */
-
-    // если не все поля заполнены, то result = false;
+    const records = [];
 
     for (let i = 0; i < recordRows.length; i++) {
       const record = {};
+      const title = recordRows[i].querySelector('input[type=text]');
+      const textValue = recordRows[i].querySelector('textarea');
+      const fileInput = recordRows[i].querySelector('input[type=file]');
 
       if (recordRows[i].classList.contains(FILE_BLOCK)) {
         record.type = 'file';
       } else if (recordRows[i].classList.contains(TEXT_BLOCK)) {
         record.type = 'text'
+      } else {
+        record.type == null;
+      }
+
+      if (title.value !== '') {
+        record.title = title.value;
+      } else if (fileInput && fileInput.files.length > 0) {
+        record.title = fileInput.files[0].name;
+      } else {
+        record.title = null;
+      }
+
+      if (textValue) {
+        record.value = textValue.value;
+      } else if (fileInput && fileInput.files.length > 0) {
+        record.value = fileInput.files[0];
+      } else {
+        record.value = null;
+      }
+
+      if (record.type == null || record.title == null || record.value == null) {
+        result = false;
       }
 
       records.push(record);
@@ -99,7 +142,7 @@
 
     return {
       result,
-      records,
+      records
     };
   };
 
@@ -132,12 +175,36 @@
     progressBarScreenFive.classList.add(STEP_ACTIVE);
 
     // updated titles
-    progressMobile.innerText = PROGRESS_TEXT_SCREEN_FIVE;
+    stepInfoText.innerText = infoTextScreenFive;
     stepInfoTitle.innerText = SCREEN_FIVE_TITLE_MOB;
+    progressMobile.innerText = PROGRESS_TEXT_SCREEN_FIVE;
 
     // show will content
-    //todo: fill the table 'will-resume__list' from records
-    //todo: fill the 'will-resume__summary's from provider
+    const summaryList = document.querySelector('.will-resume__list');
+    const fragment = document.createDocumentFragment();
+    const summaryTemplate = document.querySelector('template').content.querySelector('.will-resume__item');
+
+    function formatFileSize(size) {
+      const exp = parseInt(Math.floor(Math.log10(size) / 3));
+      const names = ['bytes', 'KB', 'MB', 'GB', 'TB'];
+      return `${Math.round(10 * size / Math.pow(1000, exp)) / 10} ${names[exp]}`
+    }
+
+    for (let record of records) {
+      const summaryItem = summaryTemplate.cloneNode();
+      if (record.type === 'text') {
+        summaryItem.textContent = `${record.title} / ${record.value}`;
+      } else if (record.type === 'file') {
+        summaryItem.textContent = `${record.title} (${formatFileSize(record.value.size)})`;
+      }
+      fragment.appendChild(summaryItem);
+    }
+
+    summaryList.appendChild(fragment);
+
+    summaryProviderName.textContent = provider.extraInfo.name;
+    summaryConfirmType.textContent = provider.extraInfo.tags;
+    summaryAnnualFee.textContent = `$${provider.info.annualFee / 100}`;
   };
 
   const submitValidation = function () {
@@ -157,28 +224,36 @@
   };
 
   const submitConfirmation = function (e) {
-    e.preventDefault();
     screens.modalConfirm.classList.add(CLOSED);
     screens.modalResult.classList.remove(CLOSED);
   };
 
+  const showBenficiaryInfoError = function (err) {
+    console.error(err);
+  };
+  const showWillContentError = showBenficiaryInfoError;
+  const showValidationError = showBenficiaryInfoError;
+  const showConfirmationError = showBenficiaryInfoError;
+
   const delegate = {
     // on the beneficiary screen
     canGoToWillContent,
-    //showBenficiaryInfoError,
+    showBenficiaryInfoError,
     goToWillContent,
 
     // on the will content screen
     canGoToValidation,
-    //showWillContentError,
+    showWillContentError,
     goToValidation,
 
     // on the validation screen
     submitValidation,
+    showValidationError,
 
     // on the confirmation screen
     cancelConfirmation,
-    submitConfirmation
+    submitConfirmation,
+    showConfirmationError
   };
 
   window.ui = {

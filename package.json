@@ -9,7 +9,7 @@
     "ethereumjs-wallet": "^0.6.2",
     "js-sha3": "^0.6.1",
     "tar-js": "^0.3.0",
-    "wcrypto": "git+ssh://git@bitbucket.org/my-will/wcrypto.git#develop",
+    "wcrypto": "git+ssh://git@bitbucket.org/my-will/wcrypto.git#interface",
     "web3": "^1.0.0-beta.35"
   },
   "devDependencies": {

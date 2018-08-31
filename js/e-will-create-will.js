@@ -118,8 +118,8 @@ class EWillCreate extends EWillBase {
   encryptWillContent(records) {
     this._will.records = records.slice();
     const willTar = new Tar();
-    for (let record in records) {
-      willTar.append(record, records[record]);
+    for (let record of records) {
+      willTar.append(record.title, record.value);
     }
 
     const willContent = willTar.append('meta.json', JSON.stringify(this._templateMeta));
@@ -170,7 +170,7 @@ class EWillCreate extends EWillBase {
     let createWillMethod = null;
     const promise = this.ajaxRequest(url, {
       method: 'POST',
-      contentType: 'application/x-tar',
+      contentType: 'application/octet-stream',
       data: /*todo: upload binary data*/this._will.encrypted
     }).then( (response) => {
       if (typeof response.error !== 'undefined') {
@@ -181,15 +181,16 @@ class EWillCreate extends EWillBase {
       console.log('confirmed the will: ' + storageId);
 
       // generate & sign the ethereum transaction
-      const willId = (new BN(this._provider.params.address.slice(2), 16)).iushln(96).iadd(new BN(this._provider.params.willId)).toString(16);
+      const willId = (new BN(this._provider.address.slice(2), 16)).iushln(96).iadd(new BN(this._provider.params.willId)).toString(16);
       console.log('willId is ' + willId);
 
       createWillMethod = this.ewPlatform.methods.createWill(
         `0x${willId}`,
         `0x${storageId}`,
         this._will.beneficiaryAddressHash,
-        this._provider.params.address);
-      return createWillMethod.estimateGas({ from: this._userAccount.address });
+        this._provider.address,
+        '0x0' /*todo: referrer*/);
+      return createWillMethod.estimateGas({ from: this._userAccount.address, value: 15.0e+18 });
     }).then( (gasLimit) => {
       const payload = createWillMethod.encodeABI();
       console.log(payload);
@@ -201,7 +202,7 @@ class EWillCreate extends EWillBase {
         gasLimit: gasLimit,
         chainId: EWillConfig.chainID
       };
-      return this._userAccount.signTransaction(tx);
+      return this._userAccount.signTransaction(rawTx);
     }).then( (tx) => {
       this._will.signedTx = tx.rawTransaction;
     }).catch( (err) => {
@@ -215,7 +216,7 @@ class EWillCreate extends EWillBase {
   submitWill() {
     const promise = new Promise( (resolve, reject) => {
       // send the transaction to the network
-      const defer = this._web3.eth.sendSignedTransaction(theState.signedTx);
+      const defer = this._web3.eth.sendSignedTransaction(this._will.signedTx);
       defer.once('transactionHash', (txId) => {
         console.log(`Tx created: ${txId}`);
         this._will.txId = txId;
@@ -258,7 +259,7 @@ class EWillCreate extends EWillBase {
 
     const msg = Buffer.concat([EthUtil.toBuffer(params.address), EthUtil.toBuffer(params.willId), EthUtil.toBuffer(params.token)]);
     const hash = EthUtil.keccak256(msg);
-    const pubKey = EthUtil.ecrecover(hash, response.signaturev, response.signaturer, response.signatures);
+    const pubKey = EthUtil.ecrecover(hash, params.signaturev, params.signaturer, params.signatures);
     const isSigned = ('0x' + EthUtil.pubToAddress(pubKey).toString('hex').toLowerCase() === params.address.toLowerCase());
     if (isSigned !== true) {
       return Promise.reject('The provider\'s signature is corrupted!');
