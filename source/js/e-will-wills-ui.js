@@ -15,6 +15,9 @@
   };
 
   const formatDate = function(arg) {
+    if (arg == 0) {
+      return 'N/A';
+    }
     return moment.unix(arg).format('LLL');
   };
 
@@ -50,7 +53,7 @@
     for (let will of wills) {
       const willRow = willRowTemplate.cloneNode(true);
       willRow.querySelector('.wrap-will__col--willId').innerHTML = maskID(will.willId);
-      willRow.querySelector('.wrap-will__col--fee').innerHTML = '$' + will.annualFee;
+      willRow.querySelector('.wrap-will__col--fee').innerHTML = will.annualFeeFmtd + ' EWILLs';
       willRow.querySelector('.wrap-will__col--state').innerHTML = `<span class="state-text ${willStateClasses[will.state]}">${willStateNames[will.state]}</span>`;
       willRow.querySelector('.wrap-will__col--validTill').innerHTML = formatDate(will.validTill);
 

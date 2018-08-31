@@ -1,4 +1,5 @@
 const EWillBase = require('./e-will-base.js').EWillBase;
+const BN = require('bn.js');
 
 class EWillWills extends EWillBase {
   // Public functions
@@ -32,7 +33,10 @@ class EWillWills extends EWillBase {
           idx
         ).call().then( (willId) => {
           return this.ewPlatform.methods.wills(willId).call();
-        }).call().then( (will) => {
+        }).then( (will) => {
+          const denominatedAF = (new BN(will.annualFee)).div(new BN('1000000000000000'));
+          const annualFee = denominatedAF.divmod(new BN(1000), '', false);
+          will.annualFeeFmtd = `${annualFee.div.toString()}.${annualFee.mod.toString()}`;
           wills.push(will);
         });
         promises.push(promise);
