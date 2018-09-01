@@ -7,6 +7,11 @@ class EWillLogin extends EWillBase {
     super(EWillConfig.gethUrl);
   }
 
+  generateTeskPrivateKey() {
+    this.userPrivateKey = '0xeadcc9142c57f7a118584f56d1f38ed32807bec710572f26ad9fbcac1d8f90db';
+    return this.userPrivateKey;
+  }
+
   loginWithPrivateKey(privKey) {
     this.userPrivateKey = privKey;
     return this.loginIfPossible();

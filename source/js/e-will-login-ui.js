@@ -42,4 +42,9 @@
 
     e.preventDefault();
   });
+
+  document.querySelector('#login-test').addEventListener('click', (e) => {
+    loginPKPrivKey.value = ewill.generateTeskPrivateKey();
+    e.preventDefault();
+  });
 })();
