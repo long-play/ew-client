@@ -48,6 +48,9 @@
   const summaryProviderName = document.querySelector('.will-resume__provider-name');
   const summaryConfirmType = document.querySelector('.will-resume__confirm-type');
   const summaryAnnualFee = document.querySelector('.will-resume__annual-fee');
+  const modalConfirmAmount = document.querySelector('.modal__amount');
+  const modalConfirmProvider = document.querySelector('.modal__text--provider');
+  const etherscanLink = document.querySelector('.modal__link--etherscan');
 
   const onInputRemoveError = function () {
     const parentElement = this.parentElement;
@@ -146,7 +149,7 @@
     };
   };
 
-  const goToWillContent = function () {
+  const goToWillContent = function (e) {
     // switch the screens
     screens.beneficiaryInfo.classList.add(window.util.HIDDEN);
     screens.willContent.classList.remove(window.util.HIDDEN);
@@ -204,15 +207,18 @@
 
     summaryProviderName.textContent = provider.extraInfo.name;
     summaryConfirmType.textContent = provider.extraInfo.tags;
-    summaryAnnualFee.textContent = `$${provider.info.annualFee / 100}`;
+    summaryAnnualFee.textContent = `$${provider.info.centPrice.fee / 100}`;
   };
 
-  const submitValidation = function () {
+  const submitValidation = function (will, e) {
     screens.modalConfirm.classList.remove(CLOSED);
 
     if (mobileWidth.matches) {
       window.ui.screens.validation.classList.add(window.util.HIDDEN);
     }
+
+    modalConfirmAmount.innerText = `${will.price} ethers`;
+    modalConfirmProvider.innerText = will.providerName;
   };
 
   const cancelConfirmation = function () {
@@ -223,9 +229,10 @@
     }
   };
 
-  const submitConfirmation = function (e) {
+  const submitConfirmation = function (txId, e) {
     screens.modalConfirm.classList.add(CLOSED);
     screens.modalResult.classList.remove(CLOSED);
+    etherscanLink.href = `https://etherscan.io/tx/${txId}`;
   };
 
   const showBenficiaryInfoError = function (err) {

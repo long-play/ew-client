@@ -39,6 +39,8 @@
     }
 
     promise.then( () => {
+      return ewill.getTotalFee(false);
+    }).then( ({ fee, refReward }) => {
       window.ui.delegate.goToWillContent(e);
     }).catch( (err) => {
       window.ui.delegate.showBenficiaryInfoError(err);
@@ -65,8 +67,8 @@
 
   // confirm the will
   window.ui.screens.validationValidate.addEventListener('click', (e) => {
-    ewill.createWill().then( () => {
-      window.ui.delegate.submitValidation(e);
+    ewill.createWill().then( (will) => {
+      window.ui.delegate.submitValidation(will, e);
     }).catch( (err) => {
       window.ui.delegate.showValidationError(err);
     });
@@ -78,8 +80,8 @@
   });
 
   window.ui.screens.modalConfirmSubmit.addEventListener('click', (e) => {
-    ewill.submitWill().then( () => {
-      window.ui.delegate.submitConfirmation(e);
+    ewill.submitWill().then( (txId) => {
+      window.ui.delegate.submitConfirmation(txId, e);
     }).catch( (err) => {
       window.ui.delegate.showConfirmationError(err);
     });

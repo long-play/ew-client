@@ -19,7 +19,7 @@
 
       providerRow.querySelector('.wrap-will__col--provider-name').innerHTML = provider.extraInfo.name;
       providerRow.querySelector('.wrap-will__col--method').innerHTML = provider.extraInfo.tags;
-      providerRow.querySelector('.wrap-will__col--tariff').innerHTML = `$${provider.info.annualFee / 100}`;
+      providerRow.querySelector('.wrap-will__col--tariff').innerHTML = `$${provider.info.centPrice.fee / 100}`;
       providerRow.querySelector('.wrap-will__col--description').innerHTML = provider.extraInfo.description;
       providerRow.querySelector('.wrap-will__col--provider-action').addEventListener('click', (e) => {
         location.href = provider.extraInfo.webUrl;

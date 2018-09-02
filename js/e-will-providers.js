@@ -18,7 +18,14 @@ class EWillProviders extends EWillBase {
         address: EWillConfig.contractEscrowAddress
       }
     };
-    return super._configureContracts(contracts);
+
+    const res = super._configureContracts(contracts).then( () => {
+      return this.ewPlatform.methods.annualPlatformFee().call();
+    }).then( (fee) => {
+      this.platformFee = new BN(fee, 10);
+    });
+
+    return res;
   }
 
   getActiveProviders() {
@@ -26,6 +33,9 @@ class EWillProviders extends EWillBase {
       return this._requestValidProviders(events.map( ev => ev.returnValues.provider ));
     }).then( (providersInfo) => {
       const promises = providersInfo.map( (providerInfo) => {
+        providerInfo.centPrice = {
+          fee: (new BN(providerInfo.annualFee, 10)).muln(12).divn(10).add(this.platformFee).toNumber()
+        };
         const info = new BN(providerInfo.info, 10);
         const promise = this.jsonRequest(`${EWillConfig.swarmUrl}/bzz:/${info.toString('hex')}/`).then( (extraInfo) => {
           return Promise.resolve({

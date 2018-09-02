@@ -84,6 +84,14 @@ class EWillCreate extends EWillBase {
     return Promise.resolve(this._will);
   }
 
+  getTotalFee(hasReferrer) {
+    const promise = this.ewPlatform.methods.totalFee(this._provider.address, hasReferrer).call().then( ({ fee, refReward }) => {
+      this._provider.info.centPrice = { fee, refReward };
+      return Promise.resolve({ fee, refReward });
+    });
+    return promise;
+  }
+
   requestProviderKey() {
     const data = {
       address: this._userAccount.address,
@@ -168,10 +176,15 @@ class EWillCreate extends EWillBase {
     const url = `${EWillConfig.swarmUrl}/bzz:/`;
     let rawTx = {};
     let createWillMethod = null;
-    const promise = this.ajaxRequest(url, {
-      method: 'POST',
-      contentType: 'application/octet-stream',
-      data: /*todo: upload binary data*/this._will.encrypted
+    let price = 0;
+    const totalFeeEthers = this.ewPlatform.methods.totalFeeEthers(this._provider.address, false);
+    const promise = totalFeeEthers.call().then( ({ fee, refReward }) =>{
+      price = fee;
+      return this.ajaxRequest(url, {
+        method: 'POST',
+        contentType: 'application/octet-stream',
+        data: this._will.encrypted
+      });
     }).then( (response) => {
       if (typeof response.error !== 'undefined') {
         return Promise.reject(response.error);
@@ -189,8 +202,8 @@ class EWillCreate extends EWillBase {
         `0x${storageId}`,
         this._will.beneficiaryAddressHash,
         this._provider.address,
-        '0x0' /*todo: referrer*/);
-      return createWillMethod.estimateGas({ from: this._userAccount.address, value: 15.0e+18 });
+        0 /*todo: referrer*/);
+      return createWillMethod.estimateGas({ from: this._userAccount.address, value: price });
     }).then( (gasLimit) => {
       const payload = createWillMethod.encodeABI();
       console.log(payload);
@@ -198,13 +211,20 @@ class EWillCreate extends EWillBase {
       rawTx = {
         to: this.ewPlatform.options.address,
         data: payload,
-        value: 15.0e+18,
+        value: price,
         gasLimit: gasLimit,
         chainId: EWillConfig.chainID
       };
       return this._userAccount.signTransaction(rawTx);
     }).then( (tx) => {
+      const denominatedPrice = (new BN(price)).div(new BN('1000000000000000'));
+      const eprice = denominatedPrice.divmod(new BN(1000), '', false);
+      const will = {
+        providerName: this._provider.extraInfo.name,
+        price: `${eprice.div.toString()}.${eprice.mod.toString()}`
+      };
       this._will.signedTx = tx.rawTransaction;
+      return Promise.resolve(will);
     }).catch( (err) => {
       console.error(`Failed to create the will tx: ${ JSON.stringify(err) }`);
       return Promise.reject(err);
