@@ -134,31 +134,33 @@ class EWillCreate extends EWillBase {
     const wcrypto = new Crypto.WCrypto();
     const promise = wcrypto.encrypt(willContent,
                     this._userAccount.privateKey,
-                    this._will.beneficiaryPublicKey)
+                    this._will.beneficiaryPublicKey,
+                    this._willId)
     .then( (enc) => {
       const encWillTar = new Tar();
       const meta = Object.assign({
         beneficiaryAddress: this._will.beneficiaryAddress,
         beneficiaryContact: this._will.beneficiaryContacts,
         beneficiaryPublicKey: this._will.beneficiaryPublicKey,
-        encryptionIV: enc.iv,
+        encryptionIV: Crypto.Util.bufferToHex(enc.iv),
         owner: this._will.beneficiaryAddress
       }, this._templateMeta);
 
-      encWillTar.append('will.encrypted.tar', enc.encrypted);
+      encWillTar.append('will.encrypted.tar', enc.ciphertext);
       const payload = encWillTar.append('meta.json', JSON.stringify(meta));
 
       return wcrypto.encrypt(payload,
                              this._userAccount.privateKey,
-                             this._provider.publicKey);
+                             this._provider.publicKey,
+                             this._willId);
     }).then( (enc) => {
       const encWillTar = new Tar();
       const meta = Object.assign({
-        encryptionIV: enc.iv,
+        encryptionIV: Crypto.Util.bufferToHex(enc.iv),
         owner: this._provider.params.address
       }, this._templateMeta);
 
-      encWillTar.append('will.encrypted.x2.tar', enc.encrypted);
+      encWillTar.append('will.encrypted.x2.tar', enc.ciphertext);
       const payload = encWillTar.append('meta.json', JSON.stringify(meta));
       this._will.encrypted = new Uint8Array(payload);
 
@@ -194,15 +196,12 @@ class EWillCreate extends EWillBase {
       console.log('confirmed the will: ' + storageId);
 
       // generate & sign the ethereum transaction
-      const willId = (new BN(this._provider.address.slice(2), 16)).iushln(96).iadd(new BN(this._provider.params.willId)).toString(16);
-      console.log('willId is ' + willId);
-
       createWillMethod = this.ewPlatform.methods.createWill(
-        `0x${willId}`,
+        this._willId,
         `0x${storageId}`,
-        this._will.beneficiaryAddressHash,
+        `0x${this._will.beneficiaryAddressHash.toString('hex')}`,
         this._provider.address,
-        0 /*todo: referrer*/);
+        EWillBase.zeroAddress() /*todo: referrer*/);
       return createWillMethod.estimateGas({ from: this._userAccount.address, value: price });
     }).then( (gasLimit) => {
       const payload = createWillMethod.encodeABI();
@@ -288,6 +287,8 @@ class EWillCreate extends EWillBase {
     // request a provider info
     const promise = this.ewEscrow.methods.providerAddress(this._provider.params.address).call().then( (address) => {
       this._provider.address = address;
+      this._willId = `0x${(new BN(this._provider.address.slice(2), 16)).iushln(96).iadd(new BN(this._provider.params.willId)).toString(16)}`;
+
       return this.ewEscrow.methods.isProviderValid(this._provider.address).call();
     }).then( (isValid) => {
       if (!isValid) {

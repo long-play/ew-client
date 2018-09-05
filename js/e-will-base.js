@@ -1,6 +1,11 @@
 const Web3 = require('web3');
 
 class EWillBase {
+  // Constants
+  static zeroAddress() {
+    return '0x0000000000000000000000000000000000000000';
+  }
+
   // Public functions
   constructor(gethUrl) {
     if (gethUrl && typeof gethUrl === 'string' && gethUrl.length > 0) {
