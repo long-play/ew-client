@@ -198,7 +198,7 @@
       if (record.type === 'text') {
         summaryItem.textContent = `${record.title} / ${record.value}`;
       } else if (record.type === 'file') {
-        summaryItem.textContent = `${record.title} (${formatFileSize(record.value.size)})`;
+        summaryItem.textContent = `${record.title} (${formatFileSize(record.value.length)})`;
       }
       fragment.appendChild(summaryItem);
     }

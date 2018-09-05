@@ -56,7 +56,26 @@
       return;
     }
 
-    const promise = ewill.requestProviderKey().then( () => {
+    const readFileContent = (file) => {
+      const promise = new Promise( (resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () =>  {
+          resolve(new Uint8Array(reader.result, 0, reader.result.byteLength));
+        };
+        reader.readAsArrayBuffer(file);
+      });
+      return promise;
+    };
+
+    const promises = [];
+    for (let record of willContent.records) {
+      if (record.type !== 'file') continue;
+      promises.push(readFileContent(record.value).then( (content) => record.value = content ));
+    }
+
+    const promise = Promise.all(promises).then(() => {
+      return ewill.requestProviderKey();
+    }).then( () => {
       return ewill.encryptWillContent(willContent.records);
     }).then( () => {
       window.ui.delegate.goToValidation(ewill.provider, willContent.records);
