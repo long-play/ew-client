@@ -1,0 +1,15 @@
+.logo {
+  font-size: 0;
+
+  &:focus {
+    outline: none;
+  }
+
+  &__image {
+    width: 58px;
+
+    @include tablet {
+      width: 67px;
+    }
+  }
+}

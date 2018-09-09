@@ -1,0 +1,19 @@
+// кнопки Карта, Спутник, масштабирование, панорамы
+.gmnoprint {
+  display: none;
+}
+
+// сообщить об ошибке на карте
+.gm-style-cc {
+  display: none;
+}
+
+// кнопка включения полноэкранного режима
+.gm-style > button {
+  display: none;
+}
+
+// логотип Google - лучше оставить!
+.gm-style > div:nth-child(3) {
+  display: none;
+}

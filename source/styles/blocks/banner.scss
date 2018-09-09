@@ -1,0 +1,319 @@
+.banner {
+  margin-bottom: 52px;
+  padding: 61px 0 293px;
+  background-image: url("../img/banner_clouds_mob.png"),
+    url("../img/girl.png"),
+    linear-gradient(to top, $white 57px, $blue-gradient-bottom 57px, $blue-gradient-top);
+  background-repeat: no-repeat;
+  background-size: 388px, 339px,auto;
+  background-position: center 45px, center 100%, 0 0;
+
+  @include retina-resolution {
+    background-image: url("../img/banner_clouds_mob@2x.png"),
+    url("../img/girl@2x.png"),
+    linear-gradient(to top, $white 57px, $blue-gradient-bottom 57px, $blue-gradient-top);
+  }
+
+  @include tablet {
+    margin-bottom: 6px;
+    padding-top: 55px;
+    padding-bottom: 415px;
+    background-image: url("../img/girl_tablet.png"),
+    linear-gradient(to top, $white 114px, $blue-gradient-bottom 114px, $blue-gradient-top);
+    background-size: 856px, auto;
+    background-position: 39% 100%, 0 0;
+
+    @include retina-resolution {
+      background-image: url("../img/girl@2x_tablet.png"),
+      linear-gradient(to top, $white 114px, $blue-gradient-bottom 114px, $blue-gradient-top);
+      background-position: 39% 100%, 0 0;
+    }
+  }
+
+  @include desktop-start {
+    margin-bottom: -15px;
+    padding-top: 80px;
+    padding-bottom: 216px;
+    background-position: 100% 100%, 0 0;
+
+    @include retina-resolution {
+      background-position: 100% 100%, 0 0;
+    }
+  }
+
+  @include desktop-full {
+    padding-top: 104px;
+    background-image: url("../img/banner_back_desktop-full.png"),
+    linear-gradient(to top, $white 114px, $blue-gradient-bottom 114px, $blue-gradient-top);
+    background-size: 1470px, auto;
+    background-position: center 100%, 0 0;
+
+    @include retina-resolution {
+      background-image: url("../img/banner_back_desktop-full@2x.png"),
+      linear-gradient(to top, $white 114px, $blue-gradient-bottom 114px, $blue-gradient-top);
+      background-position: center 100%, 0 0;
+    }
+  }
+
+  &--small {
+    margin-bottom: 42px;
+    padding: 35px 0 0;
+    background-image: url("../img/banner_small_clouds_mob.png"),
+      linear-gradient(to top, $blue-gradient-bottom, $blue-gradient-top);
+    background-repeat: no-repeat;
+    background-size: 472px, auto;
+    background-position: center 24%, 0 0;
+
+    @include retina-resolution {
+      background-image: url("../img/banner_small_clouds_mob@2x.png"),
+      linear-gradient(to top, $blue-gradient-bottom, $blue-gradient-top);
+    }
+
+    @include tablet {
+      margin-bottom: 85px;
+      padding: 39px 0 0;
+      background-image: url("../img/banner_small_clouds_tablet.png"),
+        linear-gradient(to top, $blue-gradient-bottom, $blue-gradient-top);
+      background-size: 965px, auto;
+      background-position: center 36%, 0 0;
+
+      @include retina-resolution {
+        background-image: url("../img/banner_small_clouds_tablet@2x.png"),
+        linear-gradient(to top, $blue-gradient-bottom, $blue-gradient-top);
+        background-size: 965px, auto;
+        background-position: center 36%, 0 0;
+      }
+    }
+
+    @include desktop-start {
+      margin-bottom: 104px;
+      padding: 54px 0 0;
+      background-image: url("../img/banner_small_clouds_desktop-start.png"),
+      linear-gradient(to top, $blue-gradient-bottom, $blue-gradient-top);
+      background-size: 1081px, auto;
+      background-position: center 39%, 0 0;
+
+      @include retina-resolution {
+        background-image: url("../img/banner_small_clouds_desktop-start@2x.png"),
+        linear-gradient(to top, $blue-gradient-bottom, $blue-gradient-top);
+        background-size: 1081px, auto;
+        background-position: center 39%, 0 0;
+      }
+    }
+
+    @include desktop-full {
+      padding: 54px 0 0;
+      background-image: url("../img/banner_small_clouds_desktop-full.png"),
+      linear-gradient(to top, $blue-gradient-bottom, $blue-gradient-top);
+      background-size: 1551px, auto;
+      background-position: center center, 0 0;
+
+      @include retina-resolution {
+        background-image: url("../img/banner_small_clouds_desktop-full@2x.png"),
+        linear-gradient(to top, $blue-gradient-bottom, $blue-gradient-top);
+        background-size: 1551px, auto;
+        background-position: center center, 0 0;
+      }
+    }
+
+    & .banner__wrapper {
+      display: flex;
+      flex-direction: column;
+      padding: 0 20px;
+
+      @include tablet {
+        padding: 0 33px;
+      }
+
+      @include desktop-start {
+        flex-direction: row;
+        justify-content: space-between;
+        padding: 0 90px;
+      }
+
+      @include desktop-full {
+        padding: 0 175px;
+      }
+    }
+
+    & .banner__text {
+      color: transparentize($white, 0.2);
+
+      @include tablet {
+        font-size: 16px;
+        line-height: 30px;
+      }
+
+      @include desktop-start {
+        width: 100%;
+        font-size: 18px;
+      }
+    }
+  }
+
+  &--inner {
+    margin-bottom: 34px;
+
+    & .banner__wrapper {
+
+      @include desktop-full {
+        padding: 0 185px;
+      }
+    }
+
+    @include desktop-start {
+      margin-bottom: 1px;
+    }
+  }
+
+  &__wrapper {
+    display: flex;
+    flex-direction: column;
+    padding: 0 18px 0 26px;
+
+    @include tablet {
+      padding: 0 30px;
+    }
+
+    @include desktop-start {
+      padding: 0 60px;
+    }
+
+    @include desktop-full {
+      padding: 0 115px;
+    }
+  }
+
+  &__info {
+    margin-bottom: 43px;
+
+    @include tablet {
+      margin: 0;
+    }
+
+    @include desktop-start {
+      width: 50%;
+    }
+  }
+
+  &__title {
+    @include text(18px, 1.2em, 700);
+    margin: 0 0 27px;
+    color: $white;
+
+    @include tablet {
+      margin-bottom: 23px;
+      padding-right: 19%;
+      font-size: 30px;
+    }
+
+    @include desktop-start {
+      width: 49%;
+      padding: 0;
+      margin-bottom: 22px;
+      font-size: 30px;
+    }
+  }
+
+  &__promo {
+    @include text(18px, 26px, 400);
+    margin: 0 0 26px;
+    color: $white;
+
+    @include tablet {
+      margin-bottom: 9px;
+      padding-right: 40%;
+      font-size: 26px;
+      line-height: 40px;
+    }
+
+    @include desktop-start {
+      margin-bottom: 26px;
+      padding: 0;
+      font-size: 28px;
+    }
+  }
+
+  &__text {
+    @include text(12px, 20px, 400);
+    margin: 0;
+    color: $white;
+
+    @include tablet {
+      padding-right: 23%;
+      font-size: 18px;
+      line-height: 26px;
+    }
+
+    @include desktop-start {
+      width: 47%;
+      padding: 0;
+      font-size: 18px;
+    }
+  }
+
+  &__link-background {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    align-self: center;
+    width: 276px;
+    height: 148px;
+    padding-bottom: 30px;
+    background-image: url("../img/popup.png");
+    background-repeat: no-repeat;
+    background-size: 297px;
+    background-position: -11px -7px;
+    box-shadow: 0 -4px 12px 0 transparentize($black, 0.9);
+
+    @include retina-resolution {
+      background-image: url("../img/popup@2x.png");
+      background-size: 297px;
+    }
+
+    @include tablet {
+      width: 315px;
+      height: 170px;
+      margin-top: -52px;
+      margin-left: 385px;
+      padding-bottom: 21px;
+      background-size: 340px;
+      background-position: -12px -8px;
+
+      @include retina-resolution {
+        background-size: 340px;
+      }
+    }
+
+    @include desktop-start {
+      width: 394px;
+      height: 200px;
+      margin: 11px 0 0;
+      padding-bottom: 48px;
+      background-size: 424px;
+      background-position: -15px -10px;
+
+      @include retina-resolution {
+        background-size: 424px;
+      }
+    }
+  }
+
+  &__link {
+    width: 216px;
+    margin-top: 17px;
+
+    @include tablet {
+      margin-top: 40px;
+    }
+
+    @include desktop-start {
+      margin-top: 42px;
+    }
+
+    &:hover {
+      box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.2);
+    }
+  }
+
+}

@@ -5,26 +5,42 @@
   "description": "The Web Interface for the Platform for service of digital willing",
   "keywords": [],
   "dependencies": {
-    "ethereumjs-util": "^5.1.2",
+    "ethereumjs-util": "^5.2.0",
+    "ethereumjs-wallet": "^0.6.2",
     "js-sha3": "^0.6.1",
     "tar-js": "^0.3.0",
     "wcrypto": "git+ssh://git@bitbucket.org/my-will/wcrypto.git#develop",
-    "web3": "^1.0.0-beta.30"
+    "web3": "^1.0.0-beta.36"
   },
   "devDependencies": {
-    "babel-preset-stage-0": "^6.24.1",
-    "live-server": "^1.2.0",
-    "grunt": "^1.0.1",
-    "grunt-browserify": "^5.0.0",
-    "grunt-contrib-clean": "^1.1.0",
-    "grunt-html-build": "^0.7.1",
-    "grunt-multi": "^0.0.7"
+    "autoprefixer": "^6.7.7",
+    "browser-sync": "^2.24.7",
+    "css-mqpacker": "^6.0.1",
+    "del": "^2.2.2",
+    "eslint": "^4.11.0",
+    "gulp": "^3.9.1",
+    "gulp-bro": "^1.0.3",
+    "gulp-csso": "^2.0.0",
+    "gulp-image": "^2.8.0",
+    "gulp-inject": "^4.2.0",
+    "gulp-jsmin": "^0.1.5",
+    "gulp-plumber": "^1.1.0",
+    "gulp-postcss": "^6.4.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-sass": "^3.1.0",
+    "gulp-svgmin": "^1.2.3",
+    "gulp-svgstore": "^6.1.0",
+    "light-server": "^2.5.1",
+    "run-sequence": "^1.2.2",
+    "uglifyify": "^5.0.1"
   },
   "scripts": {
-    "build": "grunt",
-    "debug": "node node_modules/live-server/live-server.js --mount=/:public --watch=public --wait=5000"
+    "build": "gulp build",
+    "debug": "gulp debug",
+    "serve": "npm run debug && gulp serve",
+    "start": "./node_modules/light-server/bin/light-server -s public/ -p 3000 --no-reload"
   },
-  "main": "index.html",
+  "main": "gulpfile.js",
   "repository": {
     "type": "git",
     "url": "git@bitbucket.org:my-will/wplatform-web.git"

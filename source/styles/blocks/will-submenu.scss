@@ -1,0 +1,59 @@
+.my-wills-menu {
+  text-align: right;
+
+  @include desktop-full {
+    text-align: center;
+  }
+
+  &--hidden {
+    display: none;
+  }
+
+  &__arrow {
+    display: inline-block;
+    margin-right: 21px;
+    color: $white;
+    text-shadow: 0 -1px 2px  transparentize($black, 0.95);
+    transform: scale(5, 1.5);
+
+    @include desktop-full {
+      margin-right: 0;
+    }
+  }
+
+  &__list {
+    margin: -3px 0 0;
+    padding: 0;
+    list-style: none;
+    border-radius: 8px;
+    box-shadow: 0 6px 15px 0 transparentize($black, 0.9);
+    overflow: hidden;
+  }
+
+  &__item {
+    background-color: $white;
+
+
+    &:not(:last-child) {
+      border-bottom: 1px solid $input-border;
+    }
+  }
+
+  &__link {
+    @include text(17px, 1.2em, 400);
+    display: block;
+    width: 268px;
+    text-align: center;
+    padding: 20px 20px;
+    text-decoration: none;
+    color: $gray-blue-dark;
+
+    &:hover {
+      background-color: $white-almost;
+    }
+
+    &--delete {
+      color: $will-red;
+    }
+  }
+}

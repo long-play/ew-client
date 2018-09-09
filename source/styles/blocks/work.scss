@@ -1,0 +1,171 @@
+.work {
+  margin-bottom: 64px;
+  padding: 0 20px;
+
+  @include tablet {
+    margin-bottom: 98px;
+    padding: 0 30px;
+  }
+
+  @include desktop-start {
+    margin-bottom: 90px;
+    padding: 0 60px;
+  }
+
+  @include desktop-full {
+    margin-bottom: 170px;
+    padding: 0 115px 0 184px;
+    background-image: url("../img/wave.svg");
+    background-repeat: no-repeat;
+    background-position: 48.3% 69%;
+    background-size: 545px;
+  }
+
+  &--inner {
+    margin-top: 66px;
+    margin-bottom: 50px;
+
+    @include tablet {
+      margin-bottom: 65px;
+    }
+
+    @include desktop-start {
+      margin-top: 89px;
+    }
+
+    @include desktop-full {
+      margin-bottom: 96px;
+    }
+  }
+
+  &__header {
+    margin-bottom: 47px;
+
+    @include tablet {
+      margin-bottom: 45px;
+    }
+
+    @include desktop-start {
+      margin-bottom: 108px;
+      padding: 0 50px;
+    }
+
+    @include desktop-full {
+      padding: 0 65px;
+    }
+  }
+
+  &__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    @include tablet {
+      display: flex;
+    }
+
+    @include desktop-start {
+      justify-content: space-between;
+    }
+
+    @include desktop-full {
+      justify-content: flex-start;
+    }
+  }
+
+  &__item {
+    padding-top: 120px;
+    background-color: transparent;
+    background-repeat: no-repeat;
+
+    @include tablet {
+      min-width: 223px;
+      padding-top: 115px;
+    }
+
+    @include desktop-start {
+      padding-top: 116px;
+    }
+
+    &:nth-child(1) {
+      margin-bottom: 65px;
+      background-image: url("../img/process-1.png");
+      background-position: left 51% top 1px;
+      background-size: 111px 84px;
+
+      @include retina-resolution {
+        background-image: url("../img/process-1@2x.png");
+        background-size: 111px 84px;
+      }
+
+      @include tablet {
+        margin: 0 20px 0 0;
+        background-position: left 0 top 0;
+      }
+
+      @include desktop-start {
+        max-width: 265px;
+        margin: 0 70px 0 0;
+        background-size: auto;
+        background-position: left 0 top 0;
+      }
+
+      @include desktop-full {
+        margin: 0 136px 0 0;
+      }
+    }
+
+    &:nth-child(2) {
+      margin-bottom: 53px;
+      background-image: url("../img/process-2.png");
+      background-position: left 52% top 1px;
+      background-size: 195px 85px;
+
+      @include retina-resolution {
+        background-image: url("../img/process-2@2x.png");
+        background-size: 195px 85px;
+      }
+
+      @include tablet {
+        margin: 0 20px 0 0;
+        background-position: left 0 top 0;
+      }
+
+      @include desktop-start {
+        max-width: 269px;
+        margin: 0 30px 0 0;
+        padding-top: 6px;
+        padding-bottom: 100px;
+        background-size: auto;
+        background-position: left 0 bottom 20px;
+      }
+
+      @include desktop-full {
+        margin: 0 132px 0 0;
+      }
+    }
+
+    &:nth-child(3) {
+      background-image: url("../img/process-3.png");
+      background-position: left 50% top 1px;
+      background-size: 111px 84px;
+
+      @include retina-resolution {
+        background-image: url("../img/process-3@2x.png");
+        background-size: 111px 84px;
+      }
+
+      @include tablet {
+        margin: 0;
+        background-position: left 0 top 0;
+      }
+
+      @include desktop-start {
+        max-width: 302px;
+        margin: 0;
+        background-size: auto;
+        background-position: left 0 top 0;
+      }
+    }
+  }
+}

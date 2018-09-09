@@ -1,0 +1,327 @@
+.main-nav {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  padding: 20px 20px 0;
+  z-index: 10;
+
+  @include tablet {
+    padding: 33px 30px 0;
+  }
+
+  @include desktop-start {
+    padding: 33px 60px 0;
+  }
+
+  @include desktop-full {
+    padding: 33px 120px 0;
+  }
+
+  &--inner {
+
+    & .main-nav__link {
+      color: transparentize($white, 0.5);
+
+      &:hover,
+      &:focus {
+        @include tablet {
+          position: relative;
+          color: $white;
+
+          &:after {
+            position: absolute;
+            left: 0;
+            bottom: -1px;
+            content: '';
+            width: 100%;
+            height: 1px;
+            background-color: $white;
+          }
+        }
+      }
+    }
+
+    & .main-nav__link--active {
+
+      @include tablet {
+        color: $white;
+
+        &:hover::after {
+          content: none;
+        }
+      }
+    }
+
+    & .main-nav__toggle-icon--burger {
+      fill: $white;
+    }
+  }
+
+  &--opened {
+    background-color: transparentize($black, 0.1);
+  }
+
+  &--opened &__logo--main {
+    display: none;
+  }
+
+  &--opened &__logo--white {
+    display: block;
+  }
+
+  &--opened &__list {
+    position: absolute;
+    top: 76px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 50;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    padding: 20px 20px 20px;
+    background-color: transparentize($black, 0.1);
+  }
+
+  &--opened &__button {
+    width: 100%;
+  }
+
+  &--opened &__link {
+    color: transparentize($white, 0.4);
+
+    &--active {
+      color: $white;
+    }
+  }
+
+  &--opened.main-nav--user-logged {
+    align-items: flex-start;
+
+    & .main-nav__button {
+      display: none;
+    }
+  }
+
+  &--user-logged {
+
+    & .main-nav__user {
+      display: flex;
+      margin-top: 3px;
+
+      @include tablet {
+        order: 1;
+        margin: -3px 0 0 38px;
+      }
+
+      @include desktop-start {
+        margin-left: 0;
+      }
+    }
+
+    & .main-nav__logo {
+      margin-left: 14px;
+
+      @include tablet {
+        margin: 0;
+      }
+
+      @include desktop-start {
+        margin-top: 0;
+        margin-right: 40px;
+      }
+    }
+
+    & .main-nav__item:last-child {
+      margin-top: 0;
+
+      @include desktop-start {
+        margin-left: 0;
+      }
+    }
+  }
+
+  &__logo {
+
+  }
+
+  &__qrcode {
+    display: none;
+  }
+
+  &__toggle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 64px;
+    height: 76px;
+    padding: 0;
+    margin: -20px -20px 0 0;
+    background-color: transparent;
+    border: none;
+
+    @include tablet {
+      display: none;
+    }
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  &__toggle-icon--burger {
+    fill: $steel;
+  }
+
+  &__toggle-icon--cross {
+    fill: $white;
+  }
+
+  &__toggle--closed &__toggle-icon--burger {
+    display: block;
+  }
+
+  &__toggle--closed &__toggle-icon--cross {
+    display: none;
+  }
+
+  &__toggle--opened &__toggle-icon--burger {
+    display: none;
+  }
+
+  &__toggle--opened &__toggle-icon--cross {
+    display: block;
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    @include tablet {
+      flex-direction: row;
+      align-items: flex-start;
+      width: auto;
+      margin-top: 12px;
+    }
+  }
+
+  &__item {
+    margin-bottom: 35px;
+
+    @include tablet {
+      margin: 0 37px 0 0;
+    }
+  }
+
+  &__item:first-child {
+    @include desktop-start {
+      margin-right: 49px;
+    }
+  }
+
+  &__item:nth-child(2) {
+    @include desktop-start {
+      margin-right: 56px;
+    }
+  }
+
+  &__item:nth-child(3) {
+    @include desktop-start {
+      margin-right: 47px;
+    }
+  }
+
+  &__item:last-child {
+    margin: auto 0 0;
+
+    @include tablet {
+      margin: 0;
+    }
+  }
+
+  &__item--button {
+
+    @include tablet {
+      display: none;
+    }
+  }
+
+  &__link {
+    @include text(14px, 18px, 700);
+    text-decoration: none;
+    color: transparentize($white, 0.4);
+
+    @include tablet {
+      font-size: 16px;
+      line-height: 26px;
+      font-weight: 400;
+      color: $steel;
+    }
+
+    &:hover,
+    &:focus {
+      outline: none;
+
+      @include tablet {
+        position: relative;
+        color: $gray-dark;
+
+        &:after {
+          position: absolute;
+          left: 0;
+          bottom: -1px;
+          content: '';
+          width: 100%;
+          height: 1px;
+          background-color: $gray-dark;
+        }
+      }
+    }
+  }
+
+  &__button {
+
+    @include tablet {
+      min-width: 119px;
+      margin-left: -61px;
+    }
+
+    @include desktop-start {
+      margin-top: -5px;
+      margin-left: -20px;
+    }
+
+    @include desktop-full {
+      margin-left: -21px;
+    }
+
+    &--not-mobile {
+      display: none;
+
+      @include tablet {
+        display: block;
+      }
+    }
+  }
+
+  &__logo--white {
+    display: none;
+  }
+
+  &__logo-will {
+    display: block;
+  }
+
+  &__list {
+    display: none;
+
+    @include tablet {
+      display: flex;
+    }
+  }
+}

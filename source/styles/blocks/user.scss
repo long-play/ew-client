@@ -1,0 +1,28 @@
+.user {
+
+  @include desktop-start {
+    display: flex;
+    align-items: center;
+  }
+
+  &__name {
+    display: none;
+
+    @include desktop-start {
+      @include text(18px, 1.2em, 400);
+      display: block;
+      margin: 0 22px 0 0;
+      color: $white;
+    }
+  }
+
+  &__qrcode {
+    width: 27px;
+    height: 27px;
+
+    @include tablet {
+      width: 54px;
+      height: 54px;
+    }
+  }
+}

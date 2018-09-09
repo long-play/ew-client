@@ -1,0 +1,78 @@
+.about {
+  margin-bottom: 66px;
+  padding: 0 20px;
+
+  @include tablet {
+    margin-bottom: 50px;
+    padding: 0 30px;
+  }
+
+  @include desktop-start {
+    margin-bottom: 80px;
+    padding: 0 60px;
+  }
+
+  @include desktop-full {
+    margin-bottom: 127px;
+    padding: 0 115px;
+  }
+
+  &--inner {
+    position: relative;
+    margin-top: 72px;
+    margin-bottom: 67px;
+
+    @include desktop-start {
+      margin-bottom: 119px;
+      margin-top: 64px;
+    }
+
+    @include desktop-full {
+      margin-bottom: 119px;
+    }
+  }
+
+  &__header {
+    margin-bottom: 33px;
+
+    @include tablet {
+      margin-bottom: 46px;
+      padding: 0 48px;
+    }
+
+    @include desktop-start {
+      margin-bottom: 99px;
+      padding: 0 80px;
+    }
+
+    @include desktop-full {
+      padding: 0 175px;
+    }
+  }
+
+  &__list {
+    margin: 0;
+  }
+
+  &__channel {
+    position: absolute;
+    top: -102px;
+    right: 20px;
+    text-decoration: none;
+
+    &::after {
+      content: '';
+      display: block;
+      width: 60px;
+      height: 60px;
+      background: url("../img/telegram.svg") no-repeat center center;
+      border-radius: 50%;
+      box-shadow: 0 2px 4px 0 transparentize($black, 0.9);
+    }
+
+    @include desktop-start {
+      top: 47px;
+      right: 56px;
+    }
+  }
+}

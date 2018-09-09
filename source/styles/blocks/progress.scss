@@ -1,0 +1,69 @@
+.progress {
+  display: flex;
+  justify-content: center;
+  padding: 0;
+  list-style: none;
+
+  &__item {
+    @include text(13px, 1.2em, 500);
+    position: relative;
+    display: flex;
+    flex-shrink: 0;
+    justify-content: center;
+    align-items: center;
+    width: 135px;
+    margin-right: -4px;
+
+    @include desktop-start {
+      width: 172px;
+      padding-left: 2px;
+      padding-top: 2px;
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    &--done {
+
+      &:before {
+        position: relative;
+        z-index: 1;
+        content: '';
+        width: 14px;
+        height: 14px;
+        margin-right: 5px;
+        margin-top: -5px;
+        border-radius: 50%;
+        background: $green-main url("../img/icon-ok.svg") no-repeat center center;
+        background-size: 9px auto;
+      }
+    }
+
+    &--active {
+      color: $blue-main;
+
+      & .progress__back {
+        fill: $white;
+      }
+    }
+  }
+
+  &__back {
+    position: absolute;
+    width: 135px;
+    height: 35px;
+    fill: transparentize($white, 0.9);
+    box-shadow: 0 2px 35px -19px $black;
+
+    @include desktop-start {
+      top: -12px;
+      left: 0;
+      width: 172px;
+      height: 44px;
+    }
+  }
+
+  &__text {
+    position: relative;
+    z-index: 1;
+  }
+}

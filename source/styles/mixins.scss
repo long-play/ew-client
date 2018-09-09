@@ -1,0 +1,35 @@
+@mixin text ($font-size, $line-height, $font-weight) {
+  font-size: $font-size;
+  line-height: $line-height;
+  font-weight: $font-weight;
+}
+
+@mixin wide-mobile {
+  @media (min-width: #{$width-mobile-wide}) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media (min-width: #{$width-tablet}) {
+    @content;
+  }
+}
+
+@mixin desktop-start {
+  @media (min-width: #{$width-desktop-start}) {
+    @content;
+  }
+}
+
+@mixin desktop-full {
+  @media (min-width: #{$width-desktop-full}) {
+    @content;
+  }
+}
+
+@mixin retina-resolution {
+  @media (min-resolution: #{$retina-dpi}), (min-resolution: #{$retina-dppx}) {
+    @content;
+  }
+}

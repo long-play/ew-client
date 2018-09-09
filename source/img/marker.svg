@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="61px" height="60px" viewBox="0 0 61 60" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: sketchtool 50 (54983) - http://www.bohemiancoding.com/sketch -->
+    <title>392E4A5F-8D5B-4955-97F9-2AABE49AF1CD</title>
+    <desc>Created with sketchtool.</desc>
+    <defs>
+        <filter x="-18.5%" y="-23.9%" width="136.9%" height="147.9%" filterUnits="objectBoundingBox" id="filter-1">
+            <feGaussianBlur stdDeviation="2.80803571" in="SourceGraphic"></feGaussianBlur>
+        </filter>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Contacts" transform="translate(-700.000000, -1347.000000)" fill-rule="nonzero">
+            <g id="Screen-Shot-2018-04-03-at-18.52.14" transform="translate(0.000000, 1209.000000)">
+                <g id="maps-and-flags" transform="translate(700.000000, 138.000000)">
+                    <path d="M52.0815834,31.6705772 C43.8576631,42.6171176 18.1757675,52.7551024 18.1757675,52.7551024 C16.6751243,53.3475115 14.9475866,53.3475115 14.337074,52.7551024 C14.337074,52.7551024 3.88811533,42.6171176 12.1120357,31.6705772 C17.7844562,24.1205065 31.3301095,18 42.3672954,18 C53.4044814,18 57.753803,24.1205065 52.0815834,31.6705772 Z" id="Shape-Copy" fill="#000000" opacity="0.200000003" filter="url(#filter-1)"></path>
+                    <path d="M39.9695477,19.807125 C39.9695477,35.6674277 21.9041206,50.3562246 21.9041206,50.3562246 C20.8485427,51.2145586 19.121005,51.2145586 18.0654271,50.3562246 C18.0654271,50.3562246 0,35.6674277 0,19.807125 C0.000201005025,8.86792383 8.94763819,0 19.9848241,0 C31.0220101,0 39.9695477,8.86792383 39.9695477,19.807125 Z" id="Shape" fill="#EE3840"></path>
+                    <path d="M20,29.7722461 C14.4558794,29.7722461 9.94562814,25.301877 9.94562814,19.8072246 C9.94562814,14.3125723 14.4560804,9.84200391 20,9.84200391 C25.5439196,9.84200391 30.0543719,14.312373 30.0543719,19.8070254 C30.0543719,25.3016777 25.5441206,29.7722461 20,29.7722461 Z" id="Shape" fill="#FFE1D6"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

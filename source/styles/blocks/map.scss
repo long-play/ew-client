@@ -1,0 +1,10 @@
+.map {
+  width: 100%;
+  height: 345px;
+  margin-bottom: 52px;
+  background-color: transparentize($blue-main, 0.3);
+
+  @include desktop-full {
+    margin-bottom: 77px;
+  }
+}

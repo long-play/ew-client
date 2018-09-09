@@ -1,0 +1,16 @@
+.wrapper {
+  min-width: $width-mobile;
+
+  @include tablet {
+    min-width: $width-tablet;
+  }
+
+  @include desktop-start {
+    min-width: $width-desktop-start;
+  }
+
+  @include desktop-full {
+    width: $width-desktop-full;
+    margin: 0 auto;
+  }
+}

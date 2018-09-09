@@ -1,0 +1,164 @@
+.contacts {
+  padding: 0 20px;
+  list-style: none;
+
+  @include tablet {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 0 20px;
+
+    &::before {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      content: '';
+      display: block;
+      width: 1px;
+      height: calc(100% - 30px);
+      background-color: transparentize($white, 0.5);
+    }
+  }
+
+  @include desktop-start {
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    padding: 0 60px;
+
+    &::before {
+      content: none;
+    }
+  }
+
+  @include desktop-full {
+    justify-content: flex-start;
+    padding: 0 119px;
+  }
+
+  &__item {
+    font-size: 0;
+    color: $white;
+
+    @include tablet {
+      width: 35%;
+    }
+
+    @include desktop-start {
+      width: auto;
+      flex-grow: 1;
+    }
+  }
+
+  &__item:not(:last-child) {
+    margin-bottom: 30px;
+
+    @include desktop-start {
+      position: relative;
+      margin-bottom: 0;
+
+      &::before {
+        position: absolute;
+        top: 5px;
+        right: 0;
+        content: '';
+        display: block;
+        width: 1px;
+        height: 32px;
+        background-color: transparentize($white, 0.5);
+      }
+    }
+  }
+
+  &__item:nth-child(1),
+  &__item:nth-child(3) {
+
+    @include tablet {
+      margin-right: 50px;
+      text-align: right;
+    }
+
+    @include desktop-start {
+      margin-right: 0;
+      text-align: left;
+    }
+  }
+
+  &__item:nth-child(1) {
+
+    @include desktop-start {
+      min-width: 177px;
+      margin-right: 30px;
+    }
+
+    @include desktop-full {
+      flex-basis: 241px;
+      margin-right: 60px;
+    }
+  }
+
+  &__item:nth-child(2) {
+
+    @include desktop-start {
+      min-width: 170px;
+      margin-right: 30px;
+    }
+
+    @include desktop-full {
+      flex-basis: 235px;
+      margin-right: 64px;
+    }
+  }
+
+  &__item:nth-child(3) {
+
+    @include desktop-start {
+      flex-grow: 0;
+      flex-basis: 280px;
+      margin-right: 30px;
+    }
+
+    @include desktop-full {
+      padding-right: 23px;
+      margin-right: 38px;
+    }
+  }
+
+  &__item-title {
+    @include text(12px, 16px, 400);
+    margin: 0 0 10px;
+
+    @include tablet {
+      font-size: 14px;
+    }
+
+    @include desktop-start {
+      margin-bottom: 12px;
+    }
+  }
+
+  &__item-content {
+    @include text(14px, 18px, 700);
+    margin: 0;
+    text-decoration: none;
+    color: inherit;
+
+    @include tablet {
+      font-size: 16px;
+      line-height: 22px;
+    }
+
+    @include desktop-start {
+      font-size: 18px;
+      line-height: 26px;
+    }
+  }
+
+  &__item-social {
+    margin-top: 13px;
+
+    @include tablet {
+      margin-top: 15px;
+    }
+  }
+}

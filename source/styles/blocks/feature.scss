@@ -1,0 +1,45 @@
+.feature {
+
+  &--left {
+    & .feature__title,
+    & .feature__text {
+
+      @include tablet {
+        text-align: left;
+      }
+    }
+  }
+
+  &__title {
+    @include text(14px, 1.2em, 600);
+    margin: 0 0 10px;
+    text-align: center;
+    color: $black;
+
+    @include tablet {
+      font-size: 18px;
+      margin-bottom: 13px;
+    }
+
+    @include desktop-start {
+      font-size: 20px;
+      margin-bottom: 14px;
+    }
+  }
+
+  &__text {
+    @include text(12px, 20px, 400);
+    margin: 0;
+    text-align: center;
+    color: $steel;
+
+    @include tablet {
+      font-size: 14px;
+      line-height: 24px;
+    }
+
+    @include desktop-start {
+      font-size: 16px;
+    }
+  }
+}
