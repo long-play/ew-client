@@ -151,7 +151,7 @@
 
     return {
       error,
-      result: (error !== null),
+      result: (error === null),
       records
     };
   };

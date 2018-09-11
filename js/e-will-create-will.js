@@ -76,7 +76,7 @@ class EWillCreate extends EWillBase {
     this._will = {
       beneficiaryAddress: benAcc.address,
       beneficiaryContacts: contacts,
-      beneficiaryPublicKey: EthUtil.bufferToHex(EthUtil.privateToPublic(benAcc.privateKey)),
+      beneficiaryPublicKey: '0x04' + EthUtil.bufferToHex(EthUtil.privateToPublic(benAcc.privateKey)).slice(2),
       beneficiaryPrivateKey: benAcc.privateKey,
       beneficiaryAddressHash: new BN(keccak256(benBuff), 16)
     };
@@ -185,6 +185,7 @@ class EWillCreate extends EWillBase {
       return this.ajaxRequest(url, {
         method: 'POST',
         contentType: 'application/octet-stream',
+        processData: false,
         data: this._will.encrypted
       });
     }).then( (response) => {
