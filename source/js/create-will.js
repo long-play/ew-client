@@ -76,14 +76,14 @@
   screens.authTypeSelector.addEventListener('change', onAuthTypeChanged);
 
   const canGoToWillContent = function () {
-    let result = true;
+    let error = null;
 
     if (screens.beneficiaryAddress.value === '') {
       const addressParent = screens.beneficiaryAddress.parentElement;
       addressParent.classList.add(ERROR);
       screens.beneficiaryAddress.focus();
       screens.beneficiaryAddress.addEventListener('input', onInputRemoveError);
-      result = false;
+      error = new Error({ code: 101, message: 'Please, fill the beneficiary address field' });
     }
 
     if (user.value === '') {
@@ -91,18 +91,19 @@
       userParent.classList.add(ERROR);
       user.focus();
       user.addEventListener('input', onInputRemoveError);
-      result = false;
+      error = new Error({ code: 102, message: 'Please, fill the beneficiary contacts field' });
     }
 
     return {
-      result,
+      error,
+      result: (error !== null),
       contacts: user.value,
       address:  screens.beneficiaryAddress.value
     };
   };
 
   const canGoToValidation = function () {
-    let result = true;
+    let error = null;
     const recordRows = screens.willContent.querySelectorAll('.will-block');
     const records = [];
 
@@ -137,14 +138,15 @@
       }
 
       if (record.type == null || record.title == null || record.value == null) {
-        result = false;
+        error = new Error({ code: 103, message: 'One of the records is incomplete or empty. Please, fill it or delete.' });
       }
 
       records.push(record);
     }
 
     return {
-      result,
+      error,
+      result: (error !== null),
       records
     };
   };
@@ -235,12 +237,30 @@
     etherscanLink.href = `https://etherscan.io/tx/${txId}`;
   };
 
-  const showBenficiaryInfoError = function (err) {
-    console.error(err);
+  const showError = function (title, err) {
+    let text = '';
+    if (typeof err === 'string') {
+      text = err;
+    } else if (typeof err.message === 'string') {
+      text = err.message;
+    } else {
+      text = 'Unknown error';
+    }
+    console.error(title + ': ' + text);
   };
-  const showWillContentError = showBenficiaryInfoError;
-  const showValidationError = showBenficiaryInfoError;
-  const showConfirmationError = showBenficiaryInfoError;
+
+  const showBenficiaryInfoError = function (err) {
+    showError('Benificiary Information', err);
+  };
+  const showWillContentError = function (err) {
+    showError('Will Content', err);
+  };
+  const showValidationError = function (err) {
+    showError('Will Content Validation', err);
+  };
+  const showConfirmationError = function (err) {
+    showError('Will Creating Confirmation', err);
+  };
 
   const delegate = {
     // on the beneficiary screen

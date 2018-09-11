@@ -19,8 +19,7 @@
   window.ui.screens.toWillContent.addEventListener('click', (e) => {
     const benInfo = window.ui.delegate.canGoToWillContent();
     if (benInfo.result !== true) {
-      const err = {}; //todo: create an error object
-      window.ui.delegate.showBenficiaryInfoError(err);
+      window.ui.delegate.showBenficiaryInfoError(benInfo.error);
       return;
     }
 
@@ -51,8 +50,7 @@
   window.ui.screens.toValidation.addEventListener('click', (e) => {
     const willContent = window.ui.delegate.canGoToValidation();
     if (willContent.result !== true) {
-      const err = {}; //todo: create an error object
-      window.ui.delegate.showWillContentError(err);
+      window.ui.delegate.showWillContentError(willContent.error);
       return;
     }
 
