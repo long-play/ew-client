@@ -77,14 +77,7 @@
 
   const canGoToWillContent = function () {
     let error = null;
-
-    if (screens.beneficiaryAddress.value === '') {
-      const addressParent = screens.beneficiaryAddress.parentElement;
-      addressParent.classList.add(ERROR);
-      screens.beneficiaryAddress.focus();
-      screens.beneficiaryAddress.addEventListener('input', onInputRemoveError);
-      error = new Error({ code: 101, message: 'Please, fill the beneficiary address field' });
-    }
+    const authType = screens.authTypeSelector.value;
 
     if (user.value === '') {
       const userParent = user.parentElement;
@@ -92,11 +85,23 @@
       user.focus();
       user.addEventListener('input', onInputRemoveError);
       error = new Error({ code: 102, message: 'Please, fill the beneficiary contacts field' });
+    } else if (authType === 'generate_new_address') {       // generate_new_address
+      // do nothing. Everything is okay
+    } else if (authType === 'generate_from_questions') {    // generate_from_questions
+      // not implemented yet. Generate an error
+      error = new Error({ code: 100, message: 'Sorry. The feature is not implemented yet. But it will appear soon.' });
+    } else if (screens.beneficiaryAddress.value === '') {   // existing_address
+      // require a beneficiary address
+      const addressParent = screens.beneficiaryAddress.parentElement;
+      addressParent.classList.add(ERROR);
+      screens.beneficiaryAddress.focus();
+      screens.beneficiaryAddress.addEventListener('input', onInputRemoveError);
+      error = new Error({ code: 101, message: 'Please, fill the beneficiary address field' });
     }
 
     return {
       error,
-      result: (error !== null),
+      result: (error === null),
       contacts: user.value,
       address:  screens.beneficiaryAddress.value
     };

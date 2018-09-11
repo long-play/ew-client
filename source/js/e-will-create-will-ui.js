@@ -26,12 +26,12 @@
     const switcher = window.ui.screens.authTypeSelector.value;
     let promise = null;
 
-    if (switcher == 'existing_address') {
+    if (switcher === 'existing_address') {
       promise = ewill.findBeneficiary(benInfo.address, benInfo.contacts);
-    } else if (switcher == 'generate_new_address') {
+    } else if (switcher === 'generate_new_address') {
       promise = ewill.createBeneficiary(benInfo.contacts);
       //todo: show the created keys to the user
-    } else if (switcher == 'generate_from_questions') {
+    } else if (switcher === 'generate_from_questions') {
       //todo: implement questionnaire
     } else { // unknown
       promise = Promise.reject('Unknown error');
