@@ -19,9 +19,10 @@ class EWillCreate extends EWillBase {
     }
     this._qParams = params;
     this._templateMeta = {
-      poweredBy: 'E-Will Platform',
+      poweredBy: 'E-will Platform',
       version: '1.0'
     };
+    this._platform = {};
   }
 
   configure() {
@@ -38,6 +39,8 @@ class EWillCreate extends EWillBase {
 
     const res = super._configureContracts(contracts).then( () => {
       return this._configureProviderParams(this._qParams);
+    }).then( () => {
+      return this._configurePlatformParams();
     });
 
     return res;
@@ -124,29 +127,46 @@ class EWillCreate extends EWillBase {
   }
 
   encryptWillContent(records) {
-    this._will.records = records.slice();
-    const willTar = new Tar();
-    for (let record of records) {
-      willTar.append(record.title, record.value);
-    }
-
-    const willContent = willTar.append('meta.json', JSON.stringify(this._templateMeta));
     const wcrypto = new Crypto.WCrypto();
-    const promise = wcrypto.encrypt(willContent,
+    let encryptedBenContacts = null;
+
+    const contactsTar = new Tar();
+    const contacts = Object.assign({
+      beneficiaryAddress: this._will.beneficiaryAddress,
+      beneficiaryContacts: this._will.beneficiaryContacts,
+      beneficiaryPublicKey: this._will.beneficiaryPublicKey,
+      owner: this._platform.address
+    }, this._templateMeta);
+    const beneficiaryContacts = contactsTar.append('meta.json', JSON.stringify(contacts));
+    const promise = wcrypto.encrypt(beneficiaryContacts,
                     this._userAccount.privateKey,
-                    this._will.beneficiaryPublicKey,
+                    this._platform.publicKey,
                     this._willId)
     .then( (enc) => {
+      encryptedBenContacts = enc;
+
+      const willTar = new Tar();
+      this._will.records = records.slice();
+      for (let record of records) {
+        willTar.append(record.title, record.value);
+      }
+
+      const willContent = willTar.append('meta.json', JSON.stringify(this._templateMeta));
+      return wcrypto.encrypt(willContent,
+             this._userAccount.privateKey,
+             this._will.beneficiaryPublicKey,
+             this._willId);
+    }).then( (enc) => {
       const encWillTar = new Tar();
       const meta = Object.assign({
         beneficiaryAddress: this._will.beneficiaryAddress,
         beneficiaryContact: this._will.beneficiaryContacts,
         beneficiaryPublicKey: this._will.beneficiaryPublicKey,
-        encryptionIV: Crypto.Util.bufferToHex(enc.iv),
         owner: this._will.beneficiaryAddress
       }, this._templateMeta);
 
       encWillTar.append('will.encrypted.tar', enc.ciphertext);
+      encWillTar.append('contacts.encrypted.tar', encryptedBenContacts.ciphertext);
       const payload = encWillTar.append('meta.json', JSON.stringify(meta));
 
       return wcrypto.encrypt(payload,
@@ -156,7 +176,6 @@ class EWillCreate extends EWillBase {
     }).then( (enc) => {
       const encWillTar = new Tar();
       const meta = Object.assign({
-        encryptionIV: Crypto.Util.bufferToHex(enc.iv),
         owner: this._provider.params.address
       }, this._templateMeta);
 
@@ -280,7 +299,7 @@ class EWillCreate extends EWillBase {
     const msg = Buffer.concat([EthUtil.toBuffer(params.address), EthUtil.toBuffer(params.willId), EthUtil.toBuffer(params.token)]);
     const hash = EthUtil.keccak256(msg);
     const pubKey = EthUtil.ecrecover(hash, params.signaturev, params.signaturer, params.signatures);
-    const isSigned = ('0x' + EthUtil.pubToAddress(pubKey).toString('hex').toLowerCase() === params.address.toLowerCase());
+    const isSigned = (`0x${EthUtil.pubToAddress(pubKey).toString('hex').toLowerCase()}` === params.address.toLowerCase());
     if (isSigned !== true) {
       return Promise.reject('The provider\'s signature is corrupted!');
     }
@@ -302,6 +321,27 @@ class EWillCreate extends EWillBase {
       return this.jsonRequest(`${EWillConfig.swarmUrl}/bzz:/${info.toString('hex')}/`);
     }).then( (providerInfo) => {
       this._provider.extraInfo = providerInfo;
+      return Promise.resolve(providerInfo);
+    });
+    return promise;
+  }
+
+  _configurePlatformParams() {
+    const promise = this.ewPlatform.methods.platformAddress().call().then( (platformAddress) => {
+      this._platform.address = platformAddress;
+      const url = `${EWillConfig.apiUrl}/key/public?address=${platformAddress}`;
+      return this.ajaxRequest(url);
+    }).then ( (response) => {
+      // Verify the response from the server
+      const pub = '0x' + response.publicKey.slice(4);
+      const addr = EthUtil.pubToAddress(pub).toString('hex');
+      if (EthUtil.addHexPrefix(addr).toLowerCase() != this._platform.address.toLowerCase()) return Promise.reject({});
+
+      this._platform.publicKey = response.publicKey;
+      return Promise.resolve(response.publicKey);
+    }).catch( (err) => {
+      console.error(`Failed to find platform public key: ${ JSON.stringify(err) }`);
+      return Promise.reject(err);
     });
     return promise;
   }
