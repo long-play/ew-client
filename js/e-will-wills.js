@@ -54,18 +54,66 @@ class EWillWills extends EWillBase {
     return promise;
   }
 
-  prolongWill(idx) {
-    return Promise.resolve(`Prolonged the will at ${idx}`);
+  prolongWill(willId) {
+    return Promise.resolve(`Prolonged the will with willId: ${willId}`);
   }
 
-  deleteWill(idx) {
-    this._wills.splice(0, 1);
-    return Promise.resolve(`Removed the will at ${idx}`);
+  deleteWill(willId) {
+    let promise = Promise.reject(`Failed to find a will with willId: ${willId}`);
+    const position = this._wills.findIndex( (e) => e.willId == willId );
+
+    if (position !== -1) {
+      const deleteWillMethod = this.ewPlatform.methods.deleteWill(willId);
+      promise = deleteWillMethod.estimateGas({ from: this._userAccount.address })
+      .then( (gasLimit) => {
+        const payload = deleteWillMethod.encodeABI();
+        console.log(payload);
+
+        rawTx = {
+          to: this.ewPlatform.options.address,
+          data: payload,
+          value: 0,
+          gasLimit: gasLimit,
+          chainId: EWillConfig.chainID
+        };
+        return this._userAccount.signTransaction(rawTx);
+      }).then( (tx) => {
+        return this._sendTx(tx);
+      });
+
+      this._wills.splice(position, 1);
+    }
+
+    return promise;
   }
 
   // Accessors
   get wills() {
     return this._wills.slice();
+  }
+
+  // Private functions
+  _sendTx(tx) {
+    const promise = new Promise( (resolve, reject) => {
+      // send the transaction to the network
+      const defer = this._web3.eth.sendSignedTransaction(tx);
+      defer.once('transactionHash', (txId) => {
+        console.log(`Tx created: ${txId}`);
+        resolve(txId);
+      });
+      defer.once('receipt', (receipt) => {
+        console.log(`Tx receipt received: ${ JSON.stringify(receipt) }`);
+      });
+      defer.once('confirmation', (count, receipt) => {
+        console.log(`Tx comfirmed ${count} times`);
+      });
+      defer.once('error', (err) => {
+        console.error(`Failed to submit the will tx: ${ JSON.stringify(err) }`);
+        reject(err);
+      });
+    });
+
+    return promise;
   }
 }
 

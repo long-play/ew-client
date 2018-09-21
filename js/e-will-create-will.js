@@ -159,10 +159,7 @@ class EWillCreate extends EWillBase {
     }).then( (enc) => {
       const encWillTar = new Tar();
       const meta = Object.assign({
-        beneficiaryAddress: this._will.beneficiaryAddress,
-        beneficiaryContact: this._will.beneficiaryContacts,
-        beneficiaryPublicKey: this._will.beneficiaryPublicKey,
-        owner: this._will.beneficiaryAddress
+        owner: this._platform.address
       }, this._templateMeta);
 
       encWillTar.append('will.encrypted.tar', enc.ciphertext);
