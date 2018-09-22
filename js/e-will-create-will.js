@@ -189,7 +189,7 @@ class EWillCreate extends EWillBase {
     return promise;
   }
 
-  createWill() {
+  createWill(subcribePeriod = 1) {
     // upload the will into SWARM & generate a transaction
     const url = `${EWillConfig.swarmUrl}/bzz:/`;
     let rawTx = {};
@@ -216,6 +216,7 @@ class EWillCreate extends EWillBase {
       createWillMethod = this.ewPlatform.methods.createWill(
         this._willId,
         `0x${storageId}`,
+        subcribePeriod,
         `0x${this._will.beneficiaryAddressHash.toString('hex')}`,
         this._provider.address,
         EWillBase.zeroAddress() /*todo: referrer*/);

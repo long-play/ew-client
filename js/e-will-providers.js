@@ -34,7 +34,7 @@ class EWillProviders extends EWillBase {
     }).then( (providersInfo) => {
       const promises = providersInfo.map( (providerInfo) => {
         providerInfo.centPrice = {
-          fee: (new BN(providerInfo.annualFee, 10)).muln(12).divn(10).add(this.platformFee).toNumber()
+          fee: (new BN(providerInfo.annualFee, 10)).add(this.platformFee).toNumber()
         };
         const info = new BN(providerInfo.info, 10);
         const promise = this.jsonRequest(`${EWillConfig.swarmUrl}/bzz:/${info.toString('hex')}/`).then( (extraInfo) => {
