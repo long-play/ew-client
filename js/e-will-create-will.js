@@ -200,7 +200,7 @@ class EWillCreate extends EWillBase {
     let createWillMethod = null;
     let price = 0;
     const totalFeeEthers = this.ewFinance.methods.totalFeeEthers(subcribePeriod, this._provider.address, refCode);
-    const promise = totalFeeEthers.call().then( ({ fee, refReward, subsidy }) =>{
+    const promise = totalFeeEthers.call().then( ({ fee, refReward, subsidy }) => {
       price = (new BN(fee)).sub(new BN(subsidy));
       return this.ajaxRequest(url, {
         method: 'POST',

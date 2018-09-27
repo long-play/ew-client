@@ -1,0 +1,10 @@
+EWillConfig = {
+    apiUrl: 'https://service.e-will.org',
+    gethUrl: 'https://geth.e-will.org/',
+    swarmUrl: 'https://swarm.e-will.org',
+    contractPlatformAddress: '0xee1335881e79828a1493aabd30ce62fadbd3c880',
+    contractFinanceAddress: '0x7f8d70a1acfe8080c9cc3585cac149070013c5eb',
+    contractEscrowAddress: '0x0717b43cc62419583e85e4f0d1273def9d074a1e',
+    chainID: 9,
+    development: false
+};
