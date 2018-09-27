@@ -31,6 +31,10 @@ class EWillCreate extends EWillBase {
         abi: 'static/abi-platform.json',
         address: EWillConfig.contractPlatformAddress
       },
+      ewFinance : {
+        abi: 'static/abi-finance.json',
+        address: EWillConfig.contractFinanceAddress
+      },
       ewEscrow : {
         abi: 'static/abi-escrow.json',
         address: EWillConfig.contractEscrowAddress
@@ -87,10 +91,10 @@ class EWillCreate extends EWillBase {
     return Promise.resolve(this._will);
   }
 
-  getTotalFee(hasReferrer) {
-    const promise = this.ewPlatform.methods.totalFee(this._provider.address, hasReferrer).call().then( ({ fee, refReward }) => {
-      this._provider.info.centPrice = { fee, refReward };
-      return Promise.resolve({ fee, refReward });
+  getTotalFee(subcribePeriod = 1, refCode = EWillBase.zeroAddress()) {
+    const promise = this.ewFinance.methods.totalFee(subcribePeriod, this._provider.address, refCode).call().then( ({ fee, refReward, subsidy }) => {
+      this._provider.info.centPrice = { fee, refReward, subsidy };
+      return Promise.resolve({ fee, refReward, subsidy });
     });
     return promise;
   }
@@ -189,15 +193,15 @@ class EWillCreate extends EWillBase {
     return promise;
   }
 
-  createWill(subcribePeriod = 1) {
+  createWill(title, subcribePeriod = 1, refCode = EWillBase.zeroAddress()) {
     // upload the will into SWARM & generate a transaction
     const url = `${EWillConfig.swarmUrl}/bzz:/`;
     let rawTx = {};
     let createWillMethod = null;
     let price = 0;
-    const totalFeeEthers = this.ewPlatform.methods.totalFeeEthers(this._provider.address, false);
-    const promise = totalFeeEthers.call().then( ({ fee, refReward }) =>{
-      price = fee;
+    const totalFeeEthers = this.ewFinance.methods.totalFeeEthers(subcribePeriod, this._provider.address, refCode);
+    const promise = totalFeeEthers.call().then( ({ fee, refReward, subsidy }) =>{
+      price = (new BN(fee)).sub(new BN(subsidy));
       return this.ajaxRequest(url, {
         method: 'POST',
         contentType: 'application/octet-stream',
@@ -212,14 +216,19 @@ class EWillCreate extends EWillBase {
       const storageId = response;
       console.log('confirmed the will: ' + storageId);
 
+      if (!title) {
+        title = `**${this._willId.slice(-4)}`;
+      }
+
       // generate & sign the ethereum transaction
       createWillMethod = this.ewPlatform.methods.createWill(
+        title,
         this._willId,
         `0x${storageId}`,
         subcribePeriod,
         `0x${this._will.beneficiaryAddressHash.toString('hex')}`,
         this._provider.address,
-        EWillBase.zeroAddress() /*todo: referrer*/);
+        refCode);
       return createWillMethod.estimateGas({ from: this._userAccount.address, value: price });
     }).then( (gasLimit) => {
       const payload = createWillMethod.encodeABI();
@@ -251,24 +260,9 @@ class EWillCreate extends EWillBase {
   }
 
   submitWill() {
-    const promise = new Promise( (resolve, reject) => {
-      // send the transaction to the network
-      const defer = this._web3.eth.sendSignedTransaction(this._will.signedTx);
-      defer.once('transactionHash', (txId) => {
-        console.log(`Tx created: ${txId}`);
-        this._will.txId = txId;
-        resolve(txId);
-      });
-      defer.once('receipt', (receipt) => {
-        console.log(`Tx receipt received: ${ JSON.stringify(receipt) }`);
-      });
-      defer.once('confirmation', (count, receipt) => {
-        console.log(`Tx comfirmed ${count} times`);
-      });
-      defer.once('error', (err) => {
-        console.error(`Failed to submit the will tx: ${ JSON.stringify(err) }`);
-        reject(err);
-      });
+    const promise = this._sendTx(this._will.signedTx).then( (txId) => {
+      this._will.txId = txId;
+      return Promise.resolve(txId);
     });
 
     return promise;

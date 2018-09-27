@@ -20,7 +20,7 @@ class EWillProviders extends EWillBase {
     };
 
     const res = super._configureContracts(contracts).then( () => {
-      return this.ewPlatform.methods.annualPlatformFee().call();
+      return this.ewPlatform.methods.annualPlatformFee(1).call();
     }).then( (fee) => {
       this.platformFee = new BN(fee, 10);
     });
