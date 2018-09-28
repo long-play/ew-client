@@ -43,6 +43,9 @@
           <a class="main-nav__link" href="how-it-works.html">How it works</a>
         </li>
         <li class="main-nav__item">
+          <a class="main-nav__link" href="providers.html">Pricing</a>
+        </li>
+        <li class="main-nav__item">
           <a class="main-nav__link" href="faq.html">FAQ</a>
         </li>
         <li class="main-nav__item">
@@ -54,40 +57,35 @@
     <div class="header__step-info  step-info">
       <div class="step-info__progress">
         <p class="step-info__progress-mobile">Step 3 of 5</p>
-        <ul class="step-info__progress-desktop  progress">
+         <ul class="step-info__progress-desktop  progress">
           <li class="progress__item  progress__item--done">
-            <svg class="progress__back" width="172" height="35">
-              <use xlink:href="#icon-progress"></use>
-            </svg>
             <span class="progress__text">Provider</span>
+            <img class="progress__back  progress__back--active" src="img/stage_arrow_filled.svg">
+            <img class="progress__back" src="img/stage_arrow_transparent.svg">
           </li>
           <li class="progress__item  progress__item--done">
-            <svg class="progress__back" width="172" height="35">
-              <use xlink:href="#icon-progress"></use>
-            </svg>
             <span class="progress__text">Confirmation</span>
+            <img class="progress__back  progress__back--active" src="img/stage_arrow_filled.svg">
+            <img class="progress__back" src="img/stage_arrow_transparent.svg">
           </li>
           <li class="progress__item  progress__item--active">
-            <svg class="progress__back" width="172" height="35">
-              <use xlink:href="#icon-progress"></use>
-            </svg>
             <span class="progress__text">Benificiary</span>
+            <img class="progress__back  progress__back--active" src="img/stage_arrow_filled.svg">
+            <img class="progress__back" src="img/stage_arrow_transparent.svg">
           </li>
           <li class="progress__item">
-            <svg class="progress__back" width="172" height="35">
-              <use xlink:href="#icon-progress"></use>
-            </svg>
             <span class="progress__text">Your will</span>
+            <img class="progress__back  progress__back--active" src="img/stage_arrow_filled.svg">
+            <img class="progress__back" src="img/stage_arrow_transparent.svg">
           </li>
           <li class="progress__item">
-            <svg class="progress__back" width="172" height="35">
-              <use xlink:href="#icon-progress"></use>
-            </svg>
             <span class="progress__text">Payment</span>
+            <img class="progress__back  progress__back--active" src="img/stage_arrow_filled.svg">
+            <img class="progress__back" src="img/stage_arrow_transparent.svg">
           </li>
         </ul>
       </div>
-      <p class="step-info__title">Benificiary</p>
+      <p class="step-info__title">Beneficiary</p>
       <p class="step-info__text">Input a beneficiary email or phone number. So we’ll be able to notify him (or her). Double check please if the contact is valid. Then input an ethereum address you want to pass the will to</p>
     </div>
   </div>
@@ -98,11 +96,21 @@
     <form class="steps__form" method="post" action="#" enctype="multipart/form-data">
       <div class="steps__step-3">
         <div class="steps__form-input  input-field">
-          <label class="input-field__description" for="field-1">Benificiary’s email or phone</label>
-          <input class="input-field__input" type="text" name="user" id="field-1" placeholder="hello@e-will.org">
+          <label class="input-field__description" for="will-title">Title of the will</label>
+          <input class="input-field__input" type="text" name="will-title" id="will-title" placeholder="to my children">
         </div>
         <div class="steps__form-input  input-field">
-          <label class="input-field__description">Benificiary’s login method</label>
+          <strong class="input-field__err-txt  input-field__err-txt--benef">Please fill in this line</strong>
+          <label class="input-field__description" for="ben-email">Beneficiary’s email</label>
+          <input class="input-field__input" type="text" name="ben-email" id="ben-email" placeholder="hello@e-will.org">
+        </div>
+        <div class="steps__form-input  input-field">
+          <strong class="input-field__err-txt  input-field__err-txt--benef">Please fill in this line</strong>
+          <label class="input-field__description" for="ben-phone">Beneficiary’s phone number</label>
+          <input class="input-field__input" type="tel" name="ben-phone" id="ben-phone" placeholder="+41 00 000 00 00">
+        </div>
+        <div class="steps__form-input  input-field">
+          <label class="input-field__description">Beneficiary’s login method</label>
           <select class="input-field__input" name="auth-type">
             <option value='existing_address'>Existing ethereum address</option>
             <option value='generate_new_address'>Generate new ethereum address</option>
@@ -110,12 +118,19 @@
           </select>
         </div>
         <div class="steps__form-input  input-field  steps__form-beneficiary-address">
-          <label class="input-field__description" for="field-2">Benificiary’s ethereum address</label>
-          <input class="input-field__input" name="address" type="text" id="field-2" placeholder="0xFe19Ca84c79Ef813E58713174d7DF1fc0f8Fa20a">
+          <strong class="input-field__err-txt  input-field__err-txt--benef">Please fill in this line</strong>
+          <label class="input-field__description" for="ben-address">Beneficiary’s ethereum address</label>
+          <input class="input-field__input" name="ben-address" type="text" id="ben-address" placeholder="0xFe19Ca84c79Ef813E58713174d7DF1fc0f8Fa20a">
         </div>
-        <p class="steps__tip" id="steps__tip-create-address">If your Beneficiary doesn&apos;t have an ethereum address you can generate <a class="link" href="#">a new one</a></p>
-        <p class="steps__tip  z-hidden" id="steps__tip-not-implemented">Sorry, the feature is not implemented yet</p>
-        <button class="steps__continue  to-step-4  button  button--blue" type="button">Continue</button>
+        <p class="steps__tip" id="steps__tip-create-address">If your Beneficiary doesn&apos;t have an ethereum address you can generate <a class="link  generate-address__link" href="#">a new one</a></p>
+        <p class="steps__error  error-block  z-hidden" id="steps__tip-not-implemented">Sorry, the feature is not implemented yet</p>
+        <p class="steps__error  error-block  z-hidden steps__error--server" id="steps__tip-server-not-response">Server does not respond. Wait a few seconds and try again.</p>
+        <button class="steps__continue  to-step-4  button  button--blue" type="button">
+          <span>Continue</span>
+          <div class="loader  loader--button  z-hidden">
+            <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+          </div>
+        </button>
       </div>
 
       <div class="steps__step-4  z-hidden">
@@ -132,7 +147,12 @@
             </svg>
             Add new File block
           </button>
-          <button class="steps__continue  steps__continue--wide  to-step-5  button  button--green  z-hidden" type="button">Continue</button>
+          <button class="steps__continue  steps__continue--wide  to-step-5  button  button--green  z-hidden" type="button">
+            <span>Continue</span>
+            <div class="loader  loader--button  z-hidden">
+              <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+            </div>
+          </button>
         </div>
         <div class="steps__drop-zone">
           <p class="steps__comment-title">Drop your data here</p>
@@ -144,6 +164,7 @@
         <div class="steps__data  steps__data--full-width  will-resume">
           <h2 class="will-resume__title">Your data</h2>
           <ul class="will-resume__list"></ul>
+          <a class="will-resume__link  back-to-wills  link" href="#">Go back and change the data</a>
         </div>
         <div class="steps__data  will-resume">
           <h2 class="will-resume__title">Resume</h2>
@@ -159,24 +180,42 @@
             <dt class="will-resume__term">Annual fee</dt>
             <dd class="will-resume__value  will-resume__annual-fee"></dd>
           </dl>
-          <button class="steps__submit  button  button--green" type="button">Create</button>
+          <dl class="will-resume__summary">
+            <dt class="will-resume__term">Subscription period</dt>
+            <dd class="will-resume__value  will-resume__subs-period"></dd>
+          </dl>
+          <button class="steps__submit  button  button--green" type="button">
+            <span>Create will</span>
+            <div class="loader  loader--button  z-hidden">
+              <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+            </div>
+          </button>
         </div>
       </div>
 
       <div class="modal  modal--confirm  modal--closed">
         <div class="modal__overlay"></div>
-        <div class="modal__content  modal__content--blue">
-          <p class="modal__title">Review the transaction<br> and confirm</p>
-          <div class="modal__image">
-            <svg class="modal__icon  modal__icon--check" width="54" height="22">
-              <use xlink:href="#icon-spectacles"></use>
-            </svg>
+        <div class="modal__content">
+          <div class="modal__header  modal__header--blue">
+            <p class="modal__title">Review the transaction<br> and confirm</p>
+            <div class="modal__image">
+              <svg class="modal__icon  modal__icon--check" width="54" height="22">
+                <use xlink:href="#icon-spectacles"></use>
+              </svg>
+            </div>
           </div>
-          <p class="modal__text">You are about to pay <span class="modal__amount">0.5 ethers</span> for creating a will at <span class="modal__text  modal__text--provider">E-will Platform</span></p>
-          <p class="modal__text">Are you sure?</p>
-          <div class="modal__buttons">
-            <button class="modal__button  button  button--gray" type="button" name="cancel">Cancel</button>
-            <button class="modal__button  button  button--green" type="button" name="submit">Confirm</button>
+          <div class="modal__main">
+            <p class="modal__text">You are about to pay <span class="modal__amount">0.5 ethers</span> for creating a will at <span class="modal__text  modal__text--provider">E-will Platform</span></p>
+            <p class="modal__text">Are you sure?</p>
+            <div class="modal__buttons">
+              <button class="modal__button  button  button--gray" type="button" name="cancel">Cancel</button>
+              <button class="modal__button  button  button--green" type="button" name="submit">
+                <span>Confirm</span>
+                <div class="loader  loader--button  z-hidden">
+                  <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+                </div>
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -184,20 +223,58 @@
   </section>
 </div>
 
-<div class="modal  modal--success  modal--closed">
-  <div class="modal__overlay"></div>
-  <div class="modal__content  modal__content--green">
-    <p class="modal__title">Your will<br> successfully published!</p>
-    <div class="modal__image">
-      <svg class="modal__icon  modal__icon--success" width="49" height="47">
-        <use xlink:href="#icon-ok"></use>
-      </svg>
+  <div class="modal  modal--success  modal--closed">
+    <div class="modal__overlay"></div>
+    <div class="modal__content">
+      <div class="modal__header  modal__header--green">
+        <p class="modal__title">Your will<br> successfully published!</p>
+        <div class="modal__image">
+          <svg class="modal__icon  modal__icon--success" width="49" height="47">
+            <use xlink:href="#icon-ok"></use>
+          </svg>
+        </div>
+      </div>
+      <div class="modal__main">
+        <p class="modal__text">You could check transaction at <a class="modal__link  link  modal__link--etherscan" href="#">etherscan.io</a></p>
+        <p class="modal__text">The record will appear in the My Wills list after the transaction is mined. It takes some time depending on Ethereum network loading.</p>
+        <a class="modal__button  modal__button--single  button  button--green" href="wills.html">Go to my wills</a>
+      </div>
     </div>
-    <p class="modal__text">You could check transaction at <a class="modal__link  link  modal__link--etherscan" href="#">etherscan.io</a></p>
-    <p class="modal__text">The record will appear in the My Wills list after the transaction is mined. It takes some time depending on Ethereum network loading.</p>
-    <a class="modal__button  modal__button--single  button  button--green" href="wills.html">Go to my wills</a>
   </div>
-</div>
+
+  <div class="modal  modal--error  modal--closed">
+    <div class="modal__overlay"></div>
+    <div class="modal__content">
+      <div class="modal__header  modal__header--red">
+        <p class="modal__title">Looks like you're offline</p>
+        <div class="modal__image">
+          <svg class="modal__icon  modal__icon--error" width="48" height="48">
+            <use xlink:href="#icon-error"></use>
+          </svg>
+        </div>
+      </div>
+      <div class="modal__main">
+        <p class="modal__text">Check internet connection and try again</p>
+        <button class="modal__button  modal__button--single  button  button--gray" type="button">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal  modal--record  modal--closed">
+    <div class="modal__overlay"></div>
+    <div class="record">
+      <div class="record__close" tabindex="0">
+        <span class="visually-hidden">Delete block</span>
+        <svg class="record__close-icon" width="14" height="14">
+          <use xlink:href="#icon-plus"></use>
+        </svg>
+      </div>
+      <p class="record__title">Title</p>
+      <div class="record__value  record__value--title"></div>
+      <p class="record__title">Value</p>
+      <div class="record__value  record__value--value"></div>
+    </div>
+  </div>
 
 <template>
   <div class="steps__block  steps__block--text  will-block">
@@ -209,6 +286,7 @@
       </svg>
     </div>
     <div class="will-block__input  input-field">
+      <strong class="input-field__err-txt">Please fill in this line</strong>
       <label class="input-field__description  input-field__description--new-will" for="field-3">Title</label>
       <input class="input-field__input" type="text" id="field-3" placeholder="Facebook">
     </div>
@@ -227,21 +305,30 @@
       </svg>
     </div>
     <div class="will-block__input  input-field">
+      <strong class="input-field__err-txt">Please fill in this line</strong>
       <label class="input-field__description  input-field__description--new-will" for="field-5">Title</label>
       <input class="input-field__input" type="text" id="field-5" placeholder="MyEtherWallet Keystore">
     </div>
     <div class="will-block__input  will-block__input--wide input-field">
       <p class="input-field__description  input-field__description--new-will">File</p>
       <div class="will-block__file">
-        <p class="will-block__file-name"><output class="will-block__name-value"></output></p>
         <input class="will-block__replace-input" type="file" id="replace-file">
-        <label class="will-block__file-handle">Replace</label>
+        <label class="will-block__file-handle  will-block__file-handle--start">
+          <svg class="will-block__icon-upload" width="13" height="16">
+            <use xlink:href="#icon-upload"></use>
+          </svg>
+          Upload file
+        </label>
+        <p class="will-block__tip">Maximum file size — 50MB</p>
+        <p class="will-block__error  error-block  z-hidden" id="file-exceeds-limit">File size exceeds the limit — 50MB</p>
       </div>
     </div>
   </div>
 
-  <li class="will-resume__item"></li>
-
+  <li class="will-resume__item">
+    <p class="will-resume__info"></p>
+    <p class="will-resume__size"></p>
+  </li>
 </template>
 
 <script src="js/util.min.js"></script>
@@ -257,9 +344,16 @@
     }
   });
 </script>
+<script src="js/e-will-error.min.js"></script>
 <script src="js/e-will-config.min.js"></script>
 <script src="js/e-will-create-will.min.js"></script>
 <script src="js/e-will-create-will-ui.min.js"></script>
+
+<!-- BEGIN JIVOSITE CODE {literal} -->
+<script type='text/javascript'>
+(function(){ var widget_id = 'ZPWDbuoavx';var d=document;var w=window;function l(){var s = document.createElement('script'); s.type = 'text/javascript'; s.async = true;s.src = '//code.jivosite.com/script/widget/'+widget_id; var ss = document.getElementsByTagName('script')[0]; ss.parentNode.insertBefore(s, ss);}if(d.readyState=='complete'){l();}else{if(w.attachEvent){w.attachEvent('onload',l);}else{w.addEventListener('load',l,false);}}})();
+</script>
+<!-- {/literal} END JIVOSITE CODE -->
 
 </body>
 </html>

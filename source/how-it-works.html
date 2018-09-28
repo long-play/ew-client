@@ -17,7 +17,7 @@
 
 <header class="header  header--inner">
   <div class="wrapper">
-    <!-- для залогиненного пользователя + main-nav--user-logged -->
+    <!-- for logged in user + main-nav--user-logged -->
     <nav class="header__menu  main-nav  main-nav--inner">
       <img class="main-nav__qrcode" src="img/qr-code.png" width="24" height="24" alt="qr-code">
       <a class="main-nav__logo  logo" href="/">
@@ -39,6 +39,9 @@
         </li>
         <li class="main-nav__item">
           <a class="main-nav__link  main-nav__link--active">How it works</a>
+        </li>
+        <li class="main-nav__item">
+          <a class="main-nav__link" href="providers.html">Pricing</a>
         </li>
         <li class="main-nav__item">
           <a class="main-nav__link" href="faq.html">FAQ</a>
@@ -84,7 +87,7 @@
           <h2 class="banner__title">The heir gets access only in the case of your confirmed inactivity</h2>
           <p class="banner__text">The platform has a number of services that you have decided to confirm that you are alive: by email, activity in social networks or messengers. You choose it.</p>
         </div>
-        <a class="banner__link  button  button--white" href="#">Try it right now</a>
+        <a class="banner__link  button  button--white" href="providers.html">Try it right now</a>
       </div>
     </div>
   </section>
@@ -112,10 +115,14 @@
         <h2 class="section-header__title  section-header__title--gray">Stay in touch</h2>
         <p class="section-header__text">Co-Owners are leaders in the industry. Having solid experience in the blockchain projects the have mobile developing company.</p>
       </div>
-      <form class="subscribe__form  subscribe-form" method="post" action="#">
+      <form class="subscribe__form  subscribe-form" method="post" action="https://e-will.us19.list-manage.com/subscribe/post?u=015bec55c59bac12b5b7a1825&amp;id=cde382a7d2" target="_blank">
         <div class="subscribe-form__input  subscribe-form__input--big  input-field">
+          <strong class="input-field__err-txt  input-field__err-txt--subs">Please fill in this line</strong>
           <label class="visually-hidden" for="subscribe-1">Enter Your E-mail</label>
-          <input class="input-field__input  subscribe-form-email" type="email" id="subscribe-1" autocomplete="on" placeholder="Enter Your E-mail" required>
+          <input class="input-field__input  subscribe-form-email" type="email" id="subscribe-1" name="EMAIL" autocomplete="on" placeholder="Enter Your E-mail" required>
+        </div>
+        <div style="position: absolute; left: -5000px;" aria-hidden="true">
+          <input type="text" name="b_015bec55c59bac12b5b7a1825_cde382a7d2" tabindex="-1" value="">
         </div>
         <button class="subscribe-form__submit  button  button--blue" type="submit">Subscribe</button>
       </form>
@@ -157,39 +164,18 @@
 
       <div class="footer__last">
         <h2 class="footer__title  footer__title--desktop">Subscribe</h2>
-        <form class="footer__form  subscribe-form" method="post" action="#">
+        <form class="footer__form  subscribe-form" method="post" action="https://e-will.us19.list-manage.com/subscribe/post?u=015bec55c59bac12b5b7a1825&amp;id=cde382a7d2" target="_blank">
           <div class="subscribe-form__input  input-field">
+            <strong class="input-field__err-txt  input-field__err-txt--subs">Please fill in this line</strong>
             <label class="visually-hidden" for="subscribe-2">Enter Your E-mail</label>
-            <input class="input-field__input  subscribe-form-email" type="email" id="subscribe-2" autocomplete="on" placeholder="Enter Your E-mail" required>
+            <input class="input-field__input  subscribe-form-email" type="email" id="subscribe-2" name="EMAIL" autocomplete="on" placeholder="Enter Your E-mail" required>
           </div>
-          <button class="subscribe-form__submit  button  button--arrow" type="submit"><span class="visually-hidden">Подписаться</span></button>
+          <div style="position: absolute; left: -5000px;" aria-hidden="true">
+            <input type="text" name="b_015bec55c59bac12b5b7a1825_cde382a7d2" tabindex="-1" value="">
+          </div>
+          <button class="subscribe-form__submit  button  button--arrow" type="submit" name="subscribe"><span class="visually-hidden">Subscribe</span></button>
         </form>
         <ul class="footer__social  social  social--footer">
-          <li class="social__item">
-            <a class="social__link" href="#">
-              <svg class="social__icon" width="25" height="15">
-                <use xlink:href="#icon-vk"></use>
-              </svg>
-              <span class="visually-hidden">We are in Vkontakte</span>
-            </a>
-          </li>
-          <li class="social__item">
-            <a class="social__link" href="#">
-              <svg class="social__icon" width="20" height="20">
-                <use xlink:href="#icon-facebook"></use>
-              </svg>
-              <span class="visually-hidden">We are on Facebook</span>
-            </a>
-          </li>
-          <li class="social__item">
-            <a class="social__link" href="#">
-              <svg class="social__icon" width="27" height="22">
-                <use xlink:href="#icon-m"></use>
-              </svg>
-              <!-- TODO -->
-              <span class="visually-hidden">We are on MMMMMMMMMM</span>
-            </a>
-          </li>
         </ul>
       </div>
 
@@ -198,23 +184,15 @@
   </div>
 </footer>
 
-<script src="https://www.gstatic.com/firebasejs/5.4.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/5.4.0/firebase-firestore.js"></script>
-<script>
-  // Initialize Firebase
-  var config = {
-    apiKey: "AIzaSyDg7xEANw4V0besHCXiWaVcT7NVU2NI-e8",
-    authDomain: "e-will-org.firebaseapp.com",
-    databaseURL: "https://e-will-org.firebaseio.com",
-    projectId: "e-will-org",
-    storageBucket: "e-will-org.appspot.com",
-    messagingSenderId: "462056750454"
-  };
-  firebase.initializeApp(config);
-</script>
 <script src="js/util.min.js"></script>
 <script src="js/menu.min.js"></script>
 <script src="js/subscribe.min.js"></script>
+
+<!-- BEGIN JIVOSITE CODE {literal} -->
+<script type='text/javascript'>
+(function(){ var widget_id = 'ZPWDbuoavx';var d=document;var w=window;function l(){var s = document.createElement('script'); s.type = 'text/javascript'; s.async = true;s.src = '//code.jivosite.com/script/widget/'+widget_id; var ss = document.getElementsByTagName('script')[0]; ss.parentNode.insertBefore(s, ss);}if(d.readyState=='complete'){l();}else{if(w.attachEvent){w.attachEvent('onload',l);}else{w.addEventListener('load',l,false);}}})();
+</script>
+<!-- {/literal} END JIVOSITE CODE -->
 
 </body>
 </html>

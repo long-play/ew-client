@@ -1,6 +1,25 @@
 (function () {
   const HIDDEN = 'z-hidden';
 
+  const startButtonAnimation = function (button) {
+    const animation = button.querySelector('.loader--button');
+    const text = button.querySelector('span');
+    text.classList.add(HIDDEN);
+
+    const showAnima = function () {
+      animation.classList.remove(HIDDEN);
+    };
+
+    setTimeout(showAnima, 200);
+  };
+
+  const stopButtonAnimation = function (button) {
+    const animation = button.querySelector('.loader--button');
+    const text = button.querySelector('span');
+    animation.classList.add(HIDDEN);
+    text.classList.remove(HIDDEN);
+  };
+
   const toggleBlock = function (mainElement, collapsedElement, inactiveMainClass, activeMainClass, activeCollapsedClass) {
     mainElement.addEventListener('click', function (evt) {
       evt.preventDefault();
@@ -29,8 +48,12 @@
 
   window.util = {
     HIDDEN: HIDDEN,
+
+    startButtonAnimation,
+    stopButtonAnimation,
+
     toggleBlock: toggleBlock,
     showBlock: showBlock,
     hideBlock: hideBlock
-  }
+  };
 })();

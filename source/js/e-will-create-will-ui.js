@@ -27,9 +27,9 @@
     let promise = null;
 
     if (switcher === 'existing_address') {
-      promise = ewill.findBeneficiary(benInfo.address, benInfo.contacts);
+      promise = ewill.findBeneficiary(benInfo.address, benInfo.contacts, benInfo.title);
     } else if (switcher === 'generate_new_address') {
-      promise = ewill.createBeneficiary(benInfo.contacts);
+      promise = ewill.createBeneficiary(benInfo.contacts, benInfo.title);
       //todo: show the created keys to the user
     } else if (switcher === 'generate_from_questions') {
       //todo: implement questionnaire
@@ -38,12 +38,16 @@
     }
 
     promise.then( () => {
-      return ewill.getTotalFee(false);
-    }).then( ({ fee, refReward }) => {
+      return ewill.getTotalFee();
+    }).then( () => {
       window.ui.delegate.goToWillContent(e);
+      window.util.stopButtonAnimation(window.ui.screens.toWillContent);
     }).catch( (err) => {
       window.ui.delegate.showBenficiaryInfoError(err);
+      window.util.stopButtonAnimation(window.ui.screens.toWillContent);
     });
+
+    window.util.startButtonAnimation(window.ui.screens.toWillContent);
   });
 
   // submit will records
@@ -67,8 +71,8 @@
 
     const promises = [];
     for (let record of willContent.records) {
-      if (record.type !== 'file') continue;
-      promises.push(readFileContent(record.value).then( (content) => record.value = content ));
+      if (record.type !== 'file' || !record.file) continue;
+      promises.push(readFileContent(record.file).then( (content) => record.value = content ));
     }
 
     const promise = Promise.all(promises).then(() => {
@@ -77,18 +81,33 @@
       return ewill.encryptWillContent(willContent.records);
     }).then( () => {
       window.ui.delegate.goToValidation(ewill.provider, willContent.records);
+      window.util.stopButtonAnimation(window.ui.screens.toValidation);
     }).catch( (err) => {
       window.ui.delegate.showWillContentError(err);
+      window.util.stopButtonAnimation(window.ui.screens.toValidation);
     });
+
+    window.util.startButtonAnimation(window.ui.screens.toValidation);
+  });
+
+  // go back to wills
+  window.ui.screens.backToWillContent.addEventListener('click', (e) => {
+    e.preventDefault();
+    window.ui.delegate.goBackToWills();
   });
 
   // confirm the will
   window.ui.screens.validationValidate.addEventListener('click', (e) => {
-    ewill.createWill().then( (will) => {
+    const willTitle = window.ui.screens.willTitle.value;
+    ewill.createWill(willTitle, ewill.provider.params.period).then( (will) => {
       window.ui.delegate.submitValidation(will, e);
+      window.util.stopButtonAnimation(window.ui.screens.validationValidate);
     }).catch( (err) => {
       window.ui.delegate.showValidationError(err);
+      window.util.stopButtonAnimation(window.ui.screens.validationValidate);
     });
+
+    window.util.startButtonAnimation(window.ui.screens.validationValidate);
   });
 
   // confirm the transaction
@@ -99,8 +118,12 @@
   window.ui.screens.modalConfirmSubmit.addEventListener('click', (e) => {
     ewill.submitWill().then( (txId) => {
       window.ui.delegate.submitConfirmation(txId, e);
+      window.util.stopButtonAnimation(window.ui.screens.modalConfirmSubmit);
     }).catch( (err) => {
       window.ui.delegate.showConfirmationError(err);
+      window.util.stopButtonAnimation(window.ui.screens.modalConfirmSubmit);
     });
+
+    window.util.startButtonAnimation(window.ui.screens.modalConfirmSubmit);
   });
 })();

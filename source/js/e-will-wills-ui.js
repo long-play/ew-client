@@ -1,24 +1,28 @@
 (function () {
+  const CLOSED = 'modal--closed';
   const HIDDEN = 'my-wills-menu--hidden';
+  const loader = document.querySelector('.loader--screen');
   const willEmpty = document.querySelector('.wrap-will--empty');
-  const willMoreWills = document.querySelector('.wrap-will--wills');
   const willsTable = document.querySelector('.wrap-will--wills');
   const willRowTemplate = document.querySelector('template').content.querySelector('.wrap-will__row--body');
+  const modalDeleteWill = document.querySelector('.modal--delete');
+  const modalDeleteWillCancel = modalDeleteWill.querySelector('.modal__button[name=cancel]');
+  const modalDeleteWillDelete = modalDeleteWill.querySelector('.modal__button[name=delete]');
 
-  const willStateNames = [ 'None', 'Created', 'Activated', 'Pending', 'Claimed', 'Declined' ];
-  const willStateClasses = [ 'state-text--success', 'state-text--success', 'state-text--success', 'state-text--danger', 'state-text--danger', 'state-text--danger' ];
+  const willStateNames = [ 'None', 'Created', 'Activated', 'Pending', 'Claimed', 'Declined', 'Removed' ];
+  const willStateClasses = [ 'state-text--success', 'state-text--success', 'state-text--success', 'state-text--danger', 'state-text--danger', 'state-text--danger', 'state-text--danger' ];
   const ewill = new window.EWillWills();
   window.ewill = ewill;
 
   const maskID = function(arg) {
-    return arg.slice(0, 8) + '...' + arg.slice(-4);
+    return '**' + arg.slice(-4);
   };
 
   const formatDate = function(arg) {
     if (arg == 0) {
       return 'N/A';
     }
-    return moment.unix(arg).format('LLL');
+    return moment.unix(arg).format('ll');
   };
 
   const prolongWill = function(row, menu, menuItem, will) {
@@ -33,15 +37,13 @@
 
   const deleteWill = function(row, menu, menuItem, will) {
     menuItem.addEventListener('click', (e) => {
-      ewill.deleteWill(will.willId).then( (result) => {
-        updateWillsList(ewill.wills);
-      });
-      e.preventDefault();
+      // Ask user's confirmation
+      modalDeleteWill.classList.remove(CLOSED);
+      modalDeleteWill.will = will;
+      // Hide submenu
       menu.classList.add(HIDDEN);
+      e.preventDefault();
     });
-  };
-
-  const submenuItemHandler = function(menuItem, item, handler) {
   };
 
   const updateWillsList = function(wills) {
@@ -52,10 +54,11 @@
 
     for (let will of wills) {
       const willRow = willRowTemplate.cloneNode(true);
+      willRow.querySelector('.wrap-will__col--title').innerHTML = will.title;
       willRow.querySelector('.wrap-will__col--willId').innerHTML = maskID(will.willId);
-      willRow.querySelector('.wrap-will__col--fee').innerHTML = will.annualFeeFmtd + ' EWILLs';
+      willRow.querySelector('.wrap-will__col--provider').innerHTML = will.providerName;
       willRow.querySelector('.wrap-will__col--state').innerHTML = `<span class="state-text ${willStateClasses[will.state]}">${willStateNames[will.state]}</span>`;
-      willRow.querySelector('.wrap-will__col--validTill').innerHTML = formatDate(will.validTill);
+      willRow.querySelector('.wrap-will__col--validTill span').innerHTML = formatDate(will.validTill);
 
       const actionButton = willRow.querySelector('.wrap-will__row--body .wrap-will__col--action');
       const actionMenu = willRow.querySelector('.wrap-will__menu');
@@ -70,8 +73,8 @@
       willsTable.insertBefore(willRow, null);
     }
 
-    willEmpty.classList.toggle('wrap-will--show', wills.length == 0);
-    willMoreWills.classList.toggle('wrap-will--show', wills.length !== 0);
+    willEmpty.classList.toggle(window.util.HIDDEN, wills.length !== 0);
+    willsTable.classList.toggle(window.util.HIDDEN, wills.length === 0);
   };
 
   if (ewill.loginIfPossible() !== true) {
@@ -80,12 +83,31 @@
     return;
   }
 
+  const hideDeleteWillModal = function() {
+    modalDeleteWill.classList.add(CLOSED);
+  };
+
+  modalDeleteWillDelete.addEventListener('click', (e) => {
+    ewill.deleteWill(modalDeleteWill.will.willId).then( (result) => {
+      updateWillsList(ewill.wills);
+      hideDeleteWillModal();
+      window.util.stopButtonAnimation(modalDeleteWillDelete);
+    });
+
+    window.util.startButtonAnimation(modalDeleteWillDelete);
+  });
+
+  modalDeleteWillCancel.addEventListener('click', (e) => {
+    hideDeleteWillModal();
+  });
+
   ewill.configure().then( () => {
     return ewill.getUserWills();
   }).then( (wills) => {
     updateWillsList(wills);
+    loader.classList.add(window.util.HIDDEN);
   }).catch( (err) => {
-    ;
+    loader.classList.add(window.util.HIDDEN);
   });
 
   document.querySelector('.header--my-wills .header__button').addEventListener('click', () => {

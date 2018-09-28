@@ -42,7 +42,11 @@
       color: $blue-main;
 
       & .progress__back {
-        fill: $white;
+        display: none;
+      }
+
+      & .progress__back--active {
+        display: block;
       }
     }
   }
@@ -50,15 +54,19 @@
   &__back {
     position: absolute;
     width: 135px;
+    max-width: none;
     height: 35px;
     fill: transparentize($white, 0.9);
-    box-shadow: 0 2px 35px -19px $black;
 
     @include desktop-start {
-      top: -12px;
-      left: 0;
-      width: 172px;
-      height: 44px;
+      top: -15px;
+      left: -9px;
+      width: 189px;
+      height: 59px;
+    }
+
+    &--active {
+      display: none;
     }
   }
 

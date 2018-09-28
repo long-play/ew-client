@@ -40,6 +40,9 @@
           <a class="main-nav__link" href="how-it-works.html">How it works</a>
         </li>
         <li class="main-nav__item">
+          <a class="main-nav__link" href="providers.html">Pricing</a>
+        </li>
+        <li class="main-nav__item">
           <a class="main-nav__link" href="faq.html">FAQ</a>
         </li>
         <li class="main-nav__item">
@@ -60,18 +63,43 @@
 
 <main class="wills-body">
   <div class="container">
-    <div class="wrap-will wrap-will--empty wrap-will--show">
+    <div class="wrap-will  wrap-will--empty  wrap-will--show  z-hidden">
       <h2 class="wills-body__empty-title">No wills yet</h2>
       <p class="wills-body__empty-content">Try to create your first one!</p>
       <img src="img/group-9.svg" alt="create-will">
     </div>
-    <div class="wrap-will wrap-will--wills">
+
+    <div class="wrap-will  wrap-will--wills  wrap-will--show  z-hidden">
       <div class="wrap-will__row wrap-will__row--head">
-        <div class="wrap-will__col wrap-will__col--head wrap-will__col--willId">Will id</div>
-        <div class="wrap-will__col wrap-will__col--head wrap-will__col--annual">Annual fee</div>
+        <div class="wrap-will__col wrap-will__col--head wrap-will__col--title">Title</div>
+        <div class="wrap-will__col wrap-will__col--head wrap-will__col--willId">Will ID</div>
+        <div class="wrap-will__col wrap-will__col--head wrap-will__col--provider">Provider</div>
         <div class="wrap-will__col wrap-will__col--head wrap-will__col--state">State</div>
         <div class="wrap-will__col wrap-will__col--head wrap-will__col--validTill">Valid till</div>
         <div class="wrap-will__col wrap-will__col--head wrap-will__col--action">Actions</div>
+      </div>
+    </div>
+
+    <div class="loader  loader--screen">
+      <span class="loader__text">Loading</span>
+      <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+    </div>
+  </div>
+
+  <div class="modal  modal--delete  modal--closed">
+    <div class="modal__overlay"></div>
+    <div class="modal__content">
+      <div class="modal__main">
+        <p class="modal__text">Do you really want to delete this will? Once it’s done, you won’t be able to recover it.</p>
+        <div class="modal__buttons">
+          <button class="modal__button  button  button--gray" type="button" name="cancel">Cancel</button>
+          <button class="modal__button  button  button--green" type="button" name="delete">
+            <span>Delete</span>
+            <div class="loader  loader--button  z-hidden">
+              <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+            </div>
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -79,10 +107,11 @@
 
 <template>
   <div class="wrap-will__row wrap-will__row--body">
+    <div class="wrap-will__col wrap-will__col--body wrap-will__col--title">634556246….9902</div>
     <div class="wrap-will__col wrap-will__col--body wrap-will__col--willId">634556246….9902</div>
-    <div class="wrap-will__col wrap-will__col--body wrap-will__col--fee">0 ethers</div>
+    <div class="wrap-will__col wrap-will__col--body wrap-will__col--provider">For Me</div>
     <div class="wrap-will__col wrap-will__col--body wrap-will__col--state"><span class="state-text state-text--success">Created</span></div>
-    <div class="wrap-will__col wrap-will__col--body wrap-will__col--validTill">January 1, 2017, 3:00 AM</div>
+    <div class="wrap-will__col wrap-will__col--body wrap-will__col--validTill"><span>January 1, 2017</span></div>
     <div class="wrap-will__col wrap-will__col--body wrap-will__col--action">
       <div class="wrap-will__menu  my-wills-menu  my-wills-menu--hidden">
         <span class="my-wills-menu__arrow">▲</span>
@@ -103,9 +132,16 @@
 <script src="js/menu.min.js"></script>
 <script src="lib/moment.min.js"></script>
 <script src="lib/jquery.min.js"></script>
+<script src="js/e-will-error.min.js"></script>
 <script src="js/e-will-config.min.js"></script>
 <script src="js/e-will-wills.min.js"></script>
 <script src="js/e-will-wills-ui.min.js"></script>
+
+<!-- BEGIN JIVOSITE CODE {literal} -->
+<script type='text/javascript'>
+(function(){ var widget_id = 'ZPWDbuoavx';var d=document;var w=window;function l(){var s = document.createElement('script'); s.type = 'text/javascript'; s.async = true;s.src = '//code.jivosite.com/script/widget/'+widget_id; var ss = document.getElementsByTagName('script')[0]; ss.parentNode.insertBefore(s, ss);}if(d.readyState=='complete'){l();}else{if(w.attachEvent){w.attachEvent('onload',l);}else{w.addEventListener('load',l,false);}}})();
+</script>
+<!-- {/literal} END JIVOSITE CODE -->
 
 </body>
 </html>

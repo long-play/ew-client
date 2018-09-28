@@ -2,18 +2,24 @@
   color:  $gray-blue-dark;
 
   @include desktop-start {
+    max-width: 1160px;
     margin: 25px 60px 0;
   }
 
+  @media (min-width: 1280px) {
+    margin: 25px auto 0;
+  }
+
   @include desktop-full {
-    margin: 25px 140px 0;
   }
 
   & .wrap-will__row--body {
-    padding: 22px 20px 17px;
+    position: relative;
+    padding: 18px 20px 27px;
 
     @include tablet {
       flex-wrap: wrap;
+      align-items: center;
     }
 
     @include desktop-start {
@@ -46,30 +52,38 @@
   }
 
   &--provider {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    flex-basis: 100%;
-    margin-bottom: 20px;
-    padding-right: 0;
+
+    @media (max-width: 767px) {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      flex-basis: 100%;
+      margin-bottom: 9px;
+      padding-right: 0;
+    }
 
     @include tablet {
-      flex-basis: 45%;
+      display: flex;
+      align-items: center;
+      flex-basis: 100%;
       margin-bottom: 10px;
       padding-right: 25px;
     }
 
     @include desktop-start {
-      flex-basis: 273px;
+      flex-basis: 436px;
       margin-bottom: 0;
     }
 
     &::before {
-      content: 'provider';
-      display: block;
-      text-transform: uppercase;
-      width: 100%;
-      margin-bottom: 15px;
+
+      @media (max-width: 767px) {
+        content: 'provider';
+        display: block;
+        text-transform: uppercase;
+        width: 100%;
+        margin-bottom: -9px;
+      }
     }
   }
 
@@ -77,16 +91,18 @@
     flex-basis: 58%;
 
     @include tablet {
-      flex-basis: 27.5%;
+      flex-basis: 25%;
     }
 
     @include desktop-start {
-      flex-basis: 135px;
+      flex-shrink: 2;
+      flex-basis: 200px;
     }
 
     &::before {
       content: 'METHOD';
       display: block;
+      margin-bottom: 4px;
 
       @include tablet {
         margin-bottom: 15px;
@@ -101,6 +117,7 @@
     &::before {
       content: 'tariff';
       display: block;
+      margin-bottom: 4px;
       text-transform: uppercase;
 
       @include tablet {
@@ -109,30 +126,34 @@
     }
 
     @include tablet {
-      flex-basis: 27.5%;
+      flex-basis: 25%;
     }
 
     @include desktop-start {
-      flex-basis: 120px;
+      flex-shrink: 2;
+      flex-basis: 140px;
     }
   }
 
-  &--description {
-    flex-basis: 100%;
-    margin-top: 29px;
+  &--years {
+    flex-basis: 110px;
+    margin-top: 22px;
 
     @include tablet {
-      flex-basis: 75%;
+      flex-basis: 25%;
+      margin-top: 0;
     }
 
     @include desktop-start {
-      flex-basis: 422px;
+      flex-shrink: 2;
+      flex-basis: 177px;
       margin-top: 0;
     }
 
     &::before {
-      content: 'description';
+      content: 'years';
       display: block;
+      margin-bottom: 12px;
       text-transform: uppercase;
 
       @include tablet {
@@ -158,26 +179,31 @@
   }
 
   &--provider-action {
-    flex-basis: 100%;
-    margin-top: 21px;
+    flex-basis: auto;
+    align-self: flex-end;
     text-align: right;
     padding-right: 0;
 
     @include tablet {
       flex-basis: auto;
-      margin-left: auto;
     }
 
     @include desktop-start {
       flex-basis: 165px;
+      align-self: auto;
       margin-top: 0;
     }
+  }
+
+  &--provider-name {
+    display: block;
   }
 }
 
 .button.button--choose {
-  width: 100%;
-  padding: 14px 14px 12px 13px;
+  flex-shrink: 0;
+  width: auto;
+  padding: 14px 17px 12px 17px;
   font-size: 14px;
 
   @include tablet {
@@ -195,6 +221,7 @@
 .provider-logo-image {
   width: 40px;
   margin-right: 34px;
+  margin-top: 9px;
   background-color: $white;
 
   @include tablet {
@@ -205,5 +232,53 @@
     vertical-align: middle;
     margin-bottom: 0;
     margin-right: 22px;
+  }
+}
+
+.wrap-will__info {
+  @include text(17px, 1.2em, 400);
+  position: relative;
+  margin-left: auto;
+  color: $blue-main;
+  border-bottom: 1px dotted $blue-main;
+  cursor: pointer;
+
+  @include desktop-start {
+    margin-left: 26px;
+  }
+}
+
+.wrap-will__select {
+  flex-shrink: 0;
+  width: 84px;
+  height: 40px;
+  padding-left: 17px;
+  border: 1px solid $input-border;
+  background-color: $input-hover;
+  border-radius: 7px;
+  -webkit-appearance: none;
+  background-image: url("../img/select-arrow.svg");
+  background-repeat: no-repeat;
+  background-position: top 17px right 12px;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.wrap-will__info-popup {
+  position: absolute;
+  top: 38px;
+  right: -19px;
+  z-index: 50;
+
+  @include tablet {
+    top: 38px;
+    right: -60px;
+  }
+
+  @include desktop-start {
+    top: 38px;
+    left: -180px;
   }
 }

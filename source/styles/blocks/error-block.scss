@@ -1,0 +1,12 @@
+.error-block {
+  @include text(14px, 1.2em, 400);
+  padding: 12px 13px;
+  background-color: transparentize($will-red, 0.9);
+  border-radius: 6px;
+  color: $will-red;
+
+  @include desktop-start {
+    padding: 17px 20px 16px;
+    font-size: 16px;
+  }
+}

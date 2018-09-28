@@ -285,7 +285,11 @@ class EWillCreate extends EWillBase {
         !this._provider.params.signaturer ||
         !this._provider.params.signatures ||
         !this._provider.params.token) {
-      return Promise.reject('Missing some provider\'s parameters');
+      return Promise.reject('Missing mandatory provider\'s parameters');
+    }
+
+    if (!this._provider.params.period) {
+      this._provider.params.period = 1;
     }
 
     const msg = Buffer.concat([EthUtil.toBuffer(params.address), EthUtil.toBuffer(params.willId), EthUtil.toBuffer(params.token)]);

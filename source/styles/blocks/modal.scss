@@ -12,7 +12,7 @@
       right: 0;
       bottom: 0;
       left: 0;
-      z-index: 50;
+      z-index: 10000;
       display: block;
       background-color: $black;
       opacity: 0.6;
@@ -25,9 +25,10 @@
     right: 0;
     bottom: 0;
     left: 0;
-    z-index: 51;
-    padding: 31px 20px 20px;
+    z-index: 10001;
+    min-width: 320px;
     text-align: center;
+    background-color: $white;
 
     @include wide-mobile {
       top: 191px;
@@ -35,30 +36,46 @@
       bottom: initial;
       left: 50%;
       width: 484px;
-      padding-top: 34px;
       border-radius: 8px;
       transform: translateX(-242px);
       box-shadow: 0 0 50px 0 transparentize($black, 0.8);
-    }
-
-    @include desktop-start {
-      padding: 34px 34px 38px;
-    }
-
-    &--blue {
-      background-image: linear-gradient(to bottom, $blue-gradient-top, $blue-gradient-bottom 247px, $white 247px, $white 100%);
-
-      @include desktop-start {
-        background-image: linear-gradient(to bottom, $blue-gradient-top, $blue-gradient-bottom 243px, $white 243px, $white 100%);
-      }
+      overflow: hidden;
     }
 
     &--green {
-      background-image: linear-gradient(to bottom, $green-gradient-top, $green-main 247px, $white 247px, $white 100%);
 
       @include desktop-start {
         background-image: linear-gradient(to bottom, $green-gradient-top, $green-main 243px, $white 243px, $white 100%);
       }
+    }
+  }
+
+  &__header {
+    padding: 31px 20px 42px;
+
+    @include desktop-start {
+      padding: 34px 34px 30px;
+    }
+
+    &--red {
+      background-image: linear-gradient(to bottom, $red-gradient-top, $red-gradient-bottom);
+    }
+
+    &--green {
+      background-image: linear-gradient(to bottom, $green-gradient-top, $green-main);
+    }
+
+    &--blue {
+      background-image: linear-gradient(to bottom, $blue-gradient-top, $blue-gradient-bottom);
+    }
+  }
+
+  &__main {
+    background-color: $white;
+    padding: 18px 20px 30px;
+
+    @include desktop-start {
+      padding: 33px 34px 38px;
     }
   }
 
@@ -79,13 +96,9 @@
     align-items: center;
     width: 80px;
     height: 80px;
-    margin: 0 auto 62px;
+    margin: 0 auto;
     background-color: transparentize($white, 0.9);
     border-radius: 50%;
-
-    @include desktop-start {
-      margin-bottom: 60px;
-    }
   }
 
   &__icon {
@@ -97,6 +110,10 @@
 
     &--success {
       width: 49px;
+    }
+
+    &--error {
+      width: 48px;
     }
   }
 
@@ -123,28 +140,57 @@
     margin-top: 65px;
 
     @include desktop-start {
-      margin-top: 61px;
+      margin-top: 41px;
       margin-right: -24px;
     }
   }
 
   &__button {
     width: calc(50% - 14px);
+    min-height: 46px;
     margin-right: 14px;
 
     @include desktop-start {
+      min-height: 52px;
       margin-right: 24px;
-      padding: 13px 34px;
+      padding: 12px 34px;
       font-size: 22px;
     }
 
     &--single {
       width: 100%;
       margin-right: 0;
-      margin-top: 46px;
+      margin-top: 35px;
 
       @include desktop-start {
-        margin-top: 40px;
+        margin-top: 39px;
+      }
+    }
+  }
+
+  &--delete {
+
+    & .modal__main {
+      margin-top: 100px;
+      padding: 28px 34px 34px;
+
+      @include wide-mobile {
+        margin-top: 0;
+      }
+    }
+
+    & .modal__buttons {
+      margin-top: 34px;
+    }
+
+    & .modal__content {
+
+      @include wide-mobile {
+        top: 267px;
+      }
+
+      @include tablet {
+        top: 410px;
       }
     }
   }

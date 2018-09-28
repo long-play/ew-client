@@ -1,0 +1,121 @@
+.record {
+  position: fixed;
+  top:0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 10001;
+  min-width: 320px;
+  padding: 78px 20px 50px;
+  background-color: $white;
+
+  @include tablet {
+    top: 50%;
+    right: auto;
+    bottom: auto;
+    left: 50%;
+    width: 700px;
+    padding: 23px 34px 38px;
+    border-radius: 8px;
+    transform: translate(-50%, -50%);
+  }
+
+  @include desktop-start {
+    width: 827px;
+  }
+
+  &__close {
+    position: absolute;
+    top: 23px;
+    right: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 34px;
+    height: 34px;
+    background-color: $gray-light;
+    border-radius: 8px;
+    cursor: pointer;
+
+    @include tablet {
+      top: -54px;
+      padding: 0;
+      background-color: transparent;
+      border: 2px solid transparentize($white, 0.8);
+    }
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  &__close-icon {
+    fill: $gray-line;
+    transform: rotate(45deg);
+
+    @include tablet {
+      fill: transparentize($white, 0.4);
+    }
+  }
+
+  &__title {
+    @include text(16px, 1.2em, 700);
+    margin: 0 0 10px;
+    color: transparentize($gray-blue-dark, 0.7);
+
+    @include tablet {
+      margin-top: 15px;
+    }
+  }
+
+  &__value {
+    @include text(14px, 1.2em, 700);
+    padding: 14px 20px 12px;
+    color: $gray-blue-dark;
+
+
+    @include tablet {
+      padding: 16px 20px 14px;
+      font-size: 18px;
+    }
+
+    &--text,
+    &--title {
+      background-color: $input-back;
+      border: 1px solid $input-border;
+      border-radius: 6px;
+    }
+
+    &--title {
+      margin-bottom: 24px;
+
+      @include tablet {
+        margin-bottom: 0;
+      }
+    }
+
+    &--text {
+      padding-top: 19px;
+
+      @include tablet {
+        min-height: 104px;
+        padding-top: 16px;
+      }
+    }
+
+    &--file {
+      padding: 12px 20px 0 30px;
+      border: none;
+      background-color: transparent;
+      background-image: url("../../img/icon-attachment.svg");
+      background-position: 0 9px;
+      background-repeat: no-repeat;
+      background-size: 20px 18px;
+
+      @include tablet {
+        padding: 20px 20px 0 33px;
+        background-position: 3px 22px;
+      }
+    }
+  }
+}

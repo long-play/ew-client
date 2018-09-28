@@ -1,0 +1,52 @@
+.provider-info {
+    text-align: right;
+
+  @include desktop-start {
+    text-align: center;
+  }
+
+  &__arrow {
+    position: absolute;
+    top: -17px;
+    right: 30px;
+    display: inline-block;
+    color: $white;
+    text-shadow: 0 -3px 2px  transparentize($black, 0.95);
+    transform: scale(5, 1.5);
+
+    @include tablet {
+      top: -17px;
+      right: 72px;
+    }
+
+    @include desktop-start {
+      top: -17px;
+    }
+  }
+
+  &__text {
+    @include text(14px, 18px, 400);
+    width: 200px;
+    margin: 0;
+    padding: 20px;
+    text-align: left;
+    color: transparentize($black, 0.2);
+    background-color: $white;
+    border-radius: 2px;
+    box-shadow: 0 2px 15px 0 transparentize($black, 0.9);
+
+    @include tablet {
+      font-size: 16px;
+      line-height: 26px;
+      width: 325px;
+    }
+
+    @include desktop-start {
+      width: 386px;
+      padding: 33px 27px 27px;
+      font-size: 16px;
+      line-height: 26px;
+      text-align: left;
+    }
+  }
+}
