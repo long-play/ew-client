@@ -1,4 +1,5 @@
 const EWillBase = require('./e-will-base.js').EWillBase;
+const EWillError = require('./e-will-error.js').EWillError;
 const keccak256 = require('js-sha3').keccak256;
 const EthUtil = require('ethereumjs-util');
 const Crypto = require('wcrypto');
@@ -64,7 +65,7 @@ class EWillCreate extends EWillBase {
       // Verify the response from the server
       const pub = '0x' + response.publicKey.slice(4);
       const addr = EthUtil.pubToAddress(pub).toString('hex');
-      if (EthUtil.addHexPrefix(addr).toLowerCase() != address.toLowerCase()) return Promise.reject({});
+      if (EthUtil.addHexPrefix(addr).toLowerCase() != address.toLowerCase()) return Promise.reject(EWillError.securityError());
 
       this._will.beneficiaryPublicKey = response.publicKey;
       return Promise.resolve(this._will);
@@ -116,9 +117,9 @@ class EWillCreate extends EWillBase {
       const pubKey = EthUtil.ecrecover(hash, response.signature.v, response.signature.r, response.signature.s);
       const isSigned = ('0x' + EthUtil.pubToAddress(pubKey).toString('hex').toLowerCase() === this._provider.params.address.toLowerCase());
       if (isSigned !== true) {
-        return Promise.reject( /* error */ );
+        return Promise.reject(EWillError.securityError());
       } else if (this._provider.params.willId != response.willId) {
-        return Promise.reject( /* error */ );
+        return Promise.reject(EWillError.generalError('The service returned wrong parameters. Please refresh the page and try again.'));
       }
 
       this._provider.publicKey = response.key;
@@ -187,7 +188,7 @@ class EWillCreate extends EWillBase {
       return Promise.resolve(this._will.records);
     }).catch( (err) => {
       console.error(`Failed to encrypt the will: ${ JSON.stringify(err) }`);
-      return Promise.reject(err);
+      return Promise.reject(EWillError.generalError('Failed to encrypt the will. Please try again.'));
     });
 
     return promise;
@@ -210,7 +211,7 @@ class EWillCreate extends EWillBase {
       });
     }).then( (response) => {
       if (typeof response.error !== 'undefined') {
-        return Promise.reject(response.error);
+        return Promise.reject(EWillError.generalError('Failed to upload encrypted data to the SWARM node. Please try again.'));
       }
 
       const storageId = response;
@@ -253,7 +254,7 @@ class EWillCreate extends EWillBase {
       return Promise.resolve(will);
     }).catch( (err) => {
       console.error(`Failed to create the will tx: ${ JSON.stringify(err) }`);
-      return Promise.reject(err);
+      return Promise.reject(EWillError.generalError('Failed to create the will record. Please make sure you have enough money in your wallet and try again.'));
     });
 
     return promise;
@@ -285,7 +286,7 @@ class EWillCreate extends EWillBase {
         !this._provider.params.signaturer ||
         !this._provider.params.signatures ||
         !this._provider.params.token) {
-      return Promise.reject('Missing mandatory provider\'s parameters');
+      return Promise.reject(EWillError.generalError('Missing mandatory Service\'s parameters. Please go back to the list of providers and choose it again.'));
     }
 
     if (!this._provider.params.period) {
@@ -297,7 +298,7 @@ class EWillCreate extends EWillBase {
     const pubKey = EthUtil.ecrecover(hash, params.signaturev, params.signaturer, params.signatures);
     const isSigned = (`0x${EthUtil.pubToAddress(pubKey).toString('hex').toLowerCase()}` === params.address.toLowerCase());
     if (isSigned !== true) {
-      return Promise.reject('The provider\'s signature is corrupted!');
+      return Promise.reject(EWillError.securityError());
     }
 
     // request a provider info
@@ -308,7 +309,7 @@ class EWillCreate extends EWillBase {
       return this.ewEscrow.methods.isProviderValid(this._provider.address).call();
     }).then( (isValid) => {
       if (!isValid) {
-        return Promise.reject(`The provider ${this._provider.params.address}=>${this._provider.address} is not a valid provider`);
+        return Promise.reject(EWillError.generalError('The selected Service is not active now. Please choose another Service on the previous page'));
       }
       return this.ewEscrow.methods.providers(this._provider.address).call();
     }).then( (providerInfo) => {
@@ -331,7 +332,9 @@ class EWillCreate extends EWillBase {
       // Verify the response from the server
       const pub = '0x' + response.publicKey.slice(4);
       const addr = EthUtil.pubToAddress(pub).toString('hex');
-      if (EthUtil.addHexPrefix(addr).toLowerCase() != this._platform.address.toLowerCase()) return Promise.reject({});
+      if (EthUtil.addHexPrefix(addr).toLowerCase() != this._platform.address.toLowerCase()) {
+        return Promise.reject(EWillError.securityError());
+      }
 
       this._platform.publicKey = response.publicKey;
       return Promise.resolve(response.publicKey);

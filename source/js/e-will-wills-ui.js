@@ -9,6 +9,7 @@
   const modalDeleteWillTitle = modalDeleteWill.querySelector('.modal__text--will-title');
   const modalDeleteWillCancel = modalDeleteWill.querySelector('.modal__button[name=cancel]');
   const modalDeleteWillDelete = modalDeleteWill.querySelector('.modal__button[name=delete]');
+  const modalError = document.querySelector('.modal--error');
 
   const willStateNames = [ 'None', 'Created', 'Activated', 'Pending', 'Claimed', 'Declined', 'Removed' ];
   const willStateClasses = [ 'state-text--success', 'state-text--success', 'state-text--success', 'state-text--danger', 'state-text--danger', 'state-text--danger', 'state-text--danger' ];
@@ -30,6 +31,10 @@
     menuItem.addEventListener('click', (e) => {
       ewill.prolongWill(will.willId).then( (result) => {
         updateWillsList(ewill.wills);
+        //todo: show success popup
+      }).catch( (err) => {
+        console.error(err);
+        showError('Failed to prolong the will', new window.EWillError('Please check you have enough money in your wallet, the current subscription ends in less than 30 days and try again', 3001, true));
       });
       e.preventDefault();
       menu.classList.add(HIDDEN);
@@ -60,6 +65,9 @@
       willRow.querySelector('.wrap-will__col--willId').innerHTML = maskID(will.willId);
       ewill.getProviderInfo(will.provider).then( (providerInfo) => {
         willRow.querySelector('.wrap-will__col--provider').innerHTML = providerInfo.extraInfo.name;
+      }).catch( (err) => {
+        willRow.querySelector('.wrap-will__col--provider').innerHTML = '-';
+        console.error(err);
       });
       willRow.querySelector('.wrap-will__col--state').innerHTML = `<span class="state-text ${willStateClasses[will.state]}">${willStateNames[will.state]}</span>`;
       willRow.querySelector('.wrap-will__col--validTill span').innerHTML = formatDate(will.validTill);
@@ -81,21 +89,53 @@
     willsTable.classList.toggle(window.util.HIDDEN, wills.length === 0);
   };
 
+  const showError = function (title, err) {
+    let text = '';
+    if (typeof err === 'string') {
+      text = err;
+    } else if (typeof err.message === 'string') {
+      text = err.message;
+    } else {
+      text = 'Something went wrong. Please, try again.';
+    }
+
+    if (err instanceof Error || err.popup === true) {
+      modalError.classList.remove(CLOSED);
+      const modalTitle = modalError.querySelector('.modal__title');
+      const modalText = modalError.querySelector('.modal__text');
+      const cancel = modalError.querySelector('.modal__button');
+
+      cancel.addEventListener('click', function () {
+        modalError.classList.add(CLOSED)
+      });
+
+      modalTitle.innerText = title;
+      modalText.innerText = text;
+    }
+
+    console.error(title + ': ' + text);
+  };
+
+  const hideDeleteWillModal = function() {
+    modalDeleteWill.classList.add(CLOSED);
+  };
+
   if (ewill.loginIfPossible() !== true) {
     console.log('not logged in');
     location.href = '/login.html?redirect=wills.html';
     return;
   }
 
-  const hideDeleteWillModal = function() {
-    modalDeleteWill.classList.add(CLOSED);
-  };
-
   modalDeleteWillDelete.addEventListener('click', (e) => {
     ewill.deleteWill(modalDeleteWill.will.willId).then( (result) => {
       updateWillsList(ewill.wills);
       hideDeleteWillModal();
       window.util.stopButtonAnimation(modalDeleteWillDelete);
+    }).catch( (err) => {
+      hideDeleteWillModal();
+      window.util.stopButtonAnimation(modalDeleteWillDelete);
+      console.error(err);
+      showError('Deleting the will', new window.EWillError('Failed to delete the will. Please try again', 3002, true));
     });
 
     window.util.startButtonAnimation(modalDeleteWillDelete);
@@ -108,10 +148,13 @@
   ewill.configure().then( () => {
     return ewill.getUserWills();
   }).then( (wills) => {
-    updateWillsList(wills);
     loader.classList.add(window.util.HIDDEN);
+    updateWillsList(wills);
   }).catch( (err) => {
     loader.classList.add(window.util.HIDDEN);
+    willEmpty.classList.toggle(window.util.HIDDEN, true);
+    console.error(err);
+    showError('Initializing the web app', err);
   });
 
   document.querySelector('.header--my-wills .header__button').addEventListener('click', () => {

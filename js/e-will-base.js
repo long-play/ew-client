@@ -28,7 +28,8 @@ class EWillBase {
       return Promise.resolve(response);
     }).fail( (err) => {
       console.error(`${url}: ${ JSON.stringify(err) }`);
-      return Promise.reject(err);
+    }).catch( () => {
+      return Promise.reject(new Error('Failed to connect to the server. Please, try again.'));
     });
     return promise;
   }

@@ -343,10 +343,10 @@
     } else if (typeof err.message === 'string') {
       text = err.message;
     } else {
-      text = 'Unknown error';
+      text = 'Something went wrong. Please, try again.';
     }
 
-    if (err.popup === true) {
+    if (err instanceof Error || err.popup === true) {
       screens.modalError.classList.remove(CLOSED);
       const modalTitle = screens.modalError.querySelector('.modal__title');
       const modalText = screens.modalError.querySelector('.modal__text');
@@ -377,6 +377,9 @@
   };
 
   const delegate = {
+    // general
+    showError,
+
     // on the beneficiary screen
     canGoToWillContent,
     showBenficiaryInfoError,

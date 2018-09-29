@@ -10,9 +10,9 @@
   }
 
   ewill.configure().then( () => {
-    ;
+    console.log('Successfully initialized');
   }).catch( (err) => {
-    ;
+    window.ui.delegate.showError('Initializing the web app', err);
   });
 
   // handle input of beneficiary info
@@ -34,7 +34,7 @@
     } else if (switcher === 'generate_from_questions') {
       //todo: implement questionnaire
     } else { // unknown
-      promise = Promise.reject('Unknown error');
+      promise = Promise.reject(new Error('Unknown beneficiary authentication type'));
     }
 
     promise.then( () => {
@@ -63,6 +63,9 @@
         const reader = new FileReader();
         reader.onload = () =>  {
           resolve(new Uint8Array(reader.result, 0, reader.result.byteLength));
+        };
+        reader.onerror = (err) =>  {
+          reject(err);
         };
         reader.readAsArrayBuffer(file);
       });

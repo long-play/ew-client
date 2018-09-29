@@ -103,6 +103,25 @@
     <span class="loader__text">Loading</span>
     <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
   </div>
+
+  <div class="modal  modal--error  modal--closed">
+    <div class="modal__overlay"></div>
+    <div class="modal__content">
+      <div class="modal__header  modal__header--red">
+        <p class="modal__title">Error</p>
+        <div class="modal__image">
+          <svg class="modal__icon  modal__icon--error" width="48" height="48">
+            <use xlink:href="#icon-error"></use>
+          </svg>
+        </div>
+      </div>
+      <div class="modal__main">
+        <p class="modal__text">Please try again</p>
+        <button class="modal__button  modal__button--single  button  button--gray" type="button">Close</button>
+      </div>
+    </div>
+  </div>
+
 </main>
 
 <template>

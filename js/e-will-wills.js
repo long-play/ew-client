@@ -1,4 +1,5 @@
 const EWillBase = require('./e-will-base.js').EWillBase;
+const EWillError = require('./e-will-error.js').EWillError;
 const BN = require('bn.js');
 
 class EWillWills extends EWillBase {
@@ -48,7 +49,7 @@ class EWillWills extends EWillBase {
       return Promise.resolve(wills);
     }).catch( (err) => {
       console.error(`Failed to obtain user's wills: ${ JSON.stringify(err) }`);
-      return Promise.reject(err);
+      return Promise.reject(EWillError.generalError('Failed to obtain the list of wills. Please try to refresh the page.'));
     });
 
     return promise;
@@ -59,7 +60,7 @@ class EWillWills extends EWillBase {
   }
 
   deleteWill(willId) {
-    let promise = Promise.reject(`Failed to find a will with willId: ${willId}`);
+    let promise = Promise.reject(EWillError.generalError(`Failed to find a will with ID: ${willId}`));
     const position = this._wills.findIndex( (e) => e.willId == willId );
 
     if (position !== -1) {

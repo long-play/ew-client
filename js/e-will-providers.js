@@ -1,4 +1,5 @@
 const EWillBase = require('./e-will-base.js').EWillBase;
+const EWillError = require('./e-will-error.js').EWillError;
 const BN = require('bn.js');
 
 class EWillProviders extends EWillBase {
@@ -51,7 +52,7 @@ class EWillProviders extends EWillBase {
       return Promise.resolve(providersInfo);
     }).catch( (err) => {
       console.error(`Failed to obtain an active providers list: ${ JSON.stringify(err) }`);
-      return Promise.reject(err);
+      return Promise.reject(EWillError.generalError('Failed to load a list of available Services. Please try to refresh the page.'));
     });
 
     return promise;
