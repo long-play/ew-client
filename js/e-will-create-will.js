@@ -216,8 +216,8 @@ class EWillCreate extends EWillBase {
       const storageId = response;
       console.log('confirmed the will: ' + storageId);
 
-      if (!title) {
-        title = `**${this._willId.slice(-4)}`;
+      if (!title || title.length === 0) {
+        title = `Will *${this._willId.slice(-4)}`;
       }
 
       // generate & sign the ethereum transaction

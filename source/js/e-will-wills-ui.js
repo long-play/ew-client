@@ -6,6 +6,7 @@
   const willsTable = document.querySelector('.wrap-will--wills');
   const willRowTemplate = document.querySelector('template').content.querySelector('.wrap-will__row--body');
   const modalDeleteWill = document.querySelector('.modal--delete');
+  const modalDeleteWillTitle = modalDeleteWill.querySelector('.modal__text--will-title');
   const modalDeleteWillCancel = modalDeleteWill.querySelector('.modal__button[name=cancel]');
   const modalDeleteWillDelete = modalDeleteWill.querySelector('.modal__button[name=delete]');
 
@@ -19,7 +20,7 @@
   };
 
   const formatDate = function(arg) {
-    if (arg == 0) {
+    if (arg < 101) {
       return 'N/A';
     }
     return moment.unix(arg).format('ll');
@@ -39,6 +40,7 @@
     menuItem.addEventListener('click', (e) => {
       // Ask user's confirmation
       modalDeleteWill.classList.remove(CLOSED);
+      modalDeleteWillTitle.innerText = will.title;
       modalDeleteWill.will = will;
       // Hide submenu
       menu.classList.add(HIDDEN);
@@ -56,7 +58,9 @@
       const willRow = willRowTemplate.cloneNode(true);
       willRow.querySelector('.wrap-will__col--title').innerHTML = will.title;
       willRow.querySelector('.wrap-will__col--willId').innerHTML = maskID(will.willId);
-      willRow.querySelector('.wrap-will__col--provider').innerHTML = will.providerName;
+      ewill.getProviderInfo(will.provider).then( (providerInfo) => {
+        willRow.querySelector('.wrap-will__col--provider').innerHTML = providerInfo.extraInfo.name;
+      });
       willRow.querySelector('.wrap-will__col--state').innerHTML = `<span class="state-text ${willStateClasses[will.state]}">${willStateNames[will.state]}</span>`;
       willRow.querySelector('.wrap-will__col--validTill span').innerHTML = formatDate(will.validTill);
 

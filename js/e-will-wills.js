@@ -87,6 +87,22 @@ class EWillWills extends EWillBase {
     return promise;
   }
 
+  getProviderInfo(provider) {
+    const providerInfo = {};
+    const promise = this.ewEscrow.methods.isProviderValid(provider).call().then( (isValid) => {
+      providerInfo.isProviderValid = isValid;
+      return this.ewEscrow.methods.providers(provider).call();
+    }).then( (pi) => {
+      providerInfo.info = pi;
+      const info = new BN(pi.info, 10);
+      return this.jsonRequest(`${EWillConfig.swarmUrl}/bzz:/${info.toString('hex')}/`);
+    }).then( (ei) => {
+      providerInfo.extraInfo = ei;
+      return Promise.resolve(providerInfo);
+    });
+    return promise;
+  }
+
   // Accessors
   get wills() {
     return this._wills.slice();

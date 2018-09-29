@@ -54,8 +54,8 @@
   const summaryList = document.querySelector('.will-resume__list');
   const summaryProviderName = document.querySelector('.will-resume__provider-name');
   const summaryConfirmType = document.querySelector('.will-resume__confirm-type');
-  const summaryAnnualFee = document.querySelector('.will-resume__annual-fee');
   const summarySubsPeriod = document.querySelector('.will-resume__subs-period');
+  const summaryTotalFee = document.querySelector('.will-resume__total-fee');
   const modalConfirmAmount = document.querySelector('.modal__amount');
   const modalConfirmProvider = document.querySelector('.modal__text--provider');
   const closeModalRecord = document.querySelector('.record__close');
@@ -284,8 +284,8 @@
 
     summaryProviderName.textContent = provider.extraInfo.name;
     summaryConfirmType.textContent = provider.extraInfo.tags;
-    summaryAnnualFee.textContent = `$${(provider.info.centPrice.fee - provider.info.centPrice.subsidy) / 100}`;
     summarySubsPeriod.textContent = formatPeriod(provider.params.period);
+    summaryTotalFee.textContent = `$${(provider.params.period * provider.info.centPrice.fee - provider.info.centPrice.subsidy) / 100}`;
   };
 
   const goBackToWills = function () {
