@@ -2,9 +2,9 @@ EWillConfig = {
     apiUrl: 'http://localhost:1337',
     gethUrl: 'https://e-will.valeyev.ru/geth/',
     swarmUrl: 'https://mh.getmobileup.com/swarm',
-    contractPlatformAddress: '0x46ca8e2a5f1874a9b14a5c58c72be21868e74565',
-    contractFinanceAddress: '0x33032e26c5478bb3a46e6aa965cf4ce8ad9503f1',
-    contractEscrowAddress: '0x470ea3f2be0b4d879a6a92c64f6a56153b2ca9f7',
+    contractPlatformAddress: '0xd08e8ff56af69822ffcdc32ffa3d6126b478e6c3',
+    contractFinanceAddress: '0x279233281c45258da4d7526394641ca9101aca4a',
+    contractEscrowAddress: '0xa9657413e6af77297376c892de6ebdce4c0feda6',
     chainID: 9,
     development: true
 };

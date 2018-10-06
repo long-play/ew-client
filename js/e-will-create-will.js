@@ -102,6 +102,7 @@ class EWillCreate extends EWillBase {
 
   requestProviderKey() {
     const data = {
+      userPublicKey: '0x04' + EthUtil.bufferToHex(EthUtil.privateToPublic(this._userAccount.privateKey)).slice(2),
       address: this._userAccount.address,
       willId: this._provider.params.willId,
       token: this._provider.params.token

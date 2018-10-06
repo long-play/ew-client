@@ -56,7 +56,31 @@ class EWillWills extends EWillBase {
   }
 
   prolongWill(willId) {
-    return Promise.resolve(`Prolonged the will with willId: ${willId}`);
+    let promise = Promise.reject(EWillError.generalError(`Failed to find a will with ID: ${willId}`));
+    const position = this._wills.findIndex( (e) => e.willId == willId );
+    const subscriptionPeriod = 1;
+
+    if (position !== -1) {
+      const prolongWillMethod = this.ewPlatform.methods.prolongWill(willId, subscriptionPeriod);
+      promise = prolongWillMethod.estimateGas({ from: this._userAccount.address })
+      .then( (gasLimit) => {
+        const payload = prolongWillMethod.encodeABI();
+        console.log(payload);
+
+        rawTx = {
+          to: this.ewPlatform.options.address,
+          data: payload,
+          value: 0,
+          gasLimit: gasLimit,
+          chainId: EWillConfig.chainID
+        };
+        return this._userAccount.signTransaction(rawTx);
+      }).then( (tx) => {
+        return this._sendTx(tx);
+      });
+    }
+
+    return promise;
   }
 
   deleteWill(willId) {
