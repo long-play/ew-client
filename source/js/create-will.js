@@ -26,7 +26,8 @@
 
     toWillContent: document.querySelector('.to-step-4'),
     toValidation: document.querySelector('.to-step-5'),
-    backToWillContent: document.querySelector('.back-to-wills')
+
+    downloadBenPrivKey: document.querySelector('.ben-priv-key'),
   };
   screens.willTitle = screens.beneficiaryInfo.querySelector('input[name=will-title]');
   screens.authTypeSelector = screens.beneficiaryInfo.querySelector('select[name=auth-type]');
@@ -41,6 +42,7 @@
   const generateKeyPairLink = document.querySelector('.generate-address__link');
   const benEmail = screens.beneficiaryInfo.querySelector('input[name=ben-email]');
   const benPhone = screens.beneficiaryInfo.querySelector('input[name=ben-phone]');
+  const backToWillContent = document.querySelector('.back-to-wills');
   const header = document.querySelector('.header--will');
   const progressMobile = document.querySelector('.step-info__progress-mobile');
   const progressBarScreenThree = document.querySelector('.progress__item:nth-child(3)');
@@ -87,6 +89,11 @@
   generateKeyPairLink.addEventListener('click', (e) => {
     screens.authTypeSelector.value = 'generate_new_address';
     screens.authTypeSelector.dispatchEvent(new Event('change'));
+    e.preventDefault();
+  });
+
+  backToWillContent.addEventListener('click', (e) => {
+    goBackToWills();
     e.preventDefault();
   });
 
@@ -289,7 +296,6 @@
   };
 
   const goBackToWills = function () {
-
     // clean summary list
     while (summaryList.firstChild) {
       summaryList.removeChild(summaryList.firstChild);
@@ -308,7 +314,6 @@
     stepInfoText.innerText = infoTextScreenFour;
     stepInfoTitle.innerText = SCREEN_FOUR_TITLE_MOB;
     progressMobile.innerText = PROGRESS_TEXT_SCREEN_FOUR;
-
   };
 
   const submitValidation = function (will, e) {
@@ -393,7 +398,6 @@
     // on the validation screen
     submitValidation,
     showValidationError,
-    goBackToWills,
 
     // on the confirmation screen
     cancelConfirmation,

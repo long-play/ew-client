@@ -27,10 +27,9 @@
     let promise = null;
 
     if (switcher === 'existing_address') {
-      promise = ewill.findBeneficiary(benInfo.address, benInfo.contacts, benInfo.title);
+      promise = ewill.findBeneficiary(benInfo.address, benInfo.contacts);
     } else if (switcher === 'generate_new_address') {
-      promise = ewill.createBeneficiary(benInfo.contacts, benInfo.title);
-      //todo: show the created keys to the user
+      promise = ewill.createBeneficiary(benInfo.contacts);
     } else if (switcher === 'generate_from_questions') {
       //todo: implement questionnaire
     } else { // unknown
@@ -93,10 +92,10 @@
     window.util.startButtonAnimation(window.ui.screens.toValidation);
   });
 
-  // go back to wills
-  window.ui.screens.backToWillContent.addEventListener('click', (e) => {
+  // download beneficiary private key
+  window.ui.screens.downloadBenPrivKey.addEventListener('click', (e) => {
+    ewill.generateInstruction();
     e.preventDefault();
-    window.ui.delegate.goBackToWills();
   });
 
   // confirm the will

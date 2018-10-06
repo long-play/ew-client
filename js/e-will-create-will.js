@@ -5,6 +5,7 @@ const EthUtil = require('ethereumjs-util');
 const Crypto = require('wcrypto');
 const Tar = require('tar-js');
 const BN = require('bn.js');
+const jsPDF = require('jspdf');
 
 class EWillCreate extends EWillBase {
   // Public functions
@@ -82,6 +83,7 @@ class EWillCreate extends EWillBase {
     const benAddr = new BN(benAcc.address.slice(2), 16);
     const benBuff = EthUtil.toBuffer(benAddr);
     this._will = {
+      shouldDownloadGuide: true,
       beneficiaryAddress: benAcc.address,
       beneficiaryContacts: contacts,
       beneficiaryPublicKey: '0x04' + EthUtil.bufferToHex(EthUtil.privateToPublic(benAcc.privateKey)).slice(2),
@@ -90,6 +92,22 @@ class EWillCreate extends EWillBase {
     };
 
     return Promise.resolve(this._will);
+  }
+
+  generateInstruction() {
+    const doc = new jsPDF();
+    doc.setFontSize(40);
+    doc.text(50, 25, 'E-will');
+    doc.setFontSize(20);
+    doc.text(20, 45, 'Here is an instruction, how to claim the will');
+    if (this._will.beneficiaryPrivateKey) {
+      doc.setFontSize(20);
+      doc.text(20, 55, 'Private key to pass to the beneficiary:');
+      doc.setFontSize(10);
+      doc.text(20, 62, this._will.beneficiaryPrivateKey);
+    }
+    doc.save('E-will. Instruction for beneficiary.pdf');
+    this._will.shouldDownloadGuide = false;
   }
 
   getTotalFee(subcribePeriod = 1, refCode = EWillBase.zeroAddress()) {
@@ -196,6 +214,11 @@ class EWillCreate extends EWillBase {
   }
 
   createWill(title, subcribePeriod = 1, refCode = EWillBase.zeroAddress()) {
+    // check if the user must download guide
+    if (this._will.shouldDownloadGuide === true) {
+      return Promise.reject(EWillError.generalError('The private key for the beneficiary was generated. You must download the Guide for him before continue.'));
+    }
+
     // upload the will into SWARM & generate a transaction
     const url = `${EWillConfig.swarmUrl}/bzz:/`;
     let rawTx = {};
