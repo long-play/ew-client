@@ -44,7 +44,7 @@
   });
 
   document.querySelector('#login-test').addEventListener('click', (e) => {
-    loginPKPrivKey.value = ewill.generateTeskPrivateKey();
+    loginPKPrivKey.value = ewill.generateTestPrivateKey();
     e.preventDefault();
   });
 })();

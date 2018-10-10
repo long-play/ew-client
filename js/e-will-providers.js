@@ -1,4 +1,5 @@
 const EWillBase = require('./e-will-base.js').EWillBase;
+const EWillError = require('./e-will-error.js').EWillError;
 const BN = require('bn.js');
 
 class EWillProviders extends EWillBase {
@@ -20,7 +21,7 @@ class EWillProviders extends EWillBase {
     };
 
     const res = super._configureContracts(contracts).then( () => {
-      return this.ewPlatform.methods.annualPlatformFee().call();
+      return this.ewPlatform.methods.annualPlatformFee(1).call();
     }).then( (fee) => {
       this.platformFee = new BN(fee, 10);
     });
@@ -34,7 +35,7 @@ class EWillProviders extends EWillBase {
     }).then( (providersInfo) => {
       const promises = providersInfo.map( (providerInfo) => {
         providerInfo.centPrice = {
-          fee: (new BN(providerInfo.annualFee, 10)).muln(12).divn(10).add(this.platformFee).toNumber()
+          fee: (new BN(providerInfo.annualFee, 10)).add(this.platformFee).toNumber()
         };
         const info = new BN(providerInfo.info, 10);
         const promise = this.jsonRequest(`${EWillConfig.swarmUrl}/bzz:/${info.toString('hex')}/`).then( (extraInfo) => {
@@ -51,7 +52,7 @@ class EWillProviders extends EWillBase {
       return Promise.resolve(providersInfo);
     }).catch( (err) => {
       console.error(`Failed to obtain an active providers list: ${ JSON.stringify(err) }`);
-      return Promise.reject(err);
+      return Promise.reject(EWillError.generalError('Failed to load a list of available Services. Please try to refresh the page.'));
     });
 
     return promise;

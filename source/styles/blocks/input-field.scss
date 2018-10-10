@@ -1,34 +1,10 @@
 .input-field {
-  position: relative;
   @include text(14px, 1.2em, 700);
+  position: relative;
   color: transparentize($gray-blue-dark, 0.7);
 
   @include tablet {
     font-size: 18px;
-  }
-
-  &--error {
-
-    &::after {
-      @include text(14px, 20px, 700);
-      position: absolute;
-      bottom: 12px;
-      right: 12px;
-      content: '!';
-      width: 20px;
-      height: 20px;
-      text-align: center;
-      vertical-align: middle;
-      border-radius: 50%;
-      border: 1px solid $will-red;
-      background-color: $white;
-      color: $will-red;
-
-      @include tablet {
-        bottom: 16px;
-        right: 16px;
-      }
-    }
   }
 
   &__input,
@@ -98,6 +74,58 @@
 
     &--new-will {
       font-size: 16px;
+    }
+  }
+
+  &__err-txt {
+    display: none;
+  }
+
+  &--error {
+
+    & .input-field__input {
+      background-color: transparentize($will-red, 0.9);
+      border-color: $will-red;
+    }
+
+    & .input-field__err-txt {
+      @include text(14px, 1.2em, 500);
+      position: absolute;
+      top: 0;
+      left: 53px;
+      display: block;
+      color: $will-red;
+
+      @include tablet {
+        font-size: 16px;
+      }
+
+      &--benef {
+        top: 76px;
+        left: 0;
+
+        @include tablet {
+          top: auto;
+          bottom: -25px;
+        }
+
+        @include desktop-start {
+          right: 0;
+          bottom: auto;
+          left: auto;
+        }
+      }
+
+      &--subs {
+        top: -20px;
+        left: 0;
+
+        @include tablet {
+          top: auto;
+          bottom: -28px;
+          left: 0;
+        }
+      }
     }
   }
 }

@@ -1,35 +1,32 @@
 (function () {
-  const forms = document.querySelectorAll('.subscribe-form');
-  const link = document.getElementById('subscribe-link');
-  const emailField = document.getElementById('subscribe-1');
+  const ERROR = 'input-field--error';
+  const EMPTY_FIELD = 'Please fill in this line';
+  const NOT_VALID = 'Please type the valid email';
+  const EMAIL_REGEXP = /^(|(([A-Za-z0-9]+_+)|([A-Za-z0-9]+\-+)|([A-Za-z0-9]+\.+)|([A-Za-z0-9]+\++))*[A-Za-z0-9]+@((\w+\-+)|(\w+\.))*\w{1,63}\.[a-zA-Z]{2,6})$/;
+  const subsBtns = document.querySelectorAll('.subscribe-form__submit');
+  const subsFields = document.querySelectorAll('input[type=email]');
+  const subsInputs = document.querySelectorAll('.input-field');
+  const errorTexts = document.querySelectorAll('.input-field__err-txt');
 
-  const subscribe = (email) => {
-    return firebase.firestore().collection('subscribers').add({
-      email: email
-    });
-  };
+  for (let i = 0; i < subsBtns.length; i++) {
+    subsBtns[i].addEventListener('click', function (evt) {
+      if (subsFields[i].value === '' || !subsFields[i].value.match(EMAIL_REGEXP)) {
+        evt.preventDefault();
+        subsInputs[i].classList.add(ERROR);
 
-  forms.forEach( (form, idx, list) => {
-    form.addEventListener('submit', (e) => {
-      const email = form.querySelector('.subscribe-form-email');
-      subscribe(email.value).then( (result) => {
-        alert('Your e-mail has been added to the mailing list');
-        console.log(result);
-      }).catch( (err) => {
-        console.log(err);
-      });
-      email.value = '';
-      e.preventDefault();
-      return false;
-    });
-  });
-
-  if (link && emailField) {
-    link.addEventListener('click', (e) => {
-      e.preventDefault();
-      emailField.focus();
+        if (subsFields[i].value === '') {
+          errorTexts[i].textContent = EMPTY_FIELD;
+        } else if (!subsFields[i].value.match(EMAIL_REGEXP)) {
+          errorTexts[i].textContent = NOT_VALID;
+        }
+      }
     });
   }
+
+  for (let i = 0; i < subsInputs.length; i++) {
+    subsFields[i].addEventListener('focus', function () {
+      subsInputs[i].classList.remove(ERROR);
+    })
+  }
+
 })();
-
-

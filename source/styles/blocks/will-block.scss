@@ -59,10 +59,13 @@
   }
 
   &__file {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
 
     @include desktop-start {
-      display: flex;
-      align-items: flex-end;
+      flex-direction: row;
+      align-items: center;
       width: 100%;
       margin-top: 16px;
       margin-bottom: 74px;
@@ -71,6 +74,7 @@
 
   &__file-name {
     @include text(14px, 1.2em, 700);
+    order: -1;
     margin: 16px 0 15px;
     color: $gray-blue-dark;
     word-wrap: break-word;
@@ -92,7 +96,7 @@
     color: $blue-gradient-top;
 
     @include desktop-start {
-      margin-right: auto;
+      margin-right: 30px;
       font-size: 18px;
     }
 
@@ -109,9 +113,53 @@
         bottom: 2px;
       }
     }
+
+    &--start {
+      display: block;
+      max-width: 155px;
+      padding: 11px 20px 10px 17px;
+      background-color: $blue-main;
+      border-radius: 6px;
+      box-shadow: inset 0 -2px $blue-shadow ;
+      color: $white;
+      cursor: pointer;
+
+      &::after {
+        content: none;
+      }
+
+      @include tablet {
+        max-width: none;
+        padding: 11px 20px 10px 17px;
+        font-size: 16px;
+      }
+
+      @include desktop-start {
+        font-size: 16px;
+      }
+
+      &:hover,
+      &:focus {
+        background-color: $blue-hover;
+      }
+    }
+  }
+
+  &__icon-upload {
+    margin-right: 13px;
   }
 
   &__replace-input {
     display: none;
+  }
+
+  &__tip {
+    @include text(14px, 1.2em, 500);
+    color: transparentize($gray-blue-dark, 0.5);
+
+    @include tablet {
+      margin: 0 auto 0 0;
+      font-size: 16px;
+    }
   }
 }

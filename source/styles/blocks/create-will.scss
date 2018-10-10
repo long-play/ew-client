@@ -72,7 +72,7 @@
   }
 
   &__form-input {
-    margin-bottom: 30px;
+    margin-bottom: 35px;
 
     @include desktop-start {
       margin-bottom: 38px;
@@ -81,7 +81,7 @@
 
   &__tip {
     @include text(14px, 1.22em, 400);
-    margin: -12px 0 29px;
+    margin: 0 0 29px;
 
     @include desktop-start {
       margin-top: -18px;
@@ -91,8 +91,29 @@
     }
   }
 
+  &__error {
+    margin: -12px 0 40px;
+
+    @include desktop-start {
+      margin: -10px 0 58px;
+    }
+
+    &--server {
+      margin-top: 0;
+
+      @include desktop-start {
+        margin-top: -28px;
+      }
+    }
+  }
+
   &__continue {
     width: 100%;
+    min-height: 46px;
+
+    @include tablet {
+      min-height: 52px;
+    }
 
     @include desktop-start {
       width: 216px;
@@ -231,10 +252,10 @@
   }
 
   &__data {
-    margin-bottom: 24px;
+    margin-bottom: 47px;
 
     @include tablet {
-      margin-bottom: 30px;
+      margin-bottom: 45px;
     }
 
     @include desktop-start {
@@ -253,14 +274,17 @@
 
   &__submit {
     width: 100%;
+    min-height: 44px;
     margin-top: 15px;
     padding: 14px 34px 12px;
 
     @include tablet {
+      min-height: 52px;
       margin-top: 35px;
     }
 
     @include desktop-start {
+      min-height: 54px;
       margin-top: 40px;
       padding: 14px 34px 12px;
       font-size: 22px;

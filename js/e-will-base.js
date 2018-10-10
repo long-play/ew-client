@@ -28,7 +28,8 @@ class EWillBase {
       return Promise.resolve(response);
     }).fail( (err) => {
       console.error(`${url}: ${ JSON.stringify(err) }`);
-      return Promise.reject(err);
+    }).catch( () => {
+      return Promise.reject(new Error('Failed to connect to the server. Please, try again.'));
     });
     return promise;
   }
@@ -66,6 +67,30 @@ class EWillBase {
       promises.push(promise);
     }
     return Promise.all(promises);
+  }
+
+  // Private functions
+  _sendTx(tx) {
+    const promise = new Promise( (resolve, reject) => {
+      // send the transaction to the network
+      const defer = this._web3.eth.sendSignedTransaction(tx);
+      defer.once('transactionHash', (txId) => {
+        console.log(`Tx created: ${txId}`);
+        resolve(txId);
+      });
+      defer.once('receipt', (receipt) => {
+        console.log(`Tx receipt received: ${ JSON.stringify(receipt) }`);
+      });
+      defer.once('confirmation', (count, receipt) => {
+        console.log(`Tx comfirmed ${count} times`);
+      });
+      defer.once('error', (err) => {
+        console.error(`Failed to submit the will tx: ${ JSON.stringify(err) }`);
+        reject(err);
+      });
+    });
+
+    return promise;
   }
 }
 

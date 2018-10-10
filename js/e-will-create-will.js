@@ -1,9 +1,11 @@
 const EWillBase = require('./e-will-base.js').EWillBase;
+const EWillError = require('./e-will-error.js').EWillError;
 const keccak256 = require('js-sha3').keccak256;
 const EthUtil = require('ethereumjs-util');
 const Crypto = require('wcrypto');
 const Tar = require('tar-js');
 const BN = require('bn.js');
+const jsPDF = require('jspdf');
 
 class EWillCreate extends EWillBase {
   // Public functions
@@ -19,9 +21,10 @@ class EWillCreate extends EWillBase {
     }
     this._qParams = params;
     this._templateMeta = {
-      poweredBy: 'E-Will Platform',
+      poweredBy: 'E-will Platform',
       version: '1.0'
     };
+    this._platform = {};
   }
 
   configure() {
@@ -29,6 +32,10 @@ class EWillCreate extends EWillBase {
       ewPlatform : {
         abi: 'static/abi-platform.json',
         address: EWillConfig.contractPlatformAddress
+      },
+      ewFinance : {
+        abi: 'static/abi-finance.json',
+        address: EWillConfig.contractFinanceAddress
       },
       ewEscrow : {
         abi: 'static/abi-escrow.json',
@@ -38,6 +45,8 @@ class EWillCreate extends EWillBase {
 
     const res = super._configureContracts(contracts).then( () => {
       return this._configureProviderParams(this._qParams);
+    }).then( () => {
+      return this._configurePlatformParams();
     });
 
     return res;
@@ -57,7 +66,7 @@ class EWillCreate extends EWillBase {
       // Verify the response from the server
       const pub = '0x' + response.publicKey.slice(4);
       const addr = EthUtil.pubToAddress(pub).toString('hex');
-      if (EthUtil.addHexPrefix(addr).toLowerCase() != address.toLowerCase()) return Promise.reject({});
+      if (EthUtil.addHexPrefix(addr).toLowerCase() != address.toLowerCase()) return Promise.reject(EWillError.securityError());
 
       this._will.beneficiaryPublicKey = response.publicKey;
       return Promise.resolve(this._will);
@@ -74,9 +83,10 @@ class EWillCreate extends EWillBase {
     const benAddr = new BN(benAcc.address.slice(2), 16);
     const benBuff = EthUtil.toBuffer(benAddr);
     this._will = {
+      shouldDownloadGuide: true,
       beneficiaryAddress: benAcc.address,
       beneficiaryContacts: contacts,
-      beneficiaryPublicKey: EthUtil.bufferToHex(EthUtil.privateToPublic(benAcc.privateKey)),
+      beneficiaryPublicKey: '0x04' + EthUtil.bufferToHex(EthUtil.privateToPublic(benAcc.privateKey)).slice(2),
       beneficiaryPrivateKey: benAcc.privateKey,
       beneficiaryAddressHash: new BN(keccak256(benBuff), 16)
     };
@@ -84,16 +94,33 @@ class EWillCreate extends EWillBase {
     return Promise.resolve(this._will);
   }
 
-  getTotalFee(hasReferrer) {
-    const promise = this.ewPlatform.methods.totalFee(this._provider.address, hasReferrer).call().then( ({ fee, refReward }) => {
-      this._provider.info.centPrice = { fee, refReward };
-      return Promise.resolve({ fee, refReward });
+  generateInstruction() {
+    const doc = new jsPDF();
+    doc.setFontSize(40);
+    doc.text(50, 25, 'E-will');
+    doc.setFontSize(20);
+    doc.text(20, 45, 'Here is an instruction, how to claim the will');
+    if (this._will.beneficiaryPrivateKey) {
+      doc.setFontSize(20);
+      doc.text(20, 55, 'Private key to pass to the beneficiary:');
+      doc.setFontSize(10);
+      doc.text(20, 62, this._will.beneficiaryPrivateKey);
+    }
+    doc.save('E-will. Instruction for beneficiary.pdf');
+    this._will.shouldDownloadGuide = false;
+  }
+
+  getTotalFee(subcribePeriod = 1, refCode = EWillBase.zeroAddress()) {
+    const promise = this.ewFinance.methods.totalFee(subcribePeriod, this._provider.address, refCode).call().then( ({ fee, refReward, subsidy }) => {
+      this._provider.info.centPrice = { fee, refReward, subsidy };
+      return Promise.resolve({ fee, refReward, subsidy });
     });
     return promise;
   }
 
   requestProviderKey() {
     const data = {
+      userPublicKey: '0x04' + EthUtil.bufferToHex(EthUtil.privateToPublic(this._userAccount.privateKey)).slice(2),
       address: this._userAccount.address,
       willId: this._provider.params.willId,
       token: this._provider.params.token
@@ -109,9 +136,9 @@ class EWillCreate extends EWillBase {
       const pubKey = EthUtil.ecrecover(hash, response.signature.v, response.signature.r, response.signature.s);
       const isSigned = ('0x' + EthUtil.pubToAddress(pubKey).toString('hex').toLowerCase() === this._provider.params.address.toLowerCase());
       if (isSigned !== true) {
-        return Promise.reject( /* error */ );
+        return Promise.reject(EWillError.securityError());
       } else if (this._provider.params.willId != response.willId) {
-        return Promise.reject( /* error */ );
+        return Promise.reject(EWillError.generalError('The service returned wrong parameters. Please refresh the page and try again.'));
       }
 
       this._provider.publicKey = response.key;
@@ -124,29 +151,43 @@ class EWillCreate extends EWillBase {
   }
 
   encryptWillContent(records) {
-    this._will.records = records.slice();
-    const willTar = new Tar();
-    for (let record of records) {
-      willTar.append(record.title, record.value);
-    }
-
-    const willContent = willTar.append('meta.json', JSON.stringify(this._templateMeta));
     const wcrypto = new Crypto.WCrypto();
-    const promise = wcrypto.encrypt(willContent,
+    let encryptedBenContacts = null;
+
+    const contactsTar = new Tar();
+    const contacts = Object.assign({
+      beneficiaryAddress: this._will.beneficiaryAddress,
+      beneficiaryContacts: this._will.beneficiaryContacts,
+      beneficiaryPublicKey: this._will.beneficiaryPublicKey,
+      owner: this._platform.address
+    }, this._templateMeta);
+    const beneficiaryContacts = contactsTar.append('meta.json', JSON.stringify(contacts));
+    const promise = wcrypto.encrypt(beneficiaryContacts,
                     this._userAccount.privateKey,
-                    this._will.beneficiaryPublicKey,
+                    this._platform.publicKey,
                     this._willId)
     .then( (enc) => {
+      encryptedBenContacts = enc;
+
+      const willTar = new Tar();
+      this._will.records = records.slice();
+      for (let record of records) {
+        willTar.append(record.title, record.value);
+      }
+
+      const willContent = willTar.append('meta.json', JSON.stringify(this._templateMeta));
+      return wcrypto.encrypt(willContent,
+             this._userAccount.privateKey,
+             this._will.beneficiaryPublicKey,
+             this._willId);
+    }).then( (enc) => {
       const encWillTar = new Tar();
       const meta = Object.assign({
-        beneficiaryAddress: this._will.beneficiaryAddress,
-        beneficiaryContact: this._will.beneficiaryContacts,
-        beneficiaryPublicKey: this._will.beneficiaryPublicKey,
-        encryptionIV: Crypto.Util.bufferToHex(enc.iv),
-        owner: this._will.beneficiaryAddress
+        owner: this._platform.address
       }, this._templateMeta);
 
       encWillTar.append('will.encrypted.tar', enc.ciphertext);
+      encWillTar.append('contacts.encrypted.tar', encryptedBenContacts.ciphertext);
       const payload = encWillTar.append('meta.json', JSON.stringify(meta));
 
       return wcrypto.encrypt(payload,
@@ -156,7 +197,6 @@ class EWillCreate extends EWillBase {
     }).then( (enc) => {
       const encWillTar = new Tar();
       const meta = Object.assign({
-        encryptionIV: Crypto.Util.bufferToHex(enc.iv),
         owner: this._provider.params.address
       }, this._templateMeta);
 
@@ -167,41 +207,53 @@ class EWillCreate extends EWillBase {
       return Promise.resolve(this._will.records);
     }).catch( (err) => {
       console.error(`Failed to encrypt the will: ${ JSON.stringify(err) }`);
-      return Promise.reject(err);
+      return Promise.reject(EWillError.generalError('Failed to encrypt the will. Please try again.'));
     });
 
     return promise;
   }
 
-  createWill() {
+  createWill(title, subcribePeriod = 1, refCode = EWillBase.zeroAddress()) {
+    // check if the user must download guide
+    if (this._will.shouldDownloadGuide === true) {
+      return Promise.reject(EWillError.generalError('The private key for the beneficiary was generated. You must download the Guide for him before continue.'));
+    }
+
     // upload the will into SWARM & generate a transaction
     const url = `${EWillConfig.swarmUrl}/bzz:/`;
     let rawTx = {};
     let createWillMethod = null;
     let price = 0;
-    const totalFeeEthers = this.ewPlatform.methods.totalFeeEthers(this._provider.address, false);
-    const promise = totalFeeEthers.call().then( ({ fee, refReward }) =>{
-      price = fee;
+    const totalFeeEthers = this.ewFinance.methods.totalFeeEthers(subcribePeriod, this._provider.address, refCode);
+    const promise = totalFeeEthers.call().then( ({ fee, refReward, subsidy }) => {
+      price = (new BN(fee)).sub(new BN(subsidy));
       return this.ajaxRequest(url, {
         method: 'POST',
         contentType: 'application/octet-stream',
+        processData: false,
         data: this._will.encrypted
       });
     }).then( (response) => {
       if (typeof response.error !== 'undefined') {
-        return Promise.reject(response.error);
+        return Promise.reject(EWillError.generalError('Failed to upload encrypted data to the SWARM node. Please try again.'));
       }
 
       const storageId = response;
       console.log('confirmed the will: ' + storageId);
 
+      if (!title || title.length === 0) {
+        title = `Will *${this._willId.slice(-4)}`;
+      }
+
       // generate & sign the ethereum transaction
       createWillMethod = this.ewPlatform.methods.createWill(
+        title,
         this._willId,
         `0x${storageId}`,
+        subcribePeriod,
         `0x${this._will.beneficiaryAddressHash.toString('hex')}`,
         this._provider.address,
-        EWillBase.zeroAddress() /*todo: referrer*/);
+        refCode);
       return createWillMethod.estimateGas({ from: this._userAccount.address, value: price });
     }).then( (gasLimit) => {
       const payload = createWillMethod.encodeABI();
@@ -226,31 +278,16 @@ class EWillCreate extends EWillBase {
       return Promise.resolve(will);
     }).catch( (err) => {
       console.error(`Failed to create the will tx: ${ JSON.stringify(err) }`);
-      return Promise.reject(err);
+      return Promise.reject(EWillError.generalError('Failed to create the will record. Please make sure you have enough money in your wallet and try again.'));
     });
 
     return promise;
   }
 
   submitWill() {
-    const promise = new Promise( (resolve, reject) => {
-      // send the transaction to the network
-      const defer = this._web3.eth.sendSignedTransaction(this._will.signedTx);
-      defer.once('transactionHash', (txId) => {
-        console.log(`Tx created: ${txId}`);
-        this._will.txId = txId;
-        resolve(txId);
-      });
-      defer.once('receipt', (receipt) => {
-        console.log(`Tx receipt received: ${ JSON.stringify(receipt) }`);
-      });
-      defer.once('confirmation', (count, receipt) => {
-        console.log(`Tx comfirmed ${count} times`);
-      });
-      defer.once('error', (err) => {
-        console.error(`Failed to submit the will tx: ${ JSON.stringify(err) }`);
-        reject(err);
-      });
+    const promise = this._sendTx(this._will.signedTx).then( (txId) => {
+      this._will.txId = txId;
+      return Promise.resolve(txId);
     });
 
     return promise;
@@ -273,15 +310,19 @@ class EWillCreate extends EWillBase {
         !this._provider.params.signaturer ||
         !this._provider.params.signatures ||
         !this._provider.params.token) {
-      return Promise.reject('Missing some provider\'s parameters');
+      return Promise.reject(EWillError.generalError('Missing mandatory Service\'s parameters. Please go back to the list of providers and choose it again.'));
+    }
+
+    if (!this._provider.params.period) {
+      this._provider.params.period = 1;
     }
 
     const msg = Buffer.concat([EthUtil.toBuffer(params.address), EthUtil.toBuffer(params.willId), EthUtil.toBuffer(params.token)]);
     const hash = EthUtil.keccak256(msg);
     const pubKey = EthUtil.ecrecover(hash, params.signaturev, params.signaturer, params.signatures);
-    const isSigned = ('0x' + EthUtil.pubToAddress(pubKey).toString('hex').toLowerCase() === params.address.toLowerCase());
+    const isSigned = (`0x${EthUtil.pubToAddress(pubKey).toString('hex').toLowerCase()}` === params.address.toLowerCase());
     if (isSigned !== true) {
-      return Promise.reject('The provider\'s signature is corrupted!');
+      return Promise.reject(EWillError.securityError());
     }
 
     // request a provider info
@@ -292,7 +333,7 @@ class EWillCreate extends EWillBase {
       return this.ewEscrow.methods.isProviderValid(this._provider.address).call();
     }).then( (isValid) => {
       if (!isValid) {
-        return Promise.reject(`The provider ${this._provider.params.address}=>${this._provider.address} is not a valid provider`);
+        return Promise.reject(EWillError.generalError('The selected Service is not active now. Please choose another Service on the previous page'));
       }
       return this.ewEscrow.methods.providers(this._provider.address).call();
     }).then( (providerInfo) => {
@@ -301,6 +342,29 @@ class EWillCreate extends EWillBase {
       return this.jsonRequest(`${EWillConfig.swarmUrl}/bzz:/${info.toString('hex')}/`);
     }).then( (providerInfo) => {
       this._provider.extraInfo = providerInfo;
+      return Promise.resolve(providerInfo);
+    });
+    return promise;
+  }
+
+  _configurePlatformParams() {
+    const promise = this.ewPlatform.methods.platformAddress().call().then( (platformAddress) => {
+      this._platform.address = platformAddress;
+      const url = `${EWillConfig.apiUrl}/key/public?address=${platformAddress}`;
+      return this.ajaxRequest(url);
+    }).then ( (response) => {
+      // Verify the response from the server
+      const pub = '0x' + response.publicKey.slice(4);
+      const addr = EthUtil.pubToAddress(pub).toString('hex');
+      if (EthUtil.addHexPrefix(addr).toLowerCase() != this._platform.address.toLowerCase()) {
+        return Promise.reject(EWillError.securityError());
+      }
+
+      this._platform.publicKey = response.publicKey;
+      return Promise.resolve(response.publicKey);
+    }).catch( (err) => {
+      console.error(`Failed to find platform public key: ${ JSON.stringify(err) }`);
+      return Promise.reject(err);
     });
     return promise;
   }

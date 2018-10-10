@@ -46,11 +46,12 @@
     margin: 25px 140px;
 
     @include desktop-start {
+      max-width: 1160px;
       margin: 26px 60px 0;
     }
 
-    @include desktop-full {
-      margin: 26px 140px 0;
+    @media (min-width: 1280px) {
+      margin: 26px auto 0;
     }
   }
 
@@ -74,11 +75,11 @@
       position: relative;
       border: solid 1px #f1f1f1;
       border-radius: 8px;
-      padding: 22px 23px 30px 19px;
+      padding: 18px 23px 20px 19px;
 
       @include desktop-start {
         margin-bottom: 15px;
-        padding: 17px 23px 19px 26px;
+        padding: 17px 23px 19px 25px;
       }
 
       &:hover {
@@ -95,16 +96,47 @@
     flex-basis: 20%;
     padding-right: 20px;
     font-size: 17px;
+    line-height: 26px;
+
+    &--title {
+      padding-right: 61px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+
+      @include tablet {
+        padding-right: 20px;
+        flex-basis: 23%;
+      }
+
+      @include desktop-start {
+        flex-basis: 333px;
+      }
+    }
 
     &--willId{
       padding-right: 25px;
 
       @include tablet {
-        flex-basis: 23%;
+        flex-basis: 11%;
+        padding-right: 15px;
       }
 
       @include desktop-start {
-        flex-basis: 217px;
+        flex-basis: 140px;
+      }
+    }
+
+    &--provider {
+      padding-right: 0;
+
+      @include tablet {
+        flex-basis: 15%;
+        padding-right: 20px;
+      }
+
+      @include desktop-start {
+        flex-basis: 200px;
       }
     }
 
@@ -123,27 +155,29 @@
     &--state{
 
       @include tablet {
-        flex-basis: 20%;
-        padding-right: 25px;
+        flex-basis: 16%;
+        padding-right: 15px;
       }
 
       @include desktop-start {
-        flex-basis: 203px;
+        flex-basis: 204px;
+        padding-right: 25px;
       }
     }
 
     &--validTill {
-      flex-basis: 100%;
-      margin-top: 30px;
-      padding-right: 25px;
+      flex-basis: 50%;
+      padding-right: 0;
 
       @include tablet {
-        flex-basis: 24%;
+        flex-basis: 14%;
         margin-top: 0;
+        padding-right: 15px;
       }
 
       @include desktop-start {
-        flex-basis: 380px;
+        flex-basis: 180px;
+        padding-right: 25px;
       }
     }
 
@@ -179,7 +213,6 @@
     &--action {
       position: absolute;
       flex-basis: auto;
-      margin-left: auto;
       text-align: right;
       top: 17px;
       right: 15px;
@@ -195,6 +228,11 @@
         right: initial;
         flex-shrink: 0;
       }
+    }
+
+    &--body.wrap-will__col--validTill span {
+      border-bottom: 2px dotted transparentize($gray-blue-dark, 0.5);
+
     }
   }
 
@@ -287,25 +325,43 @@
     &__col::before {
       color:#9b9b9b;
       font-size: 14px;
-      margin-bottom: 13px;
       text-transform:uppercase;
-    }
-
-    &__col--provider::before {
-      margin-bottom: 4px;
     }
 
     &__row--head {
       display: none;
     }
 
-    &__col--willId {
+    &__col--title {
       flex-basis: 100%;
-      margin-bottom: 33px;
+      margin-bottom: 25px;
+
+      &::before {
+        content: 'Title';
+        display: block;
+        margin-bottom: 4px;
+      }
+    }
+
+    &__col--willId {
+      flex-basis: 50%;
+      margin-bottom: 27px;
 
       &::before {
         content: 'Will id';
         display: block;
+        margin-bottom: 4px;
+      }
+    }
+
+    &__col--provider {
+      flex-basis: 50%;
+      margin-bottom: 27px;
+
+      &::before {
+        content: 'Provider';
+        display: block;
+        margin-bottom: 4px;
       }
     }
 
@@ -319,21 +375,22 @@
     }
 
     &__col--state {
-      flex-basis: 44.5%;
+      flex-basis: 50%;
 
       &::before {
         content: 'State';
         display: block;
+        margin-bottom: 7px;
       }
     }
 
-    &__col--valid {
-      flex-basis: 100%;
-      margin-top: 29px;
+    &__col--validTill {
+      flex-basis: 50%;
 
       &::before {
         content: 'Valid till';
         display: block;
+        margin-bottom: 4px;
       }
     }
   }

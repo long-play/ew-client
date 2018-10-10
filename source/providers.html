@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <link href="css/style.min.css" rel="stylesheet">
-  <title>new-will-provider</title>
+  <title>Providers</title>
 </head>
 <body class="my-wills">
 <div style="height: 0; width: 0; position: absolute; visibility: hidden" class="symbols">
@@ -33,10 +33,13 @@
       </button>
       <ul class="main-nav__list">
         <li class="main-nav__item">
-          <a class="main-nav__link  main-nav__link--active" href="wills.html">Wills</a>
+          <a class="main-nav__link" href="wills.html">Wills</a>
         </li>
         <li class="main-nav__item">
           <a class="main-nav__link" href="how-it-works.html">How it works</a>
+        </li>
+        <li class="main-nav__item">
+          <a class="main-nav__link  main-nav__link--active" href="providers.html">Pricing</a>
         </li>
         <li class="main-nav__item">
           <a class="main-nav__link" href="faq.html">FAQ</a>
@@ -52,34 +55,29 @@
         <p class="step-info__progress-mobile">Step 1 of 5</p>
         <ul class="step-info__progress-desktop  progress">
           <li class="progress__item  progress__item--active">
-            <svg class="progress__back" width="172" height="35">
-              <use xlink:href="#icon-progress"></use>
-            </svg>
             <span class="progress__text">Provider</span>
+            <img class="progress__back  progress__back--active" src="img/stage_arrow_filled.svg">
+            <img class="progress__back" src="img/stage_arrow_transparent.svg">
           </li>
-          <li class="progress__item  ">
-            <svg class="progress__back" width="172" height="35">
-              <use xlink:href="#icon-progress"></use>
-            </svg>
+          <li class="progress__item">
             <span class="progress__text">Confirmation</span>
+            <img class="progress__back  progress__back--active" src="img/stage_arrow_filled.svg">
+            <img class="progress__back" src="img/stage_arrow_transparent.svg">
           </li>
-          <li class="progress__item  ">
-            <svg class="progress__back" width="172" height="35">
-              <use xlink:href="#icon-progress"></use>
-            </svg>
+          <li class="progress__item">
             <span class="progress__text">Benificiary</span>
+            <img class="progress__back  progress__back--active" src="img/stage_arrow_filled.svg">
+            <img class="progress__back" src="img/stage_arrow_transparent.svg">
           </li>
           <li class="progress__item">
-            <svg class="progress__back" width="172" height="35">
-              <use xlink:href="#icon-progress"></use>
-            </svg>
             <span class="progress__text">Your will</span>
+            <img class="progress__back  progress__back--active" src="img/stage_arrow_filled.svg">
+            <img class="progress__back" src="img/stage_arrow_transparent.svg">
           </li>
           <li class="progress__item">
-            <svg class="progress__back" width="172" height="35">
-              <use xlink:href="#icon-progress"></use>
-            </svg>
             <span class="progress__text">Payment</span>
+            <img class="progress__back  progress__back--active" src="img/stage_arrow_filled.svg">
+            <img class="progress__back" src="img/stage_arrow_transparent.svg">
           </li>
         </ul>
       </div>
@@ -90,16 +88,40 @@
 </header>
 <main class="wills-body">
   <div class="container">
-    <div class="wrap-will wrap-will--provider">
+    <div class="wrap-will  wrap-will--provider  z-hidden">
       <div class="wrap-will__row wrap-will__row--head">
         <div class="wrap-will__col wrap-will__col--head wrap-will__col--provider">Provider</div>
         <div class="wrap-will__col wrap-will__col--head wrap-will__col--method">METHOD</div>
         <div class="wrap-will__col wrap-will__col--head wrap-will__col--tariff">TARIFF</div>
-        <div class="wrap-will__col wrap-will__col--head wrap-will__col--description">Description</div>
+        <div class="wrap-will__col wrap-will__col--head wrap-will__col--years">Years</div>
         <div class="wrap-will__col wrap-will__col--head wrap-will__col--provider-action">Actions</div>
       </div>
     </div>
   </div>
+
+  <div class="loader  loader--screen">
+    <span class="loader__text">Loading</span>
+    <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+  </div>
+
+  <div class="modal  modal--error  modal--closed">
+    <div class="modal__overlay"></div>
+    <div class="modal__content">
+      <div class="modal__header  modal__header--red">
+        <p class="modal__title">Error</p>
+        <div class="modal__image">
+          <svg class="modal__icon  modal__icon--error" width="48" height="48">
+            <use xlink:href="#icon-error"></use>
+          </svg>
+        </div>
+      </div>
+      <div class="modal__main">
+        <p class="modal__text">Please try again</p>
+        <button class="modal__button  modal__button--single  button  button--gray" type="button">Close</button>
+      </div>
+    </div>
+  </div>
+
 </main>
 
 <template>
@@ -110,10 +132,27 @@
         <img class="provider-logo-image" src="img/provider_logo1_mobile.png" srcset="img/provider_logo1_mobile@2x.png 2x" width="40" height="40" alt="logo">
       </picture>
       <span class="wrap-will__col--provider-name">WP Platform</span>
+      <div class="wrap-will__info">Info
+        <div class="wrap-will__info-popup  provider-info  z-hidden">
+          <span class="provider-info__arrow">▲</span>
+          <p class="provider-info__text">
+            At first, choose one of the available providers. They differ by methods of checking activity. The most popular are email, phone, passport. Choose the most convenient for you!
+          </p>
+        </div>
+      </div>
+
     </div>
     <div class="wrap-will__col wrap-will__col--body wrap-will__col--method">Email</div>
     <div class="wrap-will__col wrap-will__col--body wrap-will__col--tariff">0 ethers</div>
-    <div class="wrap-will__col wrap-will__col--body wrap-will__col--description">The details or reasons that someone…&nbsp;<a href="#">more</a></div>
+    <div class="wrap-will__col wrap-will__col--body wrap-will__col--years">
+      <select class="wrap-will__select">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="5">5</option>
+        <option value="10">10</option>
+      </select>
+    </div>
     <div class="wrap-will__col wrap-will__col--body wrap-will__col--provider-action"><button class="button button--blue button--choose">Choose provider</button></div>
   </div>
 </template>
@@ -124,5 +163,12 @@
 <script src="js/e-will-config.min.js"></script>
 <script src="js/e-will-providers.min.js"></script>
 <script src="js/e-will-providers-ui.min.js"></script>
+
+<!-- BEGIN JIVOSITE CODE {literal} -->
+<script type='text/javascript'>
+(function(){ var widget_id = 'ZPWDbuoavx';var d=document;var w=window;function l(){var s = document.createElement('script'); s.type = 'text/javascript'; s.async = true;s.src = '//code.jivosite.com/script/widget/'+widget_id; var ss = document.getElementsByTagName('script')[0]; ss.parentNode.insertBefore(s, ss);}if(d.readyState=='complete'){l();}else{if(w.attachEvent){w.attachEvent('onload',l);}else{w.addEventListener('load',l,false);}}})();
+</script>
+<!-- {/literal} END JIVOSITE CODE -->
+
 </body>
 </html>

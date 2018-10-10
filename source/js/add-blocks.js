@@ -1,5 +1,6 @@
 (function () {
   const BUTTONS_NO_MARGIN = 'steps__buttons--no-margin';
+  const SIZE_LIMIT = 52428800;
   const SCREEN_FOUR_PADDING_TOP_BLOCKS = 'steps__step-4--blocks';
   const textBlockTemplate = document.querySelector('template').content.querySelector('.steps__block--text');
   const fileBlockTemplate = document.querySelector('template').content.querySelector('.steps__block--file');
@@ -70,15 +71,37 @@
     label.htmlFor = input.id;
     counter++;
     window.ui.screens.willContent.insertBefore(fileBlock, buttons);
-    input.click();
 
-    const getFileName = function (e) {
+    // creates file name string, changes button text from UPLOAD to REPLACE
+    const onInputChange = function (e) {
       const files = e.target.files;
-      const fileName = fileBlock.querySelector('.will-block__name-value');
-      fileName.innerText = files[0].name;
+      const filePlace = fileBlock.querySelector('.will-block__file');
+      const fileNameNew = document.createElement('p');
+      const fileName = filePlace.querySelector('.will-block__file-name');
+      const tip = filePlace.querySelector('.will-block__tip');
+      const error = filePlace.querySelector('#file-exceeds-limit');
+
+      if (fileName) {
+        filePlace.removeChild(fileName);
+      }
+
+      fileNameNew.classList.add('will-block__file-name');
+      fileNameNew.innerText = files[0].name;
+      filePlace.appendChild(fileNameNew);
+
+      label.textContent = 'Replace';
+      label.classList.remove('will-block__file-handle--start', 'button');
+
+      tip.classList.add('z-hidden');
+
+      if (files[0].size > SIZE_LIMIT) {
+        error.classList.remove('z-hidden');
+      } else {
+        error.classList.add('z-hidden');
+      }
     };
 
-    input.addEventListener('change', getFileName);
+    input.addEventListener('change', onInputChange);
 
     changesOnFirstBlock();
   };
