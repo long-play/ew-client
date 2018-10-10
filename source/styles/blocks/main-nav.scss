@@ -18,6 +18,11 @@
     padding: 33px 120px 0;
   }
 
+  &--hello,
+  &--claim {
+    justify-content: center;
+  }
+
   &--inner {
 
     & .main-nav__link {

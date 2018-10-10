@@ -23,12 +23,12 @@
   &--login {
     width: 100%;
     max-width: 535px;
-    padding: 14px 28px 12px;
+    padding: 16px 28px 15px;
     font-size: 14px;
     font-weight: bold;
 
     @include tablet {
-      padding: 16px 34px 13px;
+      padding: 16px 34px 15px;
       font-size: 18px;
     }
 

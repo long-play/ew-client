@@ -230,9 +230,13 @@
       }
     }
 
-    &--body.wrap-will__col--validTill span {
-      border-bottom: 2px dotted transparentize($gray-blue-dark, 0.5);
+    &--body.wrap-will__col--validTill {
+      position: relative;
 
+      & > span {
+        border-bottom: 2px dotted transparentize($gray-blue-dark, 0.5);
+        cursor: pointer;
+      }
     }
   }
 
@@ -253,6 +257,23 @@
 
     @include desktop-full {
       right: -85px;
+    }
+  }
+
+  &__valid-popup {
+    position: absolute;
+    top: 66px;
+    left: -50px;
+    z-index: 50;
+
+    @include tablet {
+      top: 38px;
+      left: -59px;
+    }
+
+    @include desktop-start {
+      top: 38px;
+      left: -49px;
     }
   }
 }

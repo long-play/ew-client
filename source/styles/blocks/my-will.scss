@@ -44,6 +44,7 @@
   display: flex;
   flex-direction: column;
   min-width: 320px;
+  min-height: 100vh;
 }
 
 .will-welcome .login-screen {
@@ -68,7 +69,6 @@
 .will-welcome {
   text-align: center;
   margin-bottom: 44px;
-  min-height: 400px;
   margin-top: 162px;
 
   @include desktop-start {
@@ -104,7 +104,7 @@
   &__text {
     max-width: 500px;
     padding: 0 20px;
-    margin: auto;
+    margin: 0 auto;
     font-size: 18px;
     font-weight: normal;
     font-style: normal;
@@ -131,6 +131,59 @@
     padding-bottom: 1px;
     border-bottom: 1px solid transparentize($white, 0.3);
     text-decoration-line: none;
+  }
+
+  &__link-claim {
+    width: calc(100% - 40px);
+    margin: 53px auto 0;
+
+    @include tablet {
+      width: 291px;
+      margin: 0 auto;
+    }
+  }
+
+  &__stage {
+    margin-bottom: 150px;
+  }
+
+  &--hello {
+
+    @include desktop-start {
+      margin-top: 252px;
+      margin-bottom: 100px;
+    }
+
+    & .will-welcome__title {
+      margin-bottom: 26px;
+      font-size: 48px;
+    }
+
+    & .will-welcome__text {
+
+      @include tablet {
+        max-width: 580px;
+        margin-bottom: 45px;
+      }
+    }
+
+    & .will-form {
+      margin-top: 39px;
+      margin-bottom: 31px;
+    }
+
+    & .will-form__login {
+      margin-top: 25px;
+      margin-bottom: 18px;
+
+      @include desktop-start {
+        margin-top: 0;
+        margin-bottom: 0;      }
+    }
+
+    & .will-welcome__link {
+      font-size: 14px;
+    }
   }
 }
 
@@ -227,6 +280,13 @@
 
   &__login {
     display: block;
+  }
+
+  &--hello {
+
+    @include desktop-start {
+      margin-bottom: 70px;
+    }
   }
 }
 

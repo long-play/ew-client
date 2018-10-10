@@ -7,7 +7,9 @@
   const screen3 = document.querySelectorAll('.login-screen-3');
 
   function showScreen1() {
-    mainPage.className = 'will-welcome';
+    if (!mainPage.classList.contains('will-welcome--hello')) {
+      mainPage.className = 'will-welcome';
+    }
     for (let j = 0; j < screen1.length; j++) {
       screen1[j].classList.add('login-screen--show');
     }
@@ -23,7 +25,9 @@
     }
   }
   function showScreen2() {
-    mainPage.className = 'will-welcome will-welcome--select';
+    if (!mainPage.classList.contains('will-welcome--hello')) {
+      mainPage.className = 'will-welcome will-welcome--select';
+    }
     for (let k = 0; k < screen2.length; k++) {
       screen2[k].classList.add('login-screen--show');
     }
@@ -37,7 +41,9 @@
     }
   }
   function showScreen3() {
-    mainPage.className = 'will-welcome will-welcome--password';
+    if (!mainPage.classList.contains('will-welcome--hello')) {
+      mainPage.className = 'will-welcome will-welcome--password';
+    }
     for (let k = 0; k < screen3.length; k++) {
       screen3[k].classList.add('login-screen--show');
     }

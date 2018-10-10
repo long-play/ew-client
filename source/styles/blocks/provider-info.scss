@@ -49,4 +49,32 @@
       text-align: left;
     }
   }
+
+  &--valid {
+
+    & .provider-info__text {
+      text-align: center;
+
+      @include tablet {
+        width: 185px;
+      }
+
+      @include desktop-start {
+        width: 200px;
+        padding: 20px 27px 18px;
+      }
+    }
+
+    & .provider-info__arrow {
+      right: 88px;
+
+      @include tablet {
+        right: 88px;
+      }
+
+      @include desktop-start {
+        right: 92px;
+      }
+    }
+  }
 }

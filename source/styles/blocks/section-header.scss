@@ -51,4 +51,16 @@
       font-size: 18px;
     }
   }
+
+  &__tip {
+    @include text(8px, 20px, 400);
+
+    @include tablet {
+      font-size: 10px;
+    }
+
+    @include desktop-start {
+      font-size: 12px;
+    }
+  }
 }

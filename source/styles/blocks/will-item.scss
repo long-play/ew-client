@@ -1,0 +1,121 @@
+.will-item {
+  @include text(14px, 1.2em, 600);
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  padding: 20px 20px 21px;
+  border: 1px solid $input-border;
+  border-radius: 5px;
+  background-color: $input-back;
+  color: transparentize($gray-blue-dark, 0.7);
+  cursor: pointer;
+
+  @include tablet {
+    flex-wrap: nowrap;
+    justify-content: space-between;
+  }
+
+  @include desktop-start {
+    padding: 24px 28px 25px;
+    font-size: 16px;
+  }
+
+  @include desktop-full {
+    justify-content: flex-start;
+  }
+
+  &:hover {
+    background-color: $input-hover;
+    border-color: #d3d3d3;
+  }
+
+  &__item {
+    width: 100%;
+    margin-bottom: 20px;
+
+    @include tablet {
+      position: relative;
+      margin-right: 15px;
+      margin-bottom: 0;
+    }
+
+    &--title {
+
+      @include tablet {
+        width: 46%;
+        margin-right: 25px;
+        padding-left: 30px;
+      }
+
+      @include desktop-full {
+        width: 546px;
+      }
+    }
+
+    &--date {
+      width: 56%;
+
+      @include tablet {
+        width: 13%;
+      }
+
+      @include desktop-full {
+        width: 143px;
+      }
+    }
+
+    &--size {
+      width: 44%;
+
+      @include tablet {
+        width: 9%;
+      }
+
+      @include desktop-full {
+        width: 89px;
+      }
+    }
+
+  }
+
+  &__number {
+    margin: 0 0 20px;
+
+    @include tablet {
+      position: absolute;
+      left: 5px;
+      margin: 0;
+    }
+
+    @include desktop-full {
+      left: 0;
+    }
+  }
+
+  &__title {
+    margin: 0 0 9px;
+
+  }
+
+  &__value {
+    margin: 0;
+    color: $gray-blue-dark;
+    word-wrap: break-word;
+  }
+
+  &__button {
+    width: 100%;
+    margin-top: 5px;
+
+    @include tablet {
+      width: 27%;
+      margin-top: 0;
+    }
+
+    @include desktop-full {
+      flex-shrink: 0;
+      width: 269px;
+      margin-top: 3px;
+    }
+  }
+}

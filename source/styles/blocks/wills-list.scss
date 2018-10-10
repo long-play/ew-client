@@ -1,0 +1,17 @@
+.wills-list {
+  padding: 20px 10px;
+
+  @include desktop-start {
+    max-width: 1220px;
+    margin: 0 auto;
+    padding: 30px;
+  }
+
+  @include desktop-full {
+    padding-top: 46px;
+  }
+
+  &__item {
+    margin-bottom: 20px;
+  }
+}

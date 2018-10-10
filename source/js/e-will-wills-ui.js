@@ -27,6 +27,13 @@
     return moment.unix(arg).format('ll');
   };
 
+  const formatDateFull = function(arg) {
+    if (arg < 101) {
+      return 'N/A';
+    }
+    return moment.unix(arg).format('LLL');
+  };
+
   const prolongWill = function(row, menu, menuItem, will) {
     menuItem.addEventListener('click', (e) => {
       ewill.prolongWill(will.willId).then( (result) => {
@@ -81,6 +88,13 @@
       const itemDeleteWill = willRow.querySelector('.my-wills-menu__link--delete');
       prolongWill(willRow, actionMenu, itemProlongWill, will);
       deleteWill(willRow, actionMenu, itemDeleteWill, will);
+
+      const infoButton = willRow.querySelector('.wrap-will__col--validTill');
+      const info = willRow.querySelector('.provider-info--valid');
+      const infoText = info.querySelector('.provider-info__text');
+      window.util.showBlock(infoButton, info, window.util.HIDDEN);
+      window.util.hideBlock(infoButton, info, window.util.HIDDEN);
+      infoText.innerHTML = formatDateFull(will.validTill);
 
       willsTable.insertBefore(willRow, null);
     }
