@@ -23,7 +23,7 @@
 
   if (ewill.loginIfPossible() !== true) {
     console.log('not logged in');
-    location.href = '/hello.html?redirect=claim-will.html&' + query;
+    location.href = '/hello.html?redirect=claim-wills.html&' + query;
     return;
   }
 
@@ -63,6 +63,8 @@
             decryptButton.classList.remove('button--green');
             decryptButton.classList.add('button--blue');
             return window.util.stopButtonAnimation(decryptButton);
+          }).catch( (err) => {
+            showError('Decrypting will', err);
           });
           window.util.startButtonAnimation(decryptButton);
         }

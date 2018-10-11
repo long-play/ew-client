@@ -3,8 +3,8 @@
   const stageSecond = document.querySelector('.will-welcome__stage--second');
   const claimBtn = document.querySelector('.will-welcome__link-claim');
 
-  const goToClaim = function (evt) {
-    evt.preventDefault();
+  const goToClaim = function (e) {
+    e.preventDefault();
     stageFirst.classList.add(window.util.HIDDEN);
     stageSecond.classList.remove(window.util.HIDDEN);
   };

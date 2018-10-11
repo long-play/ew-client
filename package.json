@@ -7,7 +7,9 @@
   "dependencies": {
     "ethereumjs-util": "^5.2.0",
     "ethereumjs-wallet": "^0.6.2",
+    "file-saver": "^2.0.0-rc.3",
     "js-sha3": "^0.6.1",
+    "js-untar": "^2.0.0",
     "jspdf": "^1.4.1",
     "tar-js": "^0.3.0",
     "wcrypto": "git+ssh://git@bitbucket.org/my-will/wcrypto.git#develop",

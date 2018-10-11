@@ -22,9 +22,23 @@ class EWillBase {
     return result;
   }
 
+  binaryRequest(url, option) {
+    const promise = new Promise( (resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open('GET', url, true);
+      xhr.responseType = 'arraybuffer';
+
+      xhr.onload = function(e) {
+        resolve(new Uint8Array(this.response));
+      };
+
+      xhr.send();
+    });
+    return promise;
+  }
+
   ajaxRequest(url, options) {
     const promise = $.ajax(url, options).done( (response) => {
-      console.log(`${url}: ${ JSON.stringify(response) }`);
       return Promise.resolve(response);
     }).fail( (err) => {
       console.error(`${url}: ${ JSON.stringify(err) }`);

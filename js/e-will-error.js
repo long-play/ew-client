@@ -18,12 +18,16 @@ class EWillError extends Error {
     return this._popup;
   }
 
-  static generalError(text = 'Something went wrong. Please try again.') {
-    return new EWillError(text, 1000, true);
+  static generalError(text = 'Something went wrong. Please try again.', code = 100) {
+    return new EWillError(text, code, true);
   }
 
-  static securityError() {
-    return new EWillError('Failed to verify the response. Please double check you are using the correct URL and try again.', 1001, true);
+  static securityError(code = 1001) {
+    return new EWillError('Failed to verify the response. Please double check you are using the correct URL and try again.', code, true);
+  }
+
+  static silentError(text = 'Something went wrong.', code = 1002) {
+    return new EWillError(text, code, false);
   }
 }
 
