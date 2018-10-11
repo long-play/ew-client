@@ -2,6 +2,7 @@ const EWillBase = require('./e-will-base.js').EWillBase;
 const EWillError = require('./e-will-error.js').EWillError;
 const EthUtil = require('ethereumjs-util');
 const Crypto = require('wcrypto');
+const untar = require('js-untar');
 const FS = require('file-saver');
 const BN = require('bn.js');
 
@@ -35,19 +36,41 @@ class EWillClaim extends EWillBase {
   }
 
   downloadAndDecrypt(will) {
+    const note = (new BN(will.willId)).toString('hex');
+    const serviceKey = (new BN(will.decryptionKey)).toString('hex');
+
+    let encryptedContent = null;
     const url = `${EWillConfig.swarmUrl}/bzz:/${(new BN(will.storageId)).toString('hex')}/`;
     const promise = this.binaryRequest(url, {
     }).then( (response) => {
-      will.encryptedContent = response;
+      return untar(response);
+    }).then( (extractedFiles) => {
+      const encryptedTar = extractedFiles.filter( file => file.name == 'will.encrypted.x2.tar' );
+      encryptedContent = encryptedTar[0].buffer;
+      const aes = new Crypto.AESGCM();
+      return aes.importKey(serviceKey);
+    }).then( (aes) => {
+      const iv = Crypto.Util.sha256(Crypto.Util.hexToBuffer(serviceKey)).toString('hex').slice(-24);
+      return aes.decrypt(encryptedContent, iv, note);
+    }).then( (decrypted) => {
+      return untar(decrypted.buffer);
+    }).then( (extractedFiles) => {
+      const encryptedTar = extractedFiles.filter( file => file.name == 'will.encrypted.tar' );
+      encryptedContent = encryptedTar[0].buffer;
       return this._requestUserKey(will.owner);
     }).then( (userPublicKey) => {
-      return this._decryptWillContent(will, userPublicKey);
-    //}).then( (decryptedContent) => {
-    //  return untar(decryptedContent);
+      const wcrypto = new Crypto.WCrypto();
+      return wcrypto.decrypt(encryptedContent, this.userPrivateKey, userPublicKey, note);
+    }).then( (decryptedContent) => {
+      will.storage = new Blob([decryptedContent], {type: 'application/octet-stream'});
+      return untar(decryptedContent.buffer);
     }).then( (extractedFiles) => {
       will.content = extractedFiles;
       will.decrypted = true;
       return Promise.resolve(extractedFiles);
+    }).catch( (err) => {
+      console.error(err);
+      return Promise.reject(EWillError.generalError('Failed to decrypt the will content. Please refresh the page and try again.'));
     });
     return promise;
   }
@@ -107,24 +130,6 @@ class EWillClaim extends EWillBase {
       if (EthUtil.addHexPrefix(addr).toLowerCase() != address.toLowerCase()) return Promise.reject(EWillError.securityError());
 
       return Promise.resolve(response.publicKey);
-    });
-
-    return promise;
-  }
-
-  _decryptWillContent(will, userPublicKey) {
-    const aes = new Crypto.AESGCM();
-    const note = (new BN(will.willId)).toString('hex');
-    const serviceKey = (new BN(will.decryptionKey)).toString('hex');
-
-    const promise = aes.importKey(serviceKey).then( (aes) => {
-      const iv = Crypto.Util.sha256(Crypto.Util.hexToBuffer(serviceKey)).toString('hex').slice(-24);
-      return aes.decrypt(will.encryptedContent, iv, note);
-    }).then( (decrypted) => {
-      const wcrypto = new Crypto.WCrypto();
-      return wcrypto.decrypt(decrypted, this.userPrivateKey, userPublicKey, note);
-    }).catch( (err) => {
-      return Promise.reject(EWillError.generalError('Failed to decrypt the will content. Please refresh the page and try again.'));
     });
 
     return promise;

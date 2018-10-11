@@ -29,7 +29,7 @@ class EWillBase {
       xhr.responseType = 'arraybuffer';
 
       xhr.onload = function(e) {
-        resolve(new Uint8Array(this.response));
+        resolve(this.response);
       };
 
       xhr.send();

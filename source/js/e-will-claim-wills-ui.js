@@ -65,6 +65,7 @@
             return window.util.stopButtonAnimation(decryptButton);
           }).catch( (err) => {
             showError('Decrypting will', err);
+            return window.util.stopButtonAnimation(decryptButton);
           });
           window.util.startButtonAnimation(decryptButton);
         }
@@ -90,7 +91,7 @@
         row.querySelector('.will-content__value').innerHTML = formatFileSize(rec.size);
         row.querySelector('.will-content__file-btn').innerHTML = rec.name;
         row.querySelector('.will-content__file-btn').addEventListener('click', (e) => {
-          ewill.saveFileAs(rec.blob);
+          ewill.saveFileAs(rec.blob, rec.name);
         });
       } else if (rec.size < 80) {
         row = willContentItemShortTemplate.cloneNode(true);
@@ -149,7 +150,7 @@
 
   backLink.addEventListener('click', backToList);
   downloadButton.addEventListener('click', () => {
-    ewill.saveFileAs(willContent.will.storage);
+    ewill.saveFileAs(willContent.will.storage, `${willContent.will.title || willContent.will.willId}.tar`);
   });
 
   ewill.configure().then( () => {
