@@ -69,7 +69,7 @@ class EWillClaim extends EWillBase {
       will.decrypted = (will.state == 4);
       return Promise.resolve(extractedFiles);
     }).catch( (err) => {
-      console.error(err);
+      console.error(`Failed to download or decrypt the will content: ${ JSON.stringify(err) }`);
       return Promise.reject(EWillError.generalError('Failed to decrypt the will content. Please refresh the page and try again.', 1100));
     });
     return promise;
@@ -107,11 +107,29 @@ class EWillClaim extends EWillBase {
   }
 
   claimWill(will) {
-    const txId = '0xbababaca';
-    const promise = new Promise( (resolve, reject) => {
-      setTimeout(() => { resolve(txId); }, 1600);
+    const claimWillMethod = this.ewPlatform.methods.claimWill(will.willId);
+    const promise = claimWillMethod.estimateGas({ from: this._userAccount.address }).then( (gasLimit) => {
+      const payload = claimWillMethod.encodeABI();
+      console.log(payload);
+
+      const rawTx = {
+        to: this.ewPlatform.options.address,
+        data: payload,
+        value: 0,
+        gasLimit: gasLimit,
+        chainId: EWillConfig.chainID
+      };
+      return this._userAccount.signTransaction(rawTx);
+    }).then( (tx) => {
+      return this._sendTx(tx.rawTransaction);
+    }).then( (txId) => {
       will.decrypted = true;
+      return Promise.resolve(txId);
+    }).catch( (err) => {
+      console.error(`Failed to claim the will tx: ${ JSON.stringify(err) }`);
+      return Promise.reject(EWillError.generalError('Failed to claim the will record. Please make sure you have enough money for transaction fee in your wallet and try again.'));
     });
+
     return promise;
   }
 
