@@ -66,11 +66,11 @@ class EWillClaim extends EWillBase {
       return untar(decryptedContent.buffer);
     }).then( (extractedFiles) => {
       will.content = extractedFiles;
-      will.decrypted = true;
+      will.decrypted = (will.state == 4);
       return Promise.resolve(extractedFiles);
     }).catch( (err) => {
       console.error(err);
-      return Promise.reject(EWillError.generalError('Failed to decrypt the will content. Please refresh the page and try again.'));
+      return Promise.reject(EWillError.generalError('Failed to decrypt the will content. Please refresh the page and try again.', 1100));
     });
     return promise;
   }
@@ -110,6 +110,7 @@ class EWillClaim extends EWillBase {
     const txId = '0xbababaca';
     const promise = new Promise( (resolve, reject) => {
       setTimeout(() => { resolve(txId); }, 1600);
+      will.decrypted = true;
     });
     return promise;
   }
@@ -120,6 +121,7 @@ class EWillClaim extends EWillBase {
 
   // Private functions
   _requestUserKey(address) {
+    //todo: remove temporary code
     return Promise.resolve('0x04e3f1ea95a64bce6060c51d3d0c897d32ebed03dc671762f1d8f2da38e84a409b43a6d812290271ac3529dc20a96418c9a11756e6dfc94a2c7e284486cae3c9a9');
 
     const url = `${EWillConfig.apiUrl}/key/public?address=${address}`;

@@ -18,7 +18,7 @@ class EWillError extends Error {
     return this._popup;
   }
 
-  static generalError(text = 'Something went wrong. Please try again.', code = 100) {
+  static generalError(text = 'Something went wrong. Please try again.', code = 1000) {
     return new EWillError(text, code, true);
   }
 

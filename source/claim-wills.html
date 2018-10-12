@@ -1,142 +1,152 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
-  <meta name="theme-color" content="#000000">
-  <meta name="description" content="">
-  <meta name="keywords" content="">
-  <link href="css/style.min.css" rel="stylesheet">
-  <title>Claim the heritage</title>
-</head>
-<body class="page">
-<div style="height: 0; width: 0; position: absolute; visibility: hidden" class="symbols">
-  <!-- inject:svg --><!-- endinject -->
-</div>
-
-<header class="header  header--inner  header--claim">
-  <div class="wrapper">
-    <nav class="header__menu  main-nav  main-nav--claim">
-      <a class="main-nav__logo  logo" href="/">
-        <img class="logo__image  main-nav__logo--main" src="img/logo-white.svg" width="56" height="24" alt="Logo E-will">
-      </a>
-    </nav>
-    <h1 class="header__title  header__title--claim">Claim heritage</h1>
-
-      <p class="header__text  header__text--claim">You have been granted with digital inheritance. You have to download and decrypt it to see its content</p>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
+    <meta name="theme-color" content="#000000">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <link href="css/style.min.css" rel="stylesheet">
+    <title>Claim the heritage</title>
+  </head>
+  <body class="page">
+    <div style="height: 0; width: 0; position: absolute; visibility: hidden" class="symbols">
+      <!-- inject:svg --><!-- endinject -->
     </div>
-</header>
 
-<main class="container">
-  <div class="wills-list">
-  </div>
+    <header class="header  header--inner  header--claim">
+      <div class="wrapper">
+        <nav class="header__menu  main-nav  main-nav--claim">
+          <a class="main-nav__logo  logo" href="/">
+            <img class="logo__image  main-nav__logo--main" src="img/logo-white.svg" width="56" height="24" alt="Logo E-will">
+          </a>
+        </nav>
+        <h1 class="header__title  header__title--claim">Claim heritage</h1>
 
-  <div class="loader  loader--screen">
-    <span class="loader__text">Loading</span>
-    <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
-  </div>
-
-  <section class="will-content  z-hidden">
-    <div class="will-content__summary">
-      <a class="will-content__link" href="#">Go back</a>
-      <div class="will-content__item  will-content__item--title">
-        <p class="will-content__title">From</p>
-        <p class="will-content__value"></p>
+        <p class="header__text  header__text--claim">You have been granted with digital inheritance. You have to download and decrypt it to see its content</p>
       </div>
-      <div class="will-content__item  will-content__item--date">
-        <p class="will-content__title">Received</p>
-        <p class="will-content__value">N/A</p>
-      </div>
-      <div class="will-content__item  will-content__item--size">
-        <p class="will-content__title">Size</p>
-        <p class="will-content__value">N/A</p>
-      </div>
-    </div>
+    </header>
 
-    <div class="will-content__info">
-      <h2 class="will-content__head">Content of the will</h2>
-      <div class="will-content__wrapper">
-        <button class="will-content__button  button  button--green  button--will">Download as an archive</button>
+    <main class="container">
+      <div class="wills-list">
       </div>
-    </div>
-  </section>
 
-  <div class="modal  modal--error  modal--closed">
-    <div class="modal__overlay"></div>
-    <div class="modal__content">
-      <div class="modal__header  modal__header--red">
-        <p class="modal__title">Error</p>
-        <div class="modal__image">
-          <svg class="modal__icon  modal__icon--error" width="48" height="48">
-            <use xlink:href="#icon-error"></use>
-          </svg>
-        </div>
-      </div>
-      <div class="modal__main">
-        <p class="modal__text">Please try again</p>
-        <button class="modal__button  modal__button--single  button  button--gray" type="button">Close</button>
-      </div>
-    </div>
-  </div>
-
-</main>
-
-<template>
-  <div class="wills-list__item  will-item">
-    <div class="will-item__item  will-item__item--title">
-      <p class="will-item__number"></p>
-      <p class="will-item__title">From</p>
-      <p class="will-item__value"></p>
-    </div>
-    <div class="will-item__item  will-item__item--date">
-      <p class="will-item__title">Received</p>
-      <p class="will-item__value">N/A</p>
-    </div>
-    <div class="will-item__item  will-item__item--size">
-      <p class="will-item__title">Size</p>
-      <p class="will-item__value">N/A</p>
-    </div>
-    <button class="will-item__button  button  button--green  button--claim" type="button">
-      <span>Download and decrypt</span>
-      <div class="loader  loader--button  z-hidden">
+      <div class="loader  loader--screen">
+        <span class="loader__text">Loading</span>
         <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
       </div>
-    </button>
-  </div>
 
-  <div class="will-content__item  will-content__item-short">
-    <p class="will-content__title"></p>
-    <p class="will-content__value"></p>
-  </div>
+      <section class="will-content  z-hidden">
+        <div class="will-content__summary">
+          <a class="will-content__link" href="#">Go back</a>
+          <div class="will-content__item  will-content__item--title">
+            <p class="will-content__title">From</p>
+            <p class="will-content__value"></p>
+          </div>
+          <div class="will-content__item  will-content__item--date">
+            <p class="will-content__title">Received</p>
+            <p class="will-content__value">N/A</p>
+          </div>
+          <div class="will-content__item  will-content__item--size">
+            <p class="will-content__title">Size</p>
+            <p class="will-content__value">N/A</p>
+          </div>
+        </div>
 
-  <div class="will-content__item  will-content__item-long">
-    <p class="will-content__title"></p>
-    <p class="will-content__value  will-content__value--spaced"></p>
-  </div>
+        <div class="will-content__info">
+          <h2 class="will-content__head">Content of the will</h2>
+          <div class="will-content__wrapper">
+            <button class="will-content__button  button  button--green  button--will">Download as an archive</button>
+          </div>
+        </div>
+      </section>
 
-  <div class="will-content__item  will-content__item-file">
-    <p class="will-content__title"></p>
-    <div class="will-content__file">
-      <button class="will-content__file-btn  button  button--file" type="button"></button>
-      <p class="will-content__value"></p>
-    </div>
-  </div>
-</template>
+      <div class="modal  modal--error  modal--closed">
+        <div class="modal__overlay"></div>
+        <div class="modal__content">
+          <div class="modal__header  modal__header--red">
+            <p class="modal__title">Error</p>
+            <div class="modal__image">
+              <svg class="modal__icon  modal__icon--error" width="48" height="48">
+                <use xlink:href="#icon-error"></use>
+              </svg>
+            </div>
+          </div>
+          <div class="modal__main">
+            <p class="modal__text">Please try again</p>
+            <button class="modal__button  modal__button--single  button  button--gray" type="button">Close</button>
+          </div>
+        </div>
+      </div>
+    </main>
 
-<script src="lib/jquery.min.js"></script>
-<script src="js/util.min.js"></script>
-<script src="lib/moment.min.js"></script>
-<script src="js/e-will-error.min.js"></script>
-<script src="js/e-will-config.min.js"></script>
-<script src="js/e-will-claim-wills.min.js"></script>
-<script src="js/e-will-claim-wills-ui.min.js"></script>
+    <section class="no-wills  z-hidden">
+      <a class="no-wills__logo  logo" href="/">
+        <img class="logo__image" src="img/logo-white.svg" width="56" height="24" alt="Logo E-will">
+      </a>
+      <h1 class="no-wills__title">Oops...</h1>
+      <p class="no-wills__text">It looks like your wallet <span class="no-wills__wallet-num"></span> doesn't have any wills.</p>
+      <a class="no-wills__link" href="#">I need help</a>
+      <footer class="footer-welcome">
+        <p class="footer-welcome__content">The private key is treated securely and won’t be passed from your browser</p>
+      </footer>
+    </section>
 
-<!-- BEGIN JIVOSITE CODE {literal} -->
-<script type='text/javascript'>
-(function(){ var widget_id = 'ZPWDbuoavx';var d=document;var w=window;function l(){var s = document.createElement('script'); s.type = 'text/javascript'; s.async = true;s.src = '//code.jivosite.com/script/widget/'+widget_id; var ss = document.getElementsByTagName('script')[0]; ss.parentNode.insertBefore(s, ss);}if(d.readyState=='complete'){l();}else{if(w.attachEvent){w.attachEvent('onload',l);}else{w.addEventListener('load',l,false);}}})();
-</script>
-<!-- {/literal} END JIVOSITE CODE -->
+    <template>
+      <div class="wills-list__item  will-item">
+        <div class="will-item__item  will-item__item--title">
+          <p class="will-item__number"></p>
+          <p class="will-item__title">From</p>
+          <p class="will-item__value"></p>
+        </div>
+        <div class="will-item__item  will-item__item--date">
+          <p class="will-item__title">Received</p>
+          <p class="will-item__value">N/A</p>
+        </div>
+        <div class="will-item__item  will-item__item--size">
+          <p class="will-item__title">Size</p>
+          <p class="will-item__value">N/A</p>
+        </div>
+        <button class="will-item__button  button  button--green  button--claim" type="button">
+          <span>Download and decrypt</span>
+          <div class="loader  loader--button  z-hidden">
+            <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+          </div>
+        </button>
+      </div>
 
-</body>
+      <div class="will-content__item  will-content__item-short">
+        <p class="will-content__title"></p>
+        <p class="will-content__value"></p>
+      </div>
+
+      <div class="will-content__item  will-content__item-long">
+        <p class="will-content__title"></p>
+        <p class="will-content__value  will-content__value--spaced"></p>
+      </div>
+
+      <div class="will-content__item  will-content__item-file">
+        <p class="will-content__title"></p>
+        <div class="will-content__file">
+          <button class="will-content__file-btn  button  button--file" type="button"></button>
+          <p class="will-content__value"></p>
+        </div>
+      </div>
+    </template>
+
+    <script src="js/util.min.js"></script>
+    <script src="lib/jquery.min.js"></script>
+    <script src="lib/moment.min.js"></script>
+    <script src="js/e-will-error.min.js"></script>
+    <script src="js/e-will-config.min.js"></script>
+    <script src="js/e-will-claim-wills.min.js"></script>
+    <script src="js/e-will-claim-wills-ui.min.js"></script>
+
+    <!-- BEGIN JIVOSITE CODE {literal} -->
+    <script type='text/javascript'>
+    (function(){ var widget_id = 'ZPWDbuoavx';var d=document;var w=window;function l(){var s = document.createElement('script'); s.type = 'text/javascript'; s.async = true;s.src = '//code.jivosite.com/script/widget/'+widget_id; var ss = document.getElementsByTagName('script')[0]; ss.parentNode.insertBefore(s, ss);}if(d.readyState=='complete'){l();}else{if(w.attachEvent){w.attachEvent('onload',l);}else{w.addEventListener('load',l,false);}}})();
+    </script>
+    <!-- {/literal} END JIVOSITE CODE -->
+
+  </body>
 </html>

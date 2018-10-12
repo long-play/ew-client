@@ -3,6 +3,11 @@
   const loader = document.querySelector('.loader--screen');
   const modalError = document.querySelector('.modal--error');
 
+  const emptyWills = document.querySelector('.no-wills');
+  const emptyWillsAddress = emptyWills.querySelector('.no-wills__wallet-num');
+  const header = document.querySelector('.header');
+  const container = document.querySelector('.container');
+
   const willList = document.querySelector('.wills-list');
   const willListItemTemplate = document.querySelector('template').content.querySelector('.will-item');
 
@@ -26,6 +31,15 @@
     location.href = '/hello.html?redirect=claim-wills.html&' + query;
     return;
   }
+
+  const showEmptyScreen = function (isEmpty) {
+    if (isEmpty) {
+      emptyWillsAddress.innerHTML = ewill.userAddress;
+    }
+    emptyWills.classList.toggle(window.util.HIDDEN, !isEmpty);
+    header.classList.toggle(window.util.HIDDEN, isEmpty);
+    container.classList.toggle(window.util.HIDDEN, isEmpty);
+  };
 
   const formatDate = function (arg) {
     if (arg < 101) {
@@ -59,12 +73,18 @@
           showWill(will);
         } else {
           ewill.downloadAndDecrypt(will).then( () => {
+            let promise = Promise.resolve();
+            if (will.state == 3) {
+              promise = ewill.claimWill(will);
+            }
+            return promise;
+          }).then( () => {
             decryptButton.querySelector('span').innerText = 'Open';
             decryptButton.classList.remove('button--green');
             decryptButton.classList.add('button--blue');
             return window.util.stopButtonAnimation(decryptButton);
           }).catch( (err) => {
-            showError('Decrypting will', err);
+            showError(err.code === 1100 ? 'Decrypting will' : 'Claiming will', err);
             return window.util.stopButtonAnimation(decryptButton);
           });
           window.util.startButtonAnimation(decryptButton);
@@ -73,6 +93,7 @@
 
       willList.insertBefore(willRow, null);
     }
+    showEmptyScreen(!wills || wills.length === 0);
   };
 
   const updateWillContent = function (will) {
@@ -161,6 +182,7 @@
   }).catch( (err) => {
     loader.classList.add(window.util.HIDDEN);
     showError('Initializing the web app', err);
+    showEmptyScreen(true);
   });
 
 })();

@@ -1,0 +1,76 @@
+.no-wills {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+  background-image: url("../img/welcome_top_mobile.png"),
+  url("../img/welcome_bottom_mobile.png"),
+  linear-gradient(to top, $blue-gradient-bottom, $blue-gradient-top);
+  background-repeat: no-repeat;
+  background-size: 536px, 536px, auto;
+  background-position: center 82px, center bottom 302px, 0 0;
+
+  @include retina-resolution {
+    background-image: url("../img/welcome_top_mobile@2x.png"),
+    url("../img/welcome_bottom_mobile@2x.png"),
+    linear-gradient(to top, $blue-gradient-bottom, $blue-gradient-top);
+    background-size: 536px, 536px, auto;
+  }
+
+  @include tablet {
+    padding: 35px 30px 23px;
+    background-image: url("../img/no-wills_bg_desk.svg"), linear-gradient(to bottom, $blue-gradient-top, $blue-gradient-bottom);
+    background-position: center 0, 0 0;
+    background-repeat: no-repeat;
+    background-size: 1440px auto, 100%;
+  }
+
+  &__title {
+    @include text(48px, 1.2em, 700);
+    margin: 153px 0 16px;
+    padding: 0 20px;
+    text-align: center;
+    color: $white;
+
+    @include tablet {
+      margin: 170px 0 25px;
+      padding: 0 50px;
+    }
+
+    @include desktop-start {
+      max-width: 500px;
+      margin: 258px 0 29px;
+      font-size: 48px;
+    }
+  }
+
+  &__text {
+    @include text(18px, 1.2em, 400);
+    width: 100%;
+    max-width: 450px;
+    margin: 0 0 71px;
+    padding: 0 20px;
+    text-align: center;
+    word-wrap: break-word;
+    color: transparentize($white, 0.2);
+
+    @include tablet {
+      padding: 0;
+    }
+
+    @include desktop-start {
+      max-width: 500px;
+      margin-bottom: 79px;
+    }
+  }
+
+  &__link {
+    color: $white;
+    font-weight: bold;
+    white-space: nowrap;
+    padding-bottom: 1px;
+    border-bottom: 1px solid transparentize($white, 0.3);
+    text-decoration-line: none;
+  }
+}
