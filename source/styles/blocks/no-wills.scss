@@ -20,10 +20,31 @@
 
   @include tablet {
     padding: 35px 30px 23px;
-    background-image: url("../img/no-wills_bg_desk.svg"), linear-gradient(to bottom, $blue-gradient-top, $blue-gradient-bottom);
-    background-position: center 0, 0 0;
+    background-image: url("../img/no-wills_back_tablet.png"), linear-gradient(to bottom, $blue-gradient-top, $blue-gradient-bottom);
+    background-position: center 160px, 0 0;
     background-repeat: no-repeat;
-    background-size: 1440px auto, 100%;
+    background-size: 750px auto, 100%;
+
+    @include retina-resolution {
+      background-image: url("../img/no-wills_back_tablet.png"), linear-gradient(to bottom, $blue-gradient-top, $blue-gradient-bottom);
+      background-position: center 160px, 0 0;
+      background-repeat: no-repeat;
+      background-size: 750px auto, 100%;
+    }
+  }
+
+  @include desktop-start {
+    background-image: url("../img/no-wills_back_d-full.png"), linear-gradient(to bottom, $blue-gradient-top, $blue-gradient-bottom);
+    background-position: center 160px, 0 0;
+    background-repeat: no-repeat;
+    background-size: 990px auto, 100%;
+
+    @include retina-resolution {
+      background-image: url("../img/no-wills_back_d-full.png"), linear-gradient(to bottom, $blue-gradient-top, $blue-gradient-bottom);
+      background-position: center 160px, 0 0;
+      background-repeat: no-repeat;
+      background-size: 990px auto, 100%;
+    }
   }
 
   &__title {
@@ -66,11 +87,17 @@
   }
 
   &__link {
-    color: $white;
+    display: inline-block;
+    margin-bottom: 100px;
+    padding-bottom: 1px;
     font-weight: bold;
     white-space: nowrap;
-    padding-bottom: 1px;
     border-bottom: 1px solid transparentize($white, 0.3);
     text-decoration-line: none;
+    color: $white;
+
+    @include desktop-start {
+      margin-bottom: 350px;
+    }
   }
 }
