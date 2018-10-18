@@ -8,8 +8,20 @@ class EWillLogin extends EWillBase {
   }
 
   generateTestPrivateKey() {
-    this.userPrivateKey = '0xeadcc9142c57f7a118584f56d1f38ed32807bec710572f26ad9fbcac1d8f90db';
-    return this.userPrivateKey;
+    if (typeof Storage && localStorage.userPrivateKey) {
+      this.userPrivateKey = localStorage.userPrivateKey;
+      return Promise.resolve(this.userPrivateKey);
+    }
+
+    const promise = this.ajaxRequest(`${EWillConfig.apiUrl}/key/test`).then ( (response) => {
+      localStorage.userPrivateKey = response.privateKey;
+      this.userPrivateKey = localStorage.userPrivateKey;
+      return Promise.resolve(this.userPrivateKey);
+    }).catch( (err) => {
+      console.error(`Failed to generate test private key: ${ JSON.stringify(err) }`);
+      return Promise.reject(err);
+    });
+    return promise;
   }
 
   loginWithPrivateKey(privKey) {

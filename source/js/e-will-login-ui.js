@@ -44,7 +44,11 @@
   });
 
   document.querySelector('#login-test').addEventListener('click', (e) => {
-    loginPKPrivKey.value = ewill.generateTestPrivateKey();
+    ewill.generateTestPrivateKey().then( (privKey) => {
+      loginPKPrivKey.value = privKey;
+    }).catch( (err) => {
+      //todo: show error
+    });
     e.preventDefault();
   });
 })();
