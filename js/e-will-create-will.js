@@ -172,6 +172,7 @@ class EWillCreate extends EWillBase {
       const willTar = new Tar();
       this._will.records = records.slice();
       for (let record of records) {
+        //todo: add extensions for files and texts (.txt)
         willTar.append(record.title, record.value);
       }
 
@@ -287,7 +288,31 @@ class EWillCreate extends EWillBase {
   submitWill() {
     const promise = this._sendTx(this._will.signedTx).then( (txId) => {
       this._will.txId = txId;
-      return Promise.resolve(txId);
+      return this.fundBeneficiaryIfCreated(); //todo: add getting user's consent
+    }).then( () => {
+      return Promise.resolve(this._will.txId);
+    });
+
+    return promise;
+  }
+
+  fundBeneficiaryIfCreated() {
+    if (!this._will.beneficiaryPrivateKey) {
+      return Promise.resolve();
+    }
+
+    const rawTx = {
+      to: this._will.beneficiaryAddress,
+      value: 0.1e+18,
+      gasLimit: 21000,
+      chainId: EWillConfig.chainID
+    };
+
+    const promise = this._userAccount.signTransaction(rawTx).then( (tx) => {
+      return this._sendTx(tx.rawTransaction);
+    }).catch( (err) => {
+      console.error(`Failed to topup beneficiary address: ${ JSON.stringify(err) }`);
+      return Promise.resolve();
     });
 
     return promise;
