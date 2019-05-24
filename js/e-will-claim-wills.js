@@ -78,17 +78,18 @@ class EWillClaim extends EWillBase {
   getWills() {
     const wills = [];
 
-    const promise = this.ewPlatform.methods.numberOfBeneficiaryWills(this._userAccount.address).call().then( (numberOfWills) => {
-      const promises = [];
-      const benHash = EthUtil.keccak256(EthUtil.toBuffer(this._userAccount.address));
+    const benHash = EthUtil.keccak256(EthUtil.toBuffer(this._userAccount.address));
+    const promise = this.ewPlatform.getPastEvents('WillReleased', {
+      filter: { beneficiaryHash: benHash },
+      fromBlock: 0,
+      toBlock: 'pending',
+    }).then( (events) => {
+      console.log(events);
 
-      for (let idx = 0; idx < numberOfWills; idx++) {
-        const promise = this.ewPlatform.methods.beneficiaryWills(
-          benHash,
-          idx
-        ).call().then( (willId) => {
-          return this.ewPlatform.methods.wills(willId).call();
-        }).then( (will) => {
+      const promises = [];
+
+      for (let ev of events) {
+        const promise = this.ewPlatform.methods.wills(ev.returnValues.willId).call().then( (will) => {
           wills.push(will);
         });
         promises.push(promise);

@@ -25,16 +25,15 @@ class EWillWills extends EWillBase {
   getUserWills() {
     const wills = [];
 
-    const promise = this.ewPlatform.methods.numberOfUserWills(this._userAccount.address).call().then( (numberOfWills) => {
+    const promise = this.ewPlatform.getPastEvents('WillCreated', {
+      filter: { owner: this._userAccount.address },
+      fromBlock: 0,
+      toBlock: 'pending',
+    }).then( (events) => {
       const promises = [];
 
-      for (let idx = 0; idx < numberOfWills; idx++) {
-        const promise = this.ewPlatform.methods.userWills(
-          this._userAccount.address,
-          idx
-        ).call().then( (willId) => {
-          return this.ewPlatform.methods.wills(willId).call();
-        }).then( (will) => {
+      for (let ev of events) {
+        const promise = this.ewPlatform.methods.wills(ev.returnValues.willId).call().then( (will) => {
           const denominatedAF = (new BN(will.annualFee)).div(new BN('1000000000000000'));
           const annualFee = denominatedAF.divmod(new BN(1000), '', false);
           will.annualFeeFmtd = `${annualFee.div.toString()}.${annualFee.mod.toString()}`;
