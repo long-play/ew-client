@@ -11,7 +11,7 @@
     "jspdf": "^1.4.1",
     "tar-js": "^0.3.0",
     "wcrypto": "git+ssh://git@bitbucket.org/my-will/wcrypto.git#develop",
-    "web3": "^1.0.0-beta.36"
+    "web3": "^1.10.4"
   },
   "devDependencies": {
     "autoprefixer": "^6.7.7",
